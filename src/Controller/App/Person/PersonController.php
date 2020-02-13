@@ -57,8 +57,8 @@ class PersonController extends Controller
             'first_name' =>  'required',
             'last_name' =>  'required',
             'cpf' =>  'required',
-            'cpf' =>  'required',
-            'cpf' =>  'required',
+            'sex' =>  'required',
+            'test' =>  'required',
             'cpf' =>  'required',
         ]; 
 
