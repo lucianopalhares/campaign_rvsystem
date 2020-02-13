@@ -16,3 +16,6 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::get('/cities/{state}', 'App\City\StateController@cities');
+Route::get('/questions/{campanha}', 'App\Quiz\QuizCampaignController@questions');
+Route::get('/options/{questo}', 'App\Quiz\QuizQuestionController@options');
