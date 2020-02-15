@@ -5,12 +5,12 @@
     <main class="app-content">
       <div class="app-title">
         <div>
-          <h1><i class="fa fa-map"></i> {{isset($title)?$title:'Bairros'}} &nbsp;&nbsp;<a href="{{url('app/bairros/create')}}" class="text-primary" data-toggle="tooltip" data-placement="right" title="Cadastrar Bairro"><span class="fa fa-plus"></span></a></h1>
-          <p>Tabela com {{isset($title)?$title:'todos os Bairros'}}</p>
+          <h1><i class="fa fa-users"></i> {{isset($title)?$title:'Pessoas'}} &nbsp;&nbsp;<a href="{{url('app/pessoas/create')}}" class="text-primary" data-toggle="tooltip" data-placement="right" title="Cadastrar Pessoa"><span class="fa fa-plus"></span></a></h1>
+          <p>Tabela com {{isset($title)?$title:'todos os Pessoas'}}</p>
         </div>
         <ul class="app-breadcrumb breadcrumb side">
           <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
-          <li class="breadcrumb-item">Bairros</li>
+          <li class="breadcrumb-item">Pessoas</li>
           <li class="breadcrumb-item active">Tabela</li>
         </ul>
       </div>
@@ -26,9 +26,9 @@
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>Nome do Bairro</th>                                          
-                      <th>Cidade/UF</th>
-                      <th>Tipo</th>  
+                      <th>Nome da Pessoa</th>    
+                      <th>Sexo</th>  
+                      <th>CPF</th>
                       <th><i class="fa fa-cog"></i></th>
                     </tr>
                   </thead>
@@ -36,18 +36,19 @@
                     @foreach($items as $item)
                     <tr>
                       <td>{{$item->id}}</td>
-                      <td>{{$item->name}}</td>                      
-                      <td>{{$item->city->title}}/{{$item->city->state->letter}}</td>   
-                      <td>{{$item->type}}</td>                      
+                      <td>{{$item->first_name}} {{$item->last_name}}</td>                      
+                      <td>{{$item->sex}}</td>   
+                      <td>{{$item->cpf}}</td>                      
                       <td>              
-                      <a href="{{url('app/bairros/'.$item->id.'/edit')}}" class="text-primary"><span class="fa fa-edit" data-toggle="tooltip" data-placement="left" title="" data-original-title="Editar"></span></a>
-                      
-                      <form name="delete" action="{{ route('bairros.destroy', $item->id) }}" method="POST" style="display: none;">
+                      <a href="{{url('app/pessoas/'.$item->id.'/edit')}}" class="text-primary"><span class="fa fa-edit" data-toggle="tooltip" data-placement="left" title="" data-original-title="Editar"></span></a>
+                      <a href="{{url('app/pessoas/'.$item->id)}}" class="text-secondary"><span class="fa fa-eye" data-toggle="tooltip" data-placement="left" title="" data-original-title="Visualizar"></span></a>
+                      @if(!$item->user()->exists())
+                      <form name="delete" action="{{ route('pessoas.destroy', $item->id) }}" method="POST" style="display: none;">
                             @method('DELETE')
                             @csrf
                         </form>                    
                         <a href="javascript:void" class="text-danger" onclick="if(confirm('Você quer mesmo deletar?'))document.delete.submit();"><span class="fa fa-trash" data-toggle="tooltip" data-placement="left" title="" data-original-title="Excluir"></span></a>
-                      
+                      @endif
                       &nbsp;                                           
                       </td>
                     </tr>

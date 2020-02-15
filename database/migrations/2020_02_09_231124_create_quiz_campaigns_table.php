@@ -16,7 +16,8 @@ class CreateQuizCampaignsTable extends Migration
         Schema::create('quiz_campaigns', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('active')->nullable()->default(0);
-            $table->text('description')->nullable();
+            $table->text('description');
+            $table->string('slug',50)->unique();
             $table->timestamps();
         });
     }

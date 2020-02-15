@@ -3,6 +3,7 @@
 namespace App\Controller\App\Quiz;
 
 use App\Domain\Quiz\Model\QuizQuestion;
+use App\Domain\Quiz\Model\QuizCampaign;
 use Illuminate\Http\Request;
 use App\Controller\Controller;
 use Illuminate\Database\QueryException;
@@ -18,23 +19,43 @@ class QuizQuestionController extends Controller
     protected $pathView;
     protected $model;
     protected $campaign;
+    protected $quizCampaignSlug;
+    protected $state;
+    protected $politic;
     
     public function __construct(QuizQuestion $model){
       $this->name = 'Questão';
-      $this->link = '/app/quiz/questoes';
-      $this->pathView = 'app.question.';
+      $this->link = '/app/campanha/';
+      $this->pathView = 'app.quiz.question.';
       $this->model = $model;
       $this->campaign = App::make("App\Domain\Quiz\Model\QuizCampaign");
+      $this->state = App::make("App\Domain\City\Model\State");
+      $this->politic = App::make("App\Domain\Political\Model\Politic");
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($quizCampaignSlug)
     {
+        /* inserir em todos metodos - inicio */
+        $quizCampaign = request()->session()->get('quizCampaign');
+        $this->link .= $quizCampaign->slug.'/questoes';
+        /* inserir em todos metodos - fim */
+        
+        $state = $this->state::all();
+        $politic = $this->politic::all();
+        
+        $merged = $state->merge($politic);
+        
+        
+        dd($merged);
+        
+        return $merged[1];
+                
         $items = $this->model::paginate(10);
-        return view($this->pathView.'index',compact('items'));
+        return view($this->pathView.'index',compact('items','quizCampaign'));
     }
 
     /**
@@ -42,13 +63,14 @@ class QuizQuestionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($quizCampaignSlug)
     {
-        $campaigns = $this->campaign::all();
-        
-        if(!$campaigns->count()) return redirect('app/quiz/campanhas/create')->withErrors('Primeiro Cadastre uma Campanha');
-        
-        return view($this->pathView.'form',compact('campaigns'));
+        /* inserir em todos metodos - inicio */
+        $quizCampaign = request()->session()->get('quizCampaign');
+        $this->link .= $quizCampaign->slug.'/questoes';
+        /* inserir em todos metodos - fim */
+                
+        return view($this->pathView.'form',compact('quizCampaign'));
     }
 
     /**
@@ -124,12 +146,14 @@ class QuizQuestionController extends Controller
     public function edit(QuizQuestion $questo)
     {
         try {
-                      
+            /* inserir em todos metodos - inicio */
+            $quizCampaign = request()->session()->get('quizCampaign');
+            $this->link .= $quizCampaign->slug.'/questoes';
+            /* inserir em todos metodos - fim */      
+                            
             $item = $questo;
-            
-            $campaigns = $this->campaign::all();
-                        
-            return view($this->pathView.'form',compact('item','campaigns'));  
+                                    
+            return view($this->pathView.'form',compact('item','quizCampaign'));  
             
         } catch (\Exception $e) {//errors exceptions
           

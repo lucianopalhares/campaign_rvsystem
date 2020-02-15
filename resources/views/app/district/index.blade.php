@@ -41,13 +41,13 @@
                       <td>{{$item->type}}</td>                      
                       <td>              
                       <a href="{{url('app/bairros/'.$item->id.'/edit')}}" class="text-primary"><span class="fa fa-edit" data-toggle="tooltip" data-placement="left" title="" data-original-title="Editar"></span></a>
-                      
+                      @if(!$item->answers()->exists()&&!$item->questions()->exists()&&!$item->options()->exists())
                       <form name="delete" action="{{ route('bairros.destroy', $item->id) }}" method="POST" style="display: none;">
                             @method('DELETE')
                             @csrf
                         </form>                    
                         <a href="javascript:void" class="text-danger" onclick="if(confirm('Você quer mesmo deletar?'))document.delete.submit();"><span class="fa fa-trash" data-toggle="tooltip" data-placement="left" title="" data-original-title="Excluir"></span></a>
-                      
+                      @endif
                       &nbsp;                                           
                       </td>
                     </tr>

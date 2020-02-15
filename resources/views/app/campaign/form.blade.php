@@ -10,12 +10,12 @@
         </div>
         <ul class="app-breadcrumb breadcrumb">
           <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
-          <li class="breadcrumb-item"><a href="{{url('app/quiz/campanhas')}}">Campanhas</a></li>
+          <li class="breadcrumb-item"><a href="{{url('app/campanhas')}}">Campanhas</a></li>
           <li class="breadcrumb-item">{{isset($show)?'Ver':'Formulário'}}</li>
         </ul>
       </div>
 
-      @include('app.layout.flash_msg')
+      @include('app._utils.flash_msg')
 
       <div class="row">
         <div class="col-md-3">
@@ -28,10 +28,10 @@
             <div class="tile-body">
               
               @if(isset($item))
-                {!! Form::open(['url' => 'app/quiz/campanhas/'.$item->id,'method'=>'PUT','enctype' => 'multipart/form-data','files'=>true]) !!}
+                {!! Form::open(['url' => 'app/campanhas/'.$item->id,'method'=>'PUT','enctype' => 'multipart/form-data','files'=>true]) !!}
               
               @else 
-                {!! Form::open(['url' => 'app/quiz/campanhas','method'=>'POST','enctype' => 'multipart/form-data','files'=>true]) !!}
+                {!! Form::open(['url' => 'app/campanhas','method'=>'POST','enctype' => 'multipart/form-data','files'=>true]) !!}
               
               @endif
               
@@ -42,13 +42,20 @@
                   <input type="hidden" name="id" value="{{$item->id}}" />
                 </div>   
                 @endif
-
+                <div class="form-group">
+                  <label class="control-label">URL / Sem espaços e tudo minusculo (ex:campanha-teste)*</label>
+                  <input type="text" required="required" {{isset($show)?"disabled='disabled'":''}} name="slug" value="{{ old('slug',isset($item->slug)?$item->slug:' ') }}" class="form-control {{ $errors->has('slug')? 'is-invalid':'' }}" id="slug" placeholder="campanha-teste">
+                  {!! $errors->has('slug')? '<small id="passwordHelpBlock" class="form-text text-danger">'.$errors->first('slug').'</small>':'' !!}
+                </div> 
+                
                 <div class="form-group">
                   <label class="control-label">Descrição *</label>
                   <textarea rows="3" required="required" name="description" class="form-control {{ $errors->has('description')? 'is-invalid':'' }}" id="description">{{ old('description',isset($item->description)?$item->description:'') }}</textarea>
                   {!! $errors->has('description')? '<small id="passwordHelpBlock" class="form-text text-danger">'.$errors->first('description').'</small>':'' !!}
-                </div>          
-            
+                </div>       
+
+     
+                            
                 <div class="form-group">
                   <label class="control-label">Status</label>
                   <select {{isset($show)?"disabled='disabled'":''}} class="form-control {{ $errors->has('active')? 'is-invalid':'' }}" id="active" name="active">
@@ -69,7 +76,7 @@
               @if(!isset($show))
               <button class="btn btn-primary" type="submit"><i class="fa fa-fw fa-lg fa-check-circle"></i>Salvar</button>&nbsp;&nbsp;&nbsp;
               @else
-              <a href="{{url('app/quiz/campanhas/'.$item->id.'/edit')}}" class="btn btn-secondary"><i class="fa fa-fw fa-lg fa-check-circle"></i>Editar</a>
+              <a href="{{url('app/campanhas/'.$item->id.'/edit')}}" class="btn btn-secondary"><i class="fa fa-fw fa-lg fa-check-circle"></i>Editar</a>
               @endif
             </div>
             {{ Form::close() }}

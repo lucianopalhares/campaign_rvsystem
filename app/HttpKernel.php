@@ -61,6 +61,7 @@ class HttpKernel extends HttpKernelOrigin
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'quizCampaign' => \App\Middleware\QuizCampaignMiddleware::class,
     ];
 
     /**

@@ -1,4 +1,4 @@
-@extends('app.layout.main')
+@extends('app.quiz.layout.main')
 
 @section('main')
 
@@ -15,7 +15,7 @@
         </ul>
       </div>
 
-      @include('app.layout.flash_msg')
+      @include('app._utils.flash_msg')
 
       <div class="row">
         <div class="col-md-3">

@@ -9,6 +9,9 @@ class QuizCampaign extends Model
     public function questions(){
       return $this->hasMany("App\Domain\Quiz\Model\QuizQuestion","quiz_campaign_id");
     }
+    public function options(){
+      return $this->hasMany("App\Domain\Quiz\Model\QuizOption","quiz_campaign_id");
+    }
     public function answers(){
       return $this->hasMany("App\Domain\Quiz\Model\QuizAnswer","quiz_campaign_id");
     }

@@ -23,4 +23,7 @@ class City extends Model
     {
         return $this->morphMany('App\Domain\Quiz\Model\QuizOption', 'quiz_optionable');
     }
+    public function nable(){
+      return $this->title.'/'.$this->state->letter;
+    }
 }

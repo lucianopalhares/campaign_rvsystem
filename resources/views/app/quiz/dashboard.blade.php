@@ -1,4 +1,4 @@
-@extends('app.layout.main')
+@extends('app.quiz.layout.main')
 
 @section('main')
 
@@ -11,46 +11,37 @@
         </div>
         <ul class="app-breadcrumb breadcrumb">
           <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+          <li class="breadcrumb-item">Campanha {{$quizCampaign->id}}</li>
           <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
         </ul>
       </div>
       <div class="row">
-        <div class="col-md-6 col-lg-3" data-toggle="tooltip" data-placement="top" title="Ver Lista de Todas Campanhas">
-          <a href="{{url('app/quiz/campanhas')}}" target="_blank">
-          <div class="widget-small info coloured-icon"><i class="icon fa fa-braille fa-3x"></i>
-            <div class="info">
-              <h4>Campanhas</h4>
-              <p><b>{{$campaigns}}</b></p>
-            </div>
-          </div>
-          </a>
-        </div>
         <div class="col-md-6 col-lg-3" data-toggle="tooltip" data-placement="top" title="Ir para Lista de Questões">
-          <a href="{{url('app/quiz/questoes')}}" target="_blank">
+          <a href="{{url('app/campanha/'.$quizCampaign->slug.'/questoes')}}" target="_blank">
           <div class="widget-small danger coloured-icon"><i class="icon fa fa-quora fa-3x"></i>
             <div class="info">
               <h5>Questões</h5>
-              <p><b>{{$questions}}</b></p>
+              <p><b>{{$quizCampaign->questions->count()}}</b></p>
             </div>
           </div>
           </a>
         </div>
         <div class="col-md-6 col-lg-3" data-toggle="tooltip" data-placement="top" title="Ver Todas Opções">
-          <a href="{{url('app/quiz/opcoes')}}" target="_blank">
+          <a href="{{url('app/campanha/'.$quizCampaign->slug.'/opcoes')}}" target="_blank">
           <div class="widget-small warning coloured-icon"><i class="icon fa fa-list fa-3x"></i>
             <div class="info">
               <h4>Opções</h4>
-              <p><b>{{$options}}</b></p>
+              <p><b>{{$quizCampaign->options->count()}}</b></p>
             </div>
           </div>
           </a>
         </div>        
         <div class="col-md-6 col-lg-3" data-toggle="tooltip" data-placement="top" title="Ver Lista de Todas Respostas">
-          <a href="{{url('app/quiz/respostas')}}" target="_blank">
+          <a href="{{url('app/campanha/'.$quizCampaign->slug.'/respostas')}}" target="_blank">
           <div class="widget-small primary coloured-icon"><i class="icon fa fa-quote-right fa-3x"></i>
             <div class="info">
               <h4>Respostas</h4>
-              <p><b>{{$answers}}</b></p>
+              <p><b>{{$quizCampaign->answers->count()}}</b></p>
             </div>
           </div>
           </a>

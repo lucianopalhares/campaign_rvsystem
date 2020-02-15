@@ -17,4 +17,7 @@ class PoliticalOffice extends Model
     {
         return $this->morphMany('App\Domain\Quiz\Model\QuizOption', 'quiz_optionable');
     }
+    public function nable(){
+      return $this->name;
+    }
 }

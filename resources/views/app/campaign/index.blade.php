@@ -5,7 +5,7 @@
     <main class="app-content">
       <div class="app-title">
         <div>
-          <h1><i class="fa fa-braille"></i> {{isset($title)?$title:'Campanhas'}} &nbsp;&nbsp;<a href="{{url('app/quiz/campanhas/create')}}" class="text-primary" data-toggle="tooltip" data-placement="right" title="Cadastrar Campanha"><span class="fa fa-plus"></span></a></h1>
+          <h1><i class="fa fa-braille"></i> {{isset($title)?$title:'Campanhas'}} &nbsp;&nbsp;<a href="{{url('app/campanhas/create')}}" class="text-primary" data-toggle="tooltip" data-placement="right" title="Cadastrar Campanha"><span class="fa fa-plus"></span></a></h1>
           <p>Tabela com {{isset($title)?$title:'todas as Campanhas'}}</p>
         </div>
         <ul class="app-breadcrumb breadcrumb side">
@@ -15,7 +15,7 @@
         </ul>
       </div>
       <div class="flash_msg">
-        @include('app.layout.flash_msg')
+        @include('app._utils.flash_msg')
       </div>
       <div class="row">
         <div class="col-md-12">
@@ -44,7 +44,7 @@
                         @endif
                       </td>              
                       <td>              
-                      <a href="{{url('app/quiz/campanhas/'.$item->id.'/edit')}}" class="text-primary"><span class="fa fa-edit" data-toggle="tooltip" data-placement="left" title="" data-original-title="Editar"></span></a>
+                      <a href="{{url('app/campanhas/'.$item->id.'/edit')}}" class="text-primary"><span class="fa fa-edit" data-toggle="tooltip" data-placement="left" title="" data-original-title="Editar"></span></a>
                       @if(!$item->questions()->exists())
                         <form name="delete" action="{{ route('campanhas.destroy', $item->id) }}" method="POST" style="display: none;">
                             @method('DELETE')
@@ -53,10 +53,11 @@
                         <a href="javascript:void" class="text-danger" onclick="if(confirm('Você quer mesmo deletar?'))document.delete.submit();"><span class="fa fa-trash" data-toggle="tooltip" data-placement="left" title="" data-original-title="Excluir"></span></a>
                       @endif  
                         <!-- ativar/desativar inicio -->
-                        <form name="form{{$item->id}}" action="{{ url('app/quiz/campanhas/'.$item->id) }}" method="post" style="display: none;">
+                        <form name="form{{$item->id}}" action="{{ url('app/campanhas/'.$item->id) }}" method="post" style="display: none;">
                             @method('PUT')
                             @csrf
                             <input type="hidden" name="description" value="{{$item->description}}" />
+                            <input type="hidden" name="slug" value="{{$item->slug}}" />
                             <input type="hidden" name="active" value="{{$item->active==1?'0':'1'}}" />
                         </form>                    
                         <a href="javascript:void" class="text-secondary" onclick="if(confirm('Você quer mesmo {{$item->active==1?'Desativar':'Ativar'}}?'))return document.form{{$item->id}}.submit();"><span class="fa fa-power-off" data-toggle="tooltip" data-placement="left" title="" data-original-title="{{$item->active==1?'Desativar':'Ativar'}}"></span></a>

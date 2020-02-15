@@ -20,4 +20,7 @@ class District extends Model
     {
         return $this->morphMany('App\Domain\Quiz\Model\QuizOption', 'quiz_optionable');
     }
+    public function nable(){
+      return $this->name.', '.$this->city->title.'/'.$this->city->state->letter;
+    }
 }

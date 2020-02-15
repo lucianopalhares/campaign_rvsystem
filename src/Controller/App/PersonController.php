@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller\App\City;
+namespace App\Controller\App;
 
-use App\Domain\City\Model\District;
+use App\Domain\Person\Model\Person;
 use Illuminate\Http\Request;
 use App\Controller\Controller;
 use Illuminate\Database\QueryException;
@@ -10,23 +10,20 @@ use Illuminate\Validation\ValidationException;
 use Exception;
 use Illuminate\Validation\Rule;
 use \App;
+use Carbon\Carbon;
 
-class DistrictController extends Controller
+class PersonController extends Controller
 {
     protected $name;
     protected $link;
     protected $pathView;
     protected $model;
-    protected $state;
-    protected $city;
     
-    public function __construct(District $model){
-      $this->name = 'Bairro';
-      $this->link = '/app/city/bairros';
-      $this->pathView = 'app.district.';
+    public function __construct(Person $model){
+      $this->name = 'Pessoa';
+      $this->link = '/app/pessoas';
+      $this->pathView = 'app.person.';
       $this->model = $model;      
-      $this->state = App::make("App\Domain\City\Model\State");
-      $this->city = App::make("App\Domain\City\Model\City");
     }
     /**
      * Display a listing of the resource.
@@ -45,10 +42,8 @@ class DistrictController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {  
-        $states = $this->state::all();
-        
-        return view($this->pathView.'form',compact('states'));
+    {          
+        return view($this->pathView.'form');
     }
 
     /**
@@ -60,18 +55,34 @@ class DistrictController extends Controller
     public function store(Request $request)
     {        
         $rules = [
-            'city_id' =>  'required',
-            'name' =>  'required',
-            'type' =>  'required'
+            'first_name' =>  'required',
+            'last_name' =>  'required',
+            'cpf' =>  'required',
+            'sex' =>  'required',
+            'birth' => 'nullable|date_format:d/m/Y|before:'.Carbon::now()->subDays(6570)->format('d/m/Y'),
+            'years_old' => 'nullable|integer',
         ]; 
 
         $this->validate($request, $rules);
         
+        if(strlen($request->birth)>0){
+          $data = explode('/',$request->birth);
+          $request->birth = $data[2].'-'.$data[1].'-'.$data[0];
+        }
+        
         try {
             $model = new $this->model;
-            $model->city_id = $request->city_id;
-            $model->name = $request->name;
-            $model->type = $request->type;       
+            $model->first_name = $request->first_name;
+            $model->last_name = $request->last_name;
+            $model->cpf = $request->cpf;    
+            $model->sex = $request->sex;    
+            $model->slug = str_slug(time().'-'.$request->first_name.'-'.$request->last_name);
+            $model->nickname = $request->nickname;  
+            $model->years_old = $request->years_old;   
+            $model->birth = $request->birth;  
+            $model->salary = $request->salary;  
+            $model->education_level = $request->education_level;  
+            $model->user_id = $request->user_id;      
             
             $save = $model->save();
             
@@ -108,29 +119,51 @@ class DistrictController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\District  $model
+     * @param  \App\Person  $model
      * @return \Illuminate\Http\Response
      */
-    public function show(District $bairro)
+    public function show(Person $pessoa)
     {
-    
+        try {
+                      
+            $item = $pessoa;
+            
+            $show = true;
+                                    
+            return view($this->pathView.'form',compact('item','show'));  
+            
+        } catch (\Exception $e) {//errors exceptions
+          
+            $response = null;
+            
+            switch (get_class($e)) {
+              case QueryException::class:$response = $e->getMessage();
+              case Exception::class:$response = $e->getMessage();
+              default: $response = get_class($e);
+            }              
+            
+            if (request()->wantsJson()) {
+              return response()->json(['status'=>false,'msg'=>$response]);
+            }else{
+              return redirect($this->link)->withErrors($response);
+            }  
+          
+        }    
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\District  $model
+     * @param  \App\Person  $model
      * @return \Illuminate\Http\Response
      */
-    public function edit(District $bairro)
+    public function edit(Person $pessoa)
     {
         try {
                       
-            $item = $bairro;
-            
-            $states = $this->state::all();
-                        
-            return view($this->pathView.'form',compact('item','states'));  
+            $item = $pessoa;
+                                    
+            return view($this->pathView.'form',compact('item'));  
             
         } catch (\Exception $e) {//errors exceptions
           
@@ -155,25 +188,41 @@ class DistrictController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\District  $model
+     * @param  \App\Person  $model
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, District $bairro)
+    public function update(Request $request, Person $pessoa)
     {
         $rules = [
-            'city_id' =>  'required',
-            'name' =>  'required',
-            'type' =>  'required'
+            'first_name' =>  'required',
+            'last_name' =>  'required',
+            'cpf' =>  'required',
+            'sex' =>  'required',
+            'birth' => 'nullable|date_format:d/m/Y|before:'.Carbon::now()->subDays(6570)->format('d/m/Y'),
+            'years_old' => 'nullable|integer',
         ]; 
 
         $this->validate($request, $rules);
-        
+
+        if(strlen($request->birth)>0){
+          $data = explode('/',$request->birth);
+          $request->birth = $data[2].'-'.$data[1].'-'.$data[0];
+        }
+                
         try {
-            $model = $bairro;
+            $model = $pessoa;
             
-            $model->city_id = $request->city_id;
-            $model->name = $request->name;
-            $model->type = $request->type;          
+            $model->first_name = $request->first_name;
+            $model->last_name = $request->last_name;
+            $model->cpf = $request->cpf;    
+            $model->sex = $request->sex;    
+            $model->slug = str_slug(time().'-'.$request->first_name.'-'.$request->last_name);
+            $model->nickname = $request->nickname;  
+            $model->years_old = $request->years_old;   
+            $model->birth = $request->birth;  
+            $model->salary = $request->salary;  
+            $model->education_level = $request->education_level;  
+            $model->user_id = $request->user_id;              
             
             $save = $model->save();
             
@@ -210,14 +259,14 @@ class DistrictController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\District  $model
+     * @param  \App\Person  $model
      * @return \Illuminate\Http\Response
      */
-    public function destroy(District $bairro)
+    public function destroy(Person $pessoa)
     {
         try {
                       
-            $bairro->delete();
+            $pessoa->delete();
             
             $response = $this->name;
             

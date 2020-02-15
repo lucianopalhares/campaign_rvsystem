@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller\App\Person;
+namespace App\Controller\App;
 
-use App\Domain\Person\Model\Person;
+use App\Domain\City\Model\District;
 use Illuminate\Http\Request;
 use App\Controller\Controller;
 use Illuminate\Database\QueryException;
@@ -11,18 +11,22 @@ use Exception;
 use Illuminate\Validation\Rule;
 use \App;
 
-class PersonController extends Controller
+class DistrictController extends Controller
 {
     protected $name;
     protected $link;
     protected $pathView;
     protected $model;
+    protected $state;
+    protected $city;
     
-    public function __construct(Person $model){
-      $this->name = 'Pessoa';
-      $this->link = '/app/pessoas';
-      $this->pathView = 'app.person.';
+    public function __construct(District $model){
+      $this->name = 'Bairro';
+      $this->link = '/app/bairros';
+      $this->pathView = 'app.district.';
       $this->model = $model;      
+      $this->state = App::make("App\Domain\City\Model\State");
+      $this->city = App::make("App\Domain\City\Model\City");
     }
     /**
      * Display a listing of the resource.
@@ -41,8 +45,10 @@ class PersonController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {          
-        return view($this->pathView.'form');
+    {  
+        $states = $this->state::all();
+        
+        return view($this->pathView.'form',compact('states'));
     }
 
     /**
@@ -54,12 +60,9 @@ class PersonController extends Controller
     public function store(Request $request)
     {        
         $rules = [
-            'first_name' =>  'required',
-            'last_name' =>  'required',
-            'cpf' =>  'required',
-            'sex' =>  'required',
-            'test' =>  'required',
-            'cpf' =>  'required',
+            'city_id' =>  'required',
+            'name' =>  'required',
+            'type' =>  'required'
         ]; 
 
         $this->validate($request, $rules);
@@ -105,51 +108,29 @@ class PersonController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Person  $model
+     * @param  \App\District  $model
      * @return \Illuminate\Http\Response
      */
-    public function show(Person $pessoa)
+    public function show(District $bairro)
     {
-        try {
-                      
-            $item = $pessoa;
-            
-            $show = true;
-                                    
-            return view($this->pathView.'form',compact('item','show'));  
-            
-        } catch (\Exception $e) {//errors exceptions
-          
-            $response = null;
-            
-            switch (get_class($e)) {
-              case QueryException::class:$response = $e->getMessage();
-              case Exception::class:$response = $e->getMessage();
-              default: $response = get_class($e);
-            }              
-            
-            if (request()->wantsJson()) {
-              return response()->json(['status'=>false,'msg'=>$response]);
-            }else{
-              return redirect($this->link)->withErrors($response);
-            }  
-          
-        }    
+    
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Person  $model
+     * @param  \App\District  $model
      * @return \Illuminate\Http\Response
      */
-    public function edit(Person $pessoa)
+    public function edit(District $bairro)
     {
         try {
                       
-            $item = $pessoa;
-                                    
-            return view($this->pathView.'form',compact('item'));  
+            $item = $bairro;
+            
+            $states = $this->state::all();
+                        
+            return view($this->pathView.'form',compact('item','states'));  
             
         } catch (\Exception $e) {//errors exceptions
           
@@ -174,10 +155,10 @@ class PersonController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Person  $model
+     * @param  \App\District  $model
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Person $pessoa)
+    public function update(Request $request, District $bairro)
     {
         $rules = [
             'city_id' =>  'required',
@@ -188,7 +169,7 @@ class PersonController extends Controller
         $this->validate($request, $rules);
         
         try {
-            $model = $pessoa;
+            $model = $bairro;
             
             $model->city_id = $request->city_id;
             $model->name = $request->name;
@@ -229,14 +210,14 @@ class PersonController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Person  $model
+     * @param  \App\District  $model
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Person $pessoa)
+    public function destroy(District $bairro)
     {
         try {
                       
-            $pessoa->delete();
+            $bairro->delete();
             
             $response = $this->name;
             

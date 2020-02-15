@@ -18,14 +18,34 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::group(['namespace' => 'App','prefix' => 'app','middleware'=>'auth'],function() {
-    Route::get('/', 'DashboardController@index');
-    
-    Route::group(['namespace' => 'Quiz','prefix' => 'quiz'],function() {
-        Route::resource('/campanhas', 'QuizCampaignController');
-        Route::resource('/questoes', 'QuizQuestionController');
-        Route::resource('/opcoes', 'QuizOptionController');
-        Route::resource('/respostas', 'QuizAnswerController');
+  
+    Route::get('/', 'DashboardController@index');    
+    Route::resource('/pessoas', 'PersonController');
+    Route::resource('/bairros', 'DistrictController');
+    Route::resource('/campanhas', 'Quiz\QuizCampaignController');
+    Route::get('/error',function() {
+      return view('app._utils.error');
     });
-    Route::resource('/pessoas', 'Person\PersonController');
-    Route::resource('/bairros', 'City\DistrictController');
+    
+    Route::group(['prefix'=>'campanha','middleware'=>'auth','namespace'=>'Quiz','as'=>'Quiz'], function (){
+             
+      Route::group([
+            'prefix' => '{quizCampaignSlug}',
+            'middleware' => 'quizCampaign'
+        ], function () {
+            Route::get('dashboard', [
+                'as'   => '/',
+                'uses' => 'DashboardController@index',
+            ]);
+             
+          Route::resource('questoes','QuizQuestionController', array("as"=>"questoes","name"=>"questoes"));
+          Route::resource('opcoes','QuizOptionController', array("as"=>"opcoes","name"=>"opcoes"));
+          Route::resource('respostas','QuizAnswerController', array("as"=>"respostas","name"=>"respostas"));
+          Route::get('/error',function() {
+            return view('app.error');
+          });      
+      });
+    });
+    
 });
+

@@ -30,7 +30,7 @@
   </head>
   <body class="app sidebar-mini">
     <!-- Navbar-->
-    <header class="app-header"><a class="app-header__logo" href="index.html">Quiz</a>
+    <header class="app-header"><a class="app-header__logo" href="{{url('app')}}">Quiz Eleitoral</a>
       <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
       <!-- Navbar Right Menu-->
       <ul class="app-nav">
@@ -72,32 +72,13 @@
       </div>
       <ul class="app-menu">
         <li><a class="app-menu__item {{ (request()->is('app')) ? 'active' : '' }}" href="{{url('app')}}"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Dashboard</span></a></li>
-        <li class="treeview {{ (request()->is('app/quiz/campanhas/*')) ? 'is-expanded' : '' }} {{ (request()->is('app/quiz/campanhas')) ? 'is-expanded' : '' }}"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-braille"></i><span class="app-menu__label">Campanhas</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+        <li class="treeview {{ (request()->is('app/campanhas/*')) ? 'is-expanded' : '' }} {{ (request()->is('app/campanhas')) ? 'is-expanded' : '' }}"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-braille"></i><span class="app-menu__label">Campanhas</span><i class="treeview-indicator fa fa-angle-right"></i></a>
           <ul class="treeview-menu">
-            <li><a class="treeview-item {{ (request()->is('app/quiz/campanhas')) ? 'active' : '' }}" href="{{url('app/quiz/campanhas')}}"><i class="icon fa fa-circle-o"></i> Todos</a></li>
-            <li><a class="treeview-item {{ (request()->is('app/quiz/campanhas/create')) ? 'active' : '' }}" href="{{url('app/quiz/campanhas/create')}}"><i class="icon fa fa-circle-o"></i> Cadastrar</a></li>
+            <li><a class="treeview-item {{ (request()->is('app/campanhas')) ? 'active' : '' }}" href="{{url('app/campanhas')}}"><i class="icon fa fa-circle-o"></i> Todas Campanhas</a></li>
+            <li><a class="treeview-item {{ (request()->is('app/campanhas/create')) ? 'active' : '' }}" href="{{url('app/campanhas/create')}}"><i class="icon fa fa-circle-o"></i> Nova Campanha</a></li>
           </ul>
         </li>
-        <li class="treeview {{ (request()->is('app/quiz/questoes/*')) ? 'is-expanded' : '' }} {{ (request()->is('app/quiz/questoes')) ? 'is-expanded' : '' }}"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-quora"></i><span class="app-menu__label">Questões</span><i class="treeview-indicator fa fa-angle-right"></i></a>
-          <ul class="treeview-menu">
-            <li><a class="treeview-item {{ (request()->is('app/quiz/questoes')) ? 'active' : '' }}" href="{{url('app/quiz/questoes')}}"><i class="icon fa fa-circle-o"></i> Todos</a></li>
-            <li><a class="treeview-item {{ (request()->is('app/quiz/questoes/create')) ? 'active' : '' }}" href="{{url('app/quiz/questoes/create')}}"><i class="icon fa fa-circle-o"></i> Cadastrar</a></li>
-          </ul>
-        </li>
-
-        <li class="treeview {{ (request()->is('app/quiz/opcoes/*')) ? 'is-expanded' : '' }} {{ (request()->is('app/quiz/opcoes')) ? 'is-expanded' : '' }}"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-list"></i><span class="app-menu__label">Opções</span><i class="treeview-indicator fa fa-angle-right"></i></a>
-          <ul class="treeview-menu">
-            <li><a class="treeview-item {{ (request()->is('app/quiz/opcoes')) ? 'active' : '' }}" href="{{url('app/quiz/opcoes')}}"><i class="icon fa fa-circle-o"></i> Todos</a></li>
-            <li><a class="treeview-item {{ (request()->is('app/quiz/opcoes/create')) ? 'active' : '' }}" href="{{url('app/quiz/opcoes/create')}}"><i class="icon fa fa-circle-o"></i> Cadastrar</a></li>
-          </ul>
-        </li>
-
-        <li class="treeview {{ (request()->is('app/quiz/respostas/*')) ? 'is-expanded' : '' }} {{ (request()->is('app/quiz/respostas')) ? 'is-expanded' : '' }}"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-quote-right"></i><span class="app-menu__label">Respostas</span><i class="treeview-indicator fa fa-angle-right"></i></a>
-          <ul class="treeview-menu">
-            <li><a class="treeview-item {{ (request()->is('app/quiz/respostas')) ? 'active' : '' }}" href="{{url('app/quiz/respostas')}}"><i class="icon fa fa-circle-o"></i> Todos</a></li>
-            <li><a class="treeview-item {{ (request()->is('app/quiz/respostas/create')) ? 'active' : '' }}" href="{{url('app/quiz/respostas/create')}}"><i class="icon fa fa-circle-o"></i> Cadastrar</a></li>
-          </ul>
-        </li> 
+  
         <li class="treeview {{ (request()->is('app/pessoas/*')) ? 'is-expanded' : '' }} {{ (request()->is('app/pessoas')) ? 'is-expanded' : '' }}"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-users"></i><span class="app-menu__label">Pessoas</span><i class="treeview-indicator fa fa-angle-right"></i></a>
           <ul class="treeview-menu">
             <li><a class="treeview-item {{ (request()->is('app/pessoas')) ? 'active' : '' }}" href="{{url('app/pessoas')}}"><i class="icon fa fa-circle-o"></i> Todos</a></li>

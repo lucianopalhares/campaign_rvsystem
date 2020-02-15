@@ -21,7 +21,7 @@ class QuizCampaignController extends Controller
     
     public function __construct(QuizCampaign $model){
       $this->name = 'Campanha';
-      $this->link = '/app/quiz/campanhas';
+      $this->link = '/app/campanhas';
       $this->pathView = 'app.campaign.';
       $this->model = $model;
       //$this->question = App::make("App\Domain\Quiz\Model\QuizQuestion");
@@ -57,6 +57,7 @@ class QuizCampaignController extends Controller
     {        
         $rules = [
             'description' =>  'required',
+            'slug' =>  'required',
         ]; 
 
         $this->validate($request, $rules);
@@ -65,6 +66,7 @@ class QuizCampaignController extends Controller
             $model = new $this->model;
             $model->description = $request->description;
             $model->active = $request->active;
+            $model->slug = $request->slug;
             
             $save = $model->save();
             
@@ -152,7 +154,8 @@ class QuizCampaignController extends Controller
     public function update(Request $request, QuizCampaign $campanha)
     {
         $rules = [
-          'description' =>  'required'
+          'description' =>  'required',
+          'slug' =>  'required'
         ];  
         
         $this->validate($request, $rules);
@@ -163,6 +166,7 @@ class QuizCampaignController extends Controller
             
             $model->description = $request->description;
             $model->active = $request->active;
+            $model->slug = $request->slug;
             
             $save = $model->save();
             

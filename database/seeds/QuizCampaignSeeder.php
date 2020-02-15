@@ -11,6 +11,11 @@ class QuizCampaignSeeder extends Seeder
      */
     public function run()
     {
-        //
+        DB::table('quiz_campaigns')->insert([
+            'id' => 1,
+            'active' => 1,
+            'description' => 'Descrição da Campanha Teste',
+            'slug' => 'campanha-teste'
+        ]);
     }
 }

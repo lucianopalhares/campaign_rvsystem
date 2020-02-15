@@ -6,14 +6,14 @@ use App\Database\Eloquent\Model;
 
 class Politic extends Model
 {
+    public function person(){
+      return $this->belongsTo("App\Domain\Person\Model\Person","person_id");
+    }
     public function office(){
       return $this->belongsTo("App\Domain\Political\Model\PoliticalOffice","political_office_id");
     }
     public function party(){
       return $this->belongsTo("App\Domain\Political\Model\PoliticalParty","political_party_id");
-    }
-    public function options(){
-      return $this->hasMany("App\Domain\Quiz\Model\QuizOption","politic_id");
     }
     public function questions()
     {
@@ -22,5 +22,12 @@ class Politic extends Model
     public function options()
     {
         return $this->morphMany('App\Domain\Quiz\Model\QuizOption', 'quiz_optionable');
+    }
+    public function getFullNameAttribute()
+    {
+       return ucfirst($this->first_name) . ' ' . ucfirst($this->last_name);
+    }
+    public function nable(){
+      return $this->getFullNameAttribute();
     }
 }
