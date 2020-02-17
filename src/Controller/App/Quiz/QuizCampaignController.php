@@ -57,7 +57,7 @@ class QuizCampaignController extends Controller
     {        
         $rules = [
             'description' =>  'required',
-            'slug' =>  'required',
+            'slug' => 'required|unique:quiz_campaigns|max:100',
         ]; 
 
         $this->validate($request, $rules);
@@ -66,7 +66,7 @@ class QuizCampaignController extends Controller
             $model = new $this->model;
             $model->description = $request->description;
             $model->active = $request->active;
-            $model->slug = $request->slug;
+            $model->slug = str_slug($request->slug);
             
             $save = $model->save();
             
@@ -155,7 +155,7 @@ class QuizCampaignController extends Controller
     {
         $rules = [
           'description' =>  'required',
-          'slug' =>  'required'
+          'slug' =>  ['required','max:100',Rule::unique('quiz_campaigns')->ignore($request->id)],
         ];  
         
         $this->validate($request, $rules);
@@ -166,7 +166,7 @@ class QuizCampaignController extends Controller
             
             $model->description = $request->description;
             $model->active = $request->active;
-            $model->slug = $request->slug;
+            $model->slug = str_slug($request->slug);
             
             $save = $model->save();
             

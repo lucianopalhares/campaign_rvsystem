@@ -93,7 +93,7 @@
           @foreach($question->options as $option)
                   
             labels.push("{{$option->getDescription()}}");
-            datas.push("{{$option->answers->count()}}");
+            datas.push("{{round($option->answers->count()*100/$question->answers->count())}}");
           
           @endforeach
         

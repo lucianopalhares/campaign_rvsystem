@@ -80,63 +80,59 @@ class QuizAnswerSeeder extends Seeder
           $fichas_restantes = $fichas;
           
           if($question->options_required=='1'){
+            
+            $qtdeOpcoes = $question->options->count();
           
-          $qtdeOpcoes = $question->options->count();
-          $rodada = 1;
-          while ($rodada <= $qtdeOpcoes) {
-            $rodada++;
-            
-            $dividedAll = $fichas_restantes/$qtdeOpcoes;
-            $restDivided = $fichas_restantes-$dividedAll;
-            $restDividedMinus = $restDivided/$qtdeOpcoes;
-            
-            $dividedAllWithMinus = $dividedAll+$restDividedMinus;
-            $fichas_restantes = $fichas_restantes-$dividedAllWithMinus;   
+            foreach ($question->options as $option) {
+                                              
+              $dividedAll = $fichas/$qtdeOpcoes;// 100 / 9 = 11.11
+              $restDivided = $fichas-$dividedAll;// 100 - 11.11 = 88
+              $restDividedMinus = $restDivided/$qtdeOpcoes; // 88/9 = 9.87
+              
+              $dividedAllWithMinus = $dividedAll+$restDividedMinus;// 11.11 + 9.87 = 20.98 *
+              $fichas = $fichas-$dividedAllWithMinus; 
+              
+              $a = 1;
+              while ($a <= $dividedAllWithMinus) {                             
+                $a++;
 
-              $first_name = Arr::random($first_names);
-              $middle_name = Arr::random($middle_names);
-              $last_name = Arr::random($last_names);
-              
-              $name = $first_name['first_name'].' '.$middle_name.' '.$last_name;             
-                          
-              $sex = $first_name['sex'];
+                $first_name = Arr::random($first_names);
+                $middle_name = Arr::random($middle_names);
+                $last_name = Arr::random($last_names);
+                
+                $name = $first_name['first_name'].' '.$middle_name.' '.$last_name;             
                             
-              $questions =  @json_decode(json_encode($question->options), true);
-              $option = Arr::random($questions);
-              $option_id = $option['id'];
-              
-              //$sex = Arr::random($sexs);
-              $years_old = Arr::random($years_olds);
-              $salary = Arr::random($salaries);
-              $education_level = Arr::random($education_levels);
-              
-              $district = Arr::random($districts);
-              $district_id = $district['id'];
-                                           
-            $a = 1;
-            while ($a <= $dividedAllWithMinus) {              
-                            
-              DB::table('quiz_answers')->insert([
-                  'quiz_campaign_id' => 1,
-                  'quiz_question_id' => $question->id,
-                  'description' => '',
-                  'quiz_option_id' => $option_id,
-                  'name' => $name,
-                  'sex' => $sex,
-                  'years_old' => $years_old,
-                  'salary' => $salary,
-                  'education_level' => $education_level,
-                  'state_id' => 11,
-                  'city_id' => 2342,
-                  'district_id' => $district_id,
-                  'address' => 'Rua Teste, Nº 999',
-                  'zip_code' => '99999-999',
-              ]);
-              
-              $a++;
-            }
-          }
-        }
+                $sex = $first_name['sex'];
+                              
+                $option_id = $option->id;
+                
+                //$sex = Arr::random($sexs);
+                $years_old = Arr::random($years_olds);
+                $salary = Arr::random($salaries);
+                $education_level = Arr::random($education_levels);
+                
+                $district = Arr::random($districts);
+                $district_id = $district['id'];
+
+                DB::table('quiz_answers')->insert([
+                    'quiz_campaign_id' => 1,
+                    'quiz_question_id' => $question->id,
+                    'description' => '',
+                    'quiz_option_id' => $option_id,
+                    'name' => $name,
+                    'sex' => $sex,
+                    'years_old' => $years_old,
+                    'salary' => $salary,
+                    'education_level' => $education_level,
+                    'state_id' => 11,
+                    'city_id' => 2342,
+                    'district_id' => $district_id,
+                    'address' => 'Rua Teste, Nº 999',
+                    'zip_code' => '99999-999',
+                ]);                              
+              }  
+            }  
+        }//if($question->options_required=='1'){
       }
     }
 }

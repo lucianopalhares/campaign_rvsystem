@@ -60,10 +60,10 @@
                   <label class="control-label">Status</label>
                   <select {{isset($show)?"disabled='disabled'":''}} class="form-control {{ $errors->has('active')? 'is-invalid':'' }}" id="active" name="active">
 
-                      <option value="0" {{ old('active') == "0" ? "selected='selected'" : isset($item->active) && $item->active == "0" ? "selected='selected'" : "selected='selected'" }}>
+                      <option value="0" {{ old('active') == "0" ? "selected='selected'" : isset($item->active) && $item->active == "0" ? "selected='selected'" : "" }}>
                         Não Ativa
                       </option>
-                      <option value="1" {{ old('active') == "1" ? "selected='selected'" : isset($item->active) && $item->active == "1" ? "selected='selected'" : '' }}>
+                      <option value="1" {{ old('active') == "1" ? "selected='selected'" : isset($item->active) && $item->active == "1" ? "selected='selected'" : "selected='selected'" }}>
                         Ativada
                       </option>                 
                   </select>

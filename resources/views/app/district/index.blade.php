@@ -15,7 +15,7 @@
         </ul>
       </div>
       <div class="flash_msg">
-        @include('app.layout.flash_msg')
+        @include('app._utils.flash_msg')
       </div>
       <div class="row">
         <div class="col-md-12">

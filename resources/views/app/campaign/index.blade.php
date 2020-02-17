@@ -62,7 +62,10 @@
                         </form>                    
                         <a href="javascript:void" class="text-secondary" onclick="if(confirm('Você quer mesmo {{$item->active==1?'Desativar':'Ativar'}}?'))return document.delete{{$item->id}}.submit();"><span class="fa fa-power-off" data-toggle="tooltip" data-placement="left" title="" data-original-title="{{$item->active==1?'Desativar':'Ativar'}}"></span></a>
                         <!-- ativar/desativar fim -->
-                      &nbsp;                                           
+                      &nbsp;    
+                          <a href="{{url('app/campanha/'.$item->slug.'/dashboard')}}" target="_blank" data-toggle="tooltip" data-placement="left" title="" data-original-title="Entrar nesta Campanha">
+                            <span class="badge badge-warning"><i class="fa fa-mail-forward"></i>Entrar</span>
+                          </a>                                        
                       </td>
                     </tr>
                     @endforeach
