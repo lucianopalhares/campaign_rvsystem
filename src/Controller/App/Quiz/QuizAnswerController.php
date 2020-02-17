@@ -3,6 +3,7 @@
 namespace App\Controller\App\Quiz;
 
 use App\Domain\Quiz\Model\QuizAnswer;
+use App\Domain\Quiz\Model\QuizCampaign;
 use Illuminate\Http\Request;
 use App\Controller\Controller;
 use Illuminate\Database\QueryException;
@@ -18,25 +19,50 @@ class QuizAnswerController extends Controller
     protected $pathView;
     protected $model;
     protected $campaign;
+    protected $question;
+    protected $option;
+    protected $quizCampaignSlug;
     protected $state;
+    protected $politic;
+    protected $city;
+    protected $district;
     
     public function __construct(QuizAnswer $model){
       $this->name = 'Resposta';
-      $this->link = '/app/quiz/respostas';
-      $this->pathView = 'app.answer.';
-      $this->model = $model;
-      $this->campaign = App::make("App\Domain\Quiz\Model\QuizCampaign");
+      $this->link = '/app/campanha/';
+      $this->pathView = 'app.quiz.answer.';
+      $this->model = App::make("App\Domain\Quiz\Model\QuizAnswer");
+      $this->option = App::make("App\Domain\Quiz\Model\QuizOption");
+      $this->question = App::make("App\Domain\Quiz\Model\QuizQuestion");
+      $this->campaign = App::make("App\Domain\Quiz\Model\QuizCampaign");      
+      $this->political_party = App::make("App\Domain\Political\Model\PoliticalParty");
+      $this->politic = App::make("App\Domain\Political\Model\Politic");
       $this->state = App::make("App\Domain\City\Model\State");
+      $this->city = App::make("App\Domain\City\Model\City");
+      $this->district = App::make("App\Domain\City\Model\District");
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($quizCampaignSlug, Request $request)
     {
-        $items = $this->model::paginate(10);
-        return view($this->pathView.'index',compact('items'));
+        /* inserir em todos metodos - inicio */
+        $quizCampaign = request()->session()->get('quizCampaign');
+        $this->link .= $quizCampaign->slug.'/opcoes';
+        /* inserir em todos metodos - fim */    
+        
+        $items = $this->model::whereQuizCampaignId($quizCampaign->id)->get();
+        
+        if($request->has('quiz_question_id')){
+          $items = $this->model::whereQuizQuestionId($request->quiz_question_id)->whereQuizCampaignId($quizCampaign->id)->get();
+        }   
+        if($request->has('quiz_option_id')){
+          $items = $this->model::whereQuizOptionId($request->quiz_option_id)->whereQuizCampaignId($quizCampaign->id)->get();
+        }  
+                        
+        return view($this->pathView.'index',compact('items','quizCampaign'));
     }
 
     /**
@@ -46,12 +72,16 @@ class QuizAnswerController extends Controller
      */
     public function create()
     {
-        $campaigns = $this->campaign::all();
-        
-        if(!$campaigns->count()) return redirect('app/quiz/campanhas/create')->withErrors('Primeiro Cadastre uma Campanha');
-        
+        /* inserir em todos metodos - inicio */
+        $quizCampaign = request()->session()->get('quizCampaign');
+        $this->link .= $quizCampaign->slug.'/questoes';
+        /* inserir em todos metodos - fim */
+           
         $states = $this->state::all();
-        return view($this->pathView.'form',compact('campaigns','states'));
+        $questions = $this->question::whereQuizCampaignId($quizCampaign->id)->get();
+                                
+        return view($this->pathView.'form',compact('quizCampaign','states','questions'));
+    
     }
 
     /**
@@ -65,30 +95,46 @@ class QuizAnswerController extends Controller
         $rules = [
             'quiz_campaign_id' =>  'required',
             'quiz_question_id' =>  'required',
-            'quiz_option_id' =>  'required',
-            'description' =>  'required',
+            //'quiz_option_id' =>  'required',
+            //'description' =>  'required',
             'name' =>  'required',
-            'address' =>  'required',
-            'district' =>  'required',
-            'zip_code' =>  'required',
-            'state_id' =>  'required',
-            'city_id' =>  'required'
+            //'address' =>  'required',
+            //'district' =>  'required',
+            //'zip_code' =>  'required',
+            //'state_id' =>  'required',
+            //'city_id' =>  'required'
         ]; 
 
         $this->validate($request, $rules);
         
+        if($this->question::findOrFail($request->quiz_question_id)->options_required){
+          if(!$request->quiz_option_id){
+            return back()->withInput($request->toArray())->withErrors('Escolha uma Opção como Resposta ou aguarde o cadastro de novas opções (questão multipla escolha)');
+          }
+        }else{
+          if(strlen($request->description)==0){
+            return back()->withInput($request->toArray())->withErrors('Responda a Questão na DESCRIÇÃO, não é multipla escolha (não tem opções cadastradas para esta questão)');
+          }
+        }
+        
         try {
             $model = new $this->model;
+            
             $model->quiz_campaign_id = $request->quiz_campaign_id;
             $model->quiz_question_id = $request->quiz_question_id;
-            $model->quiz_option_id = $request->quiz_option_id;
-            $model->description = $request->description;                 
+            $model->answered_times = $request->answered_times;
+            $model->description = $request->description; 
+            $model->quiz_option_id = $request->quiz_option_id;                            
             $model->name = $request->name;  
-            $model->address = $request->address;  
-            $model->district = $request->district;  
+            $model->sex = $request->sex;
+            $model->years_old = $request->years_old;
+            $model->salary = $request->salary;
+            $model->education_level = $request->education_level; 
+            $model->state_id = $request->state_id; 
+            $model->city_id = $request->city_id; 
+            $model->district_id = $request->district_id; 
+            $model->address = $request->address;               
             $model->zip_code = $request->zip_code;  
-            $model->state_id = $request->state_id;  
-            $model->city_id = $request->city_id;         
             
             $save = $model->save();
             
@@ -128,18 +174,23 @@ class QuizAnswerController extends Controller
      * @param  \App\QuizAnswer  $model
      * @return \Illuminate\Http\Response
      */
-    public function show(QuizAnswer $resposta)
+    public function show($quizCampaignSlug, QuizAnswer $resposta)
     {
         try {
                       
             $item = $resposta;
             
-            $campaigns = $this->campaign::all();
+            /* inserir em todos metodos - inicio */
+            $quizCampaign = request()->session()->get('quizCampaign');
+            $this->link .= $quizCampaign->slug.'/questoes';
+            /* inserir em todos metodos - fim */
+               
             $states = $this->state::all();
+            $questions = $this->question::whereQuizCampaignId($quizCampaign->id)->get();
             
             $show = true;
-                        
-            return view($this->pathView.'form',compact('item','campaigns','states','show'));  
+                                    
+            return view($this->pathView.'form',compact('item','quizCampaign','states','show','questions'));  
             
         } catch (\Exception $e) {//errors exceptions
           
@@ -166,16 +217,21 @@ class QuizAnswerController extends Controller
      * @param  \App\QuizAnswer  $model
      * @return \Illuminate\Http\Response
      */
-    public function edit(QuizAnswer $resposta)
+    public function edit($quizCampaignSlug, QuizAnswer $resposta)
     {
         try {
                       
             $item = $resposta;
             
-            $campaigns = $this->campaign::all();
+            /* inserir em todos metodos - inicio */
+            $quizCampaign = request()->session()->get('quizCampaign');
+            $this->link .= $quizCampaign->slug.'/questoes';
+            /* inserir em todos metodos - fim */
+               
             $states = $this->state::all();
-                        
-            return view($this->pathView.'form',compact('item','campaigns','states'));  
+            $questions = $this->question::whereQuizCampaignId($quizCampaign->id)->get();
+                                    
+            return view($this->pathView.'form',compact('item','quizCampaign','states','questions')); 
             
         } catch (\Exception $e) {//errors exceptions
           
@@ -203,36 +259,46 @@ class QuizAnswerController extends Controller
      * @param  \App\QuizAnswer  $model
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, QuizAnswer $resposta)
+    public function update(Request $request, $quizCampaignSlug, QuizAnswer $resposta)
     {
         $rules = [
             'quiz_campaign_id' =>  'required',
             'quiz_question_id' =>  'required',
-            'quiz_option_id' =>  'required',
-            'description' =>  'required',
+            //'quiz_option_id' =>  'required',
+            //'description' =>  'required',
             'name' =>  'required',
-            'address' =>  'required',
-            'district' =>  'required',
-            'zip_code' =>  'required',
-            'state_id' =>  'required',
-            'city_id' =>  'required'
         ]; 
 
         $this->validate($request, $rules);
-        
+
+        if($this->question::findOrFail($request->quiz_question_id)->options_required){
+          if(!$request->quiz_option_id){
+            return back()->withInput($request->toArray())->withErrors('Escolha uma Opção como Resposta ou aguarde o cadastro de novas opções (questão multipla escolha)');
+          }
+        }else{
+          if(strlen($request->description)==0){
+            return back()->withInput($request->toArray())->withErrors('Responda a Questão na DESCRIÇÃO, não é multipla escolha (não tem opções cadastradas para esta questão)');
+          }
+        }
+                
         try {
             $model = $resposta;
             
             $model->quiz_campaign_id = $request->quiz_campaign_id;
             $model->quiz_question_id = $request->quiz_question_id;
-            $model->quiz_option_id = $request->quiz_option_id;
-            $model->description = $request->description;                 
+            $model->answered_times = $request->answered_times;
+            $model->description = $request->description; 
+            $model->quiz_option_id = $request->quiz_option_id;                            
             $model->name = $request->name;  
-            $model->address = $request->address;  
-            $model->district = $request->district;  
-            $model->zip_code = $request->zip_code;  
+            $model->sex = $request->sex;
+            $model->years_old = $request->years_old;
+            $model->salary = $request->salary;
+            $model->education_level = $request->education_level; 
             $model->state_id = $request->state_id; 
-            $model->city_id = $request->city_id;          
+            $model->city_id = $request->city_id; 
+            $model->district_id = $request->district_id; 
+            $model->address = $request->address;               
+            $model->zip_code = $request->zip_code;     
             
             $save = $model->save();
             
@@ -272,7 +338,7 @@ class QuizAnswerController extends Controller
      * @param  \App\QuizAnswer  $model
      * @return \Illuminate\Http\Response
      */
-    public function destroy(QuizAnswer $resposta)
+    public function destroy($quizCampaignSlug, QuizAnswer $resposta)
     {
         try {
                       

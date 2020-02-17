@@ -42,7 +42,6 @@ class CreateQuizAnswersTable extends Migration
             $table->enum('salary',[
               'Até 1 Salário Minimo',
               'Entre 1 e 2 Salários Minimos',
-              'Não Declarou/Não Respondeu',
               'Entre 2 e 5 Salários Minimos',
               'Entre 5 e 10 Salários Minimos',
               'Mais de 10 Salários Minimos',

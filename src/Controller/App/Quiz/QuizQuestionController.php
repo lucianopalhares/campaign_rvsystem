@@ -18,19 +18,26 @@ class QuizQuestionController extends Controller
     protected $link;
     protected $pathView;
     protected $model;
+    protected $option;
     protected $campaign;
     protected $quizCampaignSlug;
     protected $state;
     protected $politic;
+    protected $city;
+    protected $district;
     
-    public function __construct(QuizQuestion $model){
+    public function __construct(){
       $this->name = 'Questão';
       $this->link = '/app/campanha/';
       $this->pathView = 'app.quiz.question.';
-      $this->model = $model;
-      $this->campaign = App::make("App\Domain\Quiz\Model\QuizCampaign");
-      $this->state = App::make("App\Domain\City\Model\State");
+      $this->model = App::make("App\Domain\Quiz\Model\QuizQuestion");
+      $this->option = App::make("App\Domain\Quiz\Model\QuizOption");
+      $this->campaign = App::make("App\Domain\Quiz\Model\QuizCampaign");      
+      $this->political_party = App::make("App\Domain\Political\Model\PoliticalParty");
       $this->politic = App::make("App\Domain\Political\Model\Politic");
+      $this->state = App::make("App\Domain\City\Model\State");
+      $this->city = App::make("App\Domain\City\Model\City");
+      $this->district = App::make("App\Domain\City\Model\District");
     }
     /**
      * Display a listing of the resource.
@@ -42,19 +49,9 @@ class QuizQuestionController extends Controller
         /* inserir em todos metodos - inicio */
         $quizCampaign = request()->session()->get('quizCampaign');
         $this->link .= $quizCampaign->slug.'/questoes';
-        /* inserir em todos metodos - fim */
-        
-        $state = $this->state::all();
-        $politic = $this->politic::all();
-        
-        $merged = $state->merge($politic);
-        
-        
-        dd($merged);
-        
-        return $merged[1];
+        /* inserir em todos metodos - fim */    
                 
-        $items = $this->model::paginate(10);
+        $items = $this->model::whereQuizCampaignId($quizCampaign->id)->get();
         return view($this->pathView.'index',compact('items','quizCampaign'));
     }
 
@@ -69,8 +66,15 @@ class QuizQuestionController extends Controller
         $quizCampaign = request()->session()->get('quizCampaign');
         $this->link .= $quizCampaign->slug.'/questoes';
         /* inserir em todos metodos - fim */
-                
-        return view($this->pathView.'form',compact('quizCampaign'));
+
+        $political_parties = $this->political_party::all();
+        $politics = $this->politic::with('political_office')->get();   
+        $states = $this->state::all();
+        $cities = $this->city::with('state')->get();
+        $districts = $this->district::with('city','city.state')->get();
+                                
+        return view($this->pathView.'form',compact('quizCampaign','political_parties','politics','states','cities','districts'));
+    
     }
 
     /**
@@ -79,7 +83,7 @@ class QuizQuestionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $quizCampaignSlug)
     {        
         $rules = [
             'quiz_campaign_id' =>  'required',
@@ -88,11 +92,20 @@ class QuizQuestionController extends Controller
 
         $this->validate($request, $rules);
         
+        if(!$request->quiz_questionable_id||!$request->quiz_questionable_type||!$request->quiz_questionable_name){
+            $request->quiz_questionable_id = null;
+            $request->quiz_questionable_type = null;
+            $request->quiz_questionable_name = null;          
+        }
+                
         try {
             $model = new $this->model;
             $model->quiz_campaign_id = $request->quiz_campaign_id;
             $model->description = $request->description;
-            $model->multiple_choice = $request->multiple_choice;
+            $model->options_required = $request->options_required;
+            $model->quiz_questionable_id = $request->quiz_questionable_id;
+            $model->quiz_questionable_type = $request->quiz_questionable_type;
+            $model->quiz_questionable_name = $request->quiz_questionable_name;
             
             $save = $model->save();
             
@@ -143,17 +156,24 @@ class QuizQuestionController extends Controller
      * @param  \App\QuizQuestion  $model
      * @return \Illuminate\Http\Response
      */
-    public function edit(QuizQuestion $questo)
+    public function edit($quizCampaignSlug, QuizQuestion $questo)
     {
         try {
-            /* inserir em todos metodos - inicio */
-            $quizCampaign = request()->session()->get('quizCampaign');
-            $this->link .= $quizCampaign->slug.'/questoes';
-            /* inserir em todos metodos - fim */      
-                            
-            $item = $questo;
-                                    
-            return view($this->pathView.'form',compact('item','quizCampaign'));  
+          /* inserir em todos metodos - inicio */
+          $quizCampaign = request()->session()->get('quizCampaign');
+          $this->link .= $quizCampaign->slug.'/questoes';
+          /* inserir em todos metodos - fim */
+          
+          $item = $questo;
+
+          $political_parties = $this->political_party::all();
+          $politics = $this->politic::with('political_office')->get();   
+          $states = $this->state::all();
+          $cities = $this->city::with('state')->get();
+          $districts = $this->district::with('city','city.state')->get();
+                                  
+          return view($this->pathView.'form',compact('item','quizCampaign','political_parties','politics','states','cities','districts'));
+      
             
         } catch (\Exception $e) {//errors exceptions
           
@@ -181,7 +201,7 @@ class QuizQuestionController extends Controller
      * @param  \App\QuizQuestion  $model
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, QuizQuestion $questo)
+    public function update(Request $request, $quizCampaignSlug, QuizQuestion $questo)
     {
         $rules = [
             'quiz_campaign_id' =>  'required',
@@ -189,13 +209,22 @@ class QuizQuestionController extends Controller
         ]; 
 
         $this->validate($request, $rules);
-        
+
+        if(!$request->quiz_questionable_id||!$request->quiz_questionable_type||!$request->quiz_questionable_name){
+            $request->quiz_questionable_id = null;
+            $request->quiz_questionable_type = null;
+            $request->quiz_questionable_name = null;          
+        }
+              
         try {
             $model = $questo;
             
             $model->quiz_campaign_id = $request->quiz_campaign_id;
             $model->description = $request->description;
-            $model->multiple_choice = $request->multiple_choice;
+            $model->options_required = $request->options_required;
+            $model->quiz_questionable_id = $request->quiz_questionable_id;
+            $model->quiz_questionable_type = $request->quiz_questionable_type;
+            $model->quiz_questionable_name = $request->quiz_questionable_name;
             
             $save = $model->save();
             
@@ -235,7 +264,7 @@ class QuizQuestionController extends Controller
      * @param  \App\QuizQuestion  $model
      * @return \Illuminate\Http\Response
      */
-    public function destroy(QuizQuestion $questo)
+    public function destroy($quizCampaignSlug, QuizQuestion $questo)
     {
         try {
                       
@@ -270,7 +299,23 @@ class QuizQuestionController extends Controller
         }  
     }
     public function options(QuizQuestion $questo){
-      return response()->json($questo->options);
+      
+      $data = [];
+      $data['quiz_question'] = $questo;
+      $data['data'] = [];
+      foreach ($questo->options as $option) {
+        $description = '';
+        if($option->description){
+          $description = $option->description;
+        }
+        if($option->quiz_optionable_id){
+          $description .= ' '.$option->quiz_optionable->nable();
+        }
+        $insert['description'] = $description;
+        $insert['id'] = $option->id;
+        $data['data'][] = $insert;
+      }    
+      return response()->json($data);
     }
 }
 

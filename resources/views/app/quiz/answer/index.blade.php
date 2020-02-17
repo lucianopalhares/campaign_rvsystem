@@ -5,12 +5,13 @@
     <main class="app-content">
       <div class="app-title">
         <div>
-          <h1><i class="fa fa-quote-right"></i> {{isset($title)?$title:'Respostas'}} &nbsp;&nbsp;<a href="{{url('app/quiz/respostas/create')}}" class="text-primary" data-toggle="tooltip" data-placement="right" title="Cadastrar Resposta"><span class="fa fa-plus"></span></a></h1>
-          <p>Tabela com {{isset($title)?$title:'todas as Respostas'}}</p>
+          <h1><i class="fa fa-quote-right"></i> {{isset($title)?$title:'Respostas'}} da Campanha {{$quizCampaign->id}} &nbsp;&nbsp;<a href="{{url('app/campanha/'.$quizCampaign->slug.'/respostas/create')}}" class="text-primary" data-toggle="tooltip" data-placement="right" title="Responder uma Questão"><span class="fa fa-plus"></span></a></h1>
+          <p>Tabela com {{isset($title)?$title:'todas as Respostas'}} da Campanha {{$quizCampaign->id}}</p>
         </div>
         <ul class="app-breadcrumb breadcrumb side">
           <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
-          <li class="breadcrumb-item">Respostas</li>
+          <li class="breadcrumb-item">Campanha {{$quizCampaign->id}}</li>
+          <li class="breadcrumb-item"><a href="{{url('app/campanha/'.$quizCampaign->slug.'/respostas')}}">Respostas</a></li>
           <li class="breadcrumb-item active">Tabela</li>
         </ul>
       </div>
@@ -27,10 +28,8 @@
                     <tr>
                       <th>#</th>
                       <th>Municipe</th>
-                      <th>Descrição</th>                      
-                      <th>Opção</th>
-                      <th>Questão</th>
-                      <th>Campanha</th>
+                      <th>Questão</th>  
+                      <th>Resposta</th>
                       <th><i class="fa fa-cog"></i></th>
                     </tr>
                   </thead>
@@ -39,19 +38,31 @@
                     <tr>
                       <td>{{$item->id}}</td>
                       <td>{{$item->name}}</td>
-                      <td>{{$item->description}}</td>
-                      <td><span data-toggle="tooltip" data-placement="top" title="" data-original-title="{{'id:'.$item->quiz_option_id.' / '.$item->option->description}}">{{substr($item->option->description, -15).'..'}}</span></td>
-                      <td><span data-toggle="tooltip" data-placement="top" title="" data-original-title="{{'id:'.$item->quiz_question_id.' / '.$item->question->description}}">{{substr($item->question->description, -15).'..'}}</span></td>             
-                      <td><span data-toggle="tooltip" data-placement="top" title="" data-original-title="{{'id:'.$item->quiz_campaign_id.' / '.$item->campaign->description}}">{{substr($item->campaign->description, -15).'..'}}</span></td>             
-                                            
+                      <td>
+                        
+                        {{$item->question->getDescription()}}    
+                        @if($item->question->options_required)
+                          <a href="{{url('app/campanha/'.$quizCampaign->slug.'/opcoes?quiz_question_id='.$item->quiz_question_id)}}" target="_blank" data-toggle="tooltip" data-placement="left" title="" data-original-title="Abrir uma nova Guia de Página com Opções Somente desta Questão">
+                            <small><i class="fa fa-list" data-toggle="tooltip" data-placement="left" title="" data-original-title="Multipla Escolha"></i></small>
+                          </a> 
+                        @endif   
+                                                        
+                      </td>
+                      <td>
+                        @if($item->quiz_option_id)                          
+                            {{$item->option->getDescription()}}  
+                        @endif
+                        {{$item->description?$item->description:''}}
+                      </td>              
                       <td>              
-                      <a href="{{url('app/quiz/respostas/'.$item->id.'/edit')}}" class="text-primary"><span class="fa fa-edit" data-toggle="tooltip" data-placement="left" title="" data-original-title="Editar"></span></a>
-                      <a href="{{url('app/quiz/respostas/'.$item->id)}}" class="text-secondary"><span class="fa fa-eye" data-toggle="tooltip" data-placement="left" title="" data-original-title="Visualizar"></span></a>
-                        <form name="delete" action="{{ route('respostas.destroy', $item->id) }}" method="POST" style="display: none;">
+                      <a href="{{url('app/campanha/'.$quizCampaign->slug.'/respostas/'.$item->id.'/edit')}}" class="text-primary"><span class="fa fa-edit" data-toggle="tooltip" data-placement="left" title="" data-original-title="Editar"></span></a>
+                      <a href="{{url('app/campanha/'.$quizCampaign->slug.'/respostas/'.$item->id)}}" class="text-secondary"><span class="fa fa-eye" data-toggle="tooltip" data-placement="left" title="" data-original-title="Visualizar"></span></a>
+                      
+                        <form name="delete{{$item->id}}" action="{{url('app/campanha/'.$quizCampaign->slug.'/respostas/'.$item->id)}}" method="POST" style="display: none;">
                             @method('DELETE')
                             @csrf
                         </form>                    
-                        <a href="javascript:void" class="text-danger" onclick="if(confirm('Você quer mesmo deletar?'))document.delete.submit();"><span class="fa fa-trash" data-toggle="tooltip" data-placement="left" title="" data-original-title="Excluir"></span></a>
+                        <a href="javascript:void" class="text-danger" onclick="if(confirm('Você quer mesmo deletar?'))return document.delete{{$item->id}}.submit();"><span class="fa fa-trash" data-toggle="tooltip" data-placement="left" title="" data-original-title="Excluir"></span></a>
                       
                       &nbsp;                                           
                       </td>

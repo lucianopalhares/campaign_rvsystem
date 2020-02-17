@@ -19,4 +19,11 @@ class QuizQuestion extends Model
     {
         return $this->morphTo();
     }
+    public function getDescription(){
+      if($this->quiz_questionable_id){
+        return $this->description.' '.$this->quiz_questionable->nable().' ?';
+      }else{
+        return $this->description.' ?';
+      }
+    }
 }

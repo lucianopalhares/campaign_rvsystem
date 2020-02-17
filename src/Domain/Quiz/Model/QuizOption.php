@@ -19,4 +19,11 @@ class QuizOption extends Model
     {
         return $this->morphTo();
     }    
+    public function getDescription(){
+      $description = strlen($this->description)>0?$this->description:'';
+      if($this->quiz_optionable_id){
+        $description .= ' '.$this->quiz_optionable->nable();
+      }
+      return $description;
+    }
 }

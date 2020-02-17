@@ -79,22 +79,22 @@
 
         <li class="treeview {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/questoes/*')) ? 'is-expanded' : '' }} {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/questoes')) ? 'is-expanded' : '' }}"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-quora"></i><span class="app-menu__label">Questões</span><span class="badge badge-danger">{{$quizCampaign->questions->count()}}</span>&nbsp;&nbsp;&nbsp;<i class="treeview-indicator fa fa-angle-right"></i></a>
           <ul class="treeview-menu">
-            <li><a class="treeview-item {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/questoes')) ? 'active' : '' }}" href="{{url('app/campanha/'.$quizCampaign->slug.'/questoes')}}"><i class="icon fa fa-circle-o"></i> Todos</a></li>
-            <li><a class="treeview-item {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/questoes/create')) ? 'active' : '' }}" href="{{url('app/campanha/'.$quizCampaign->slug.'/questoes/create')}}"><i class="icon fa fa-circle-o"></i> Cadastrar</a></li>
+            <li><a class="treeview-item {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/questoes')) ? 'active' : '' }}" href="{{url('app/campanha/'.$quizCampaign->slug.'/questoes')}}"><i class="icon fa fa-circle-o"></i> Todas Questões</a></li>
+            <li><a class="treeview-item {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/questoes/create')) ? 'active' : '' }}" href="{{url('app/campanha/'.$quizCampaign->slug.'/questoes/create')}}"><i class="icon fa fa-circle-o"></i> Nova Questão</a></li>
           </ul>
         </li>
 
         <li class="treeview {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/opcoes/*')) ? 'is-expanded' : '' }} {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/opcoes')) ? 'is-expanded' : '' }}"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-list"></i><span class="app-menu__label">Opções</span><span class="badge badge-warning">{{$quizCampaign->options->count()}}</span>&nbsp;&nbsp;&nbsp;<i class="treeview-indicator fa fa-angle-right"></i></a>
           <ul class="treeview-menu">
-            <li><a class="treeview-item {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/opcoes')) ? 'active' : '' }}" href="{{url('app/campanha/'.$quizCampaign->slug.'/opcoes')}}"><i class="icon fa fa-circle-o"></i> Todos</a></li>
-            <li><a class="treeview-item {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/opcoes/create')) ? 'active' : '' }}" href="{{url('app/campanha/'.$quizCampaign->slug.'/opcoes/create')}}"><i class="icon fa fa-circle-o"></i> Cadastrar</a></li>
+            <li><a class="treeview-item {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/opcoes')) ? 'active' : '' }}" href="{{url('app/campanha/'.$quizCampaign->slug.'/opcoes')}}"><i class="icon fa fa-circle-o"></i> Todas Opções</a></li>
+            <li><a class="treeview-item {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/opcoes/create')) ? 'active' : '' }}" href="{{url('app/campanha/'.$quizCampaign->slug.'/opcoes/create')}}"><i class="icon fa fa-circle-o"></i> Nova Opção</a></li>
           </ul>
         </li>
 
         <li class="treeview {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/respostas/*')) ? 'is-expanded' : '' }} {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/respostas')) ? 'is-expanded' : '' }}"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-quote-right"></i><span class="app-menu__label">Respostas</span><span class="badge badge-primary">{{$quizCampaign->answers->count()}}</span>&nbsp;&nbsp;&nbsp;<i class="treeview-indicator fa fa-angle-right"></i></a>
           <ul class="treeview-menu">
-            <li><a class="treeview-item {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/respostas')) ? 'active' : '' }}" href="{{url('app/campanha/'.$quizCampaign->slug.'/respostas')}}"><i class="icon fa fa-circle-o"></i> Todos</a></li>
-            <li><a class="treeview-item {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/respostas/create')) ? 'active' : '' }}" href="{{url('app/campanha/'.$quizCampaign->slug.'/respostas/create')}}"><i class="icon fa fa-circle-o"></i> Cadastrar</a></li>
+            <li><a class="treeview-item {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/respostas')) ? 'active' : '' }}" href="{{url('app/campanha/'.$quizCampaign->slug.'/respostas')}}"><i class="icon fa fa-circle-o"></i> Todas Respostas</a></li>
+            <li><a class="treeview-item {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/respostas/create')) ? 'active' : '' }}" href="{{url('app/campanha/'.$quizCampaign->slug.'/respostas/create')}}"><i class="icon fa fa-circle-o"></i> Responder Pergunta</a></li>
           </ul>
         </li> 
 

@@ -53,14 +53,14 @@
                         <a href="javascript:void" class="text-danger" onclick="if(confirm('Você quer mesmo deletar?'))document.delete.submit();"><span class="fa fa-trash" data-toggle="tooltip" data-placement="left" title="" data-original-title="Excluir"></span></a>
                       @endif  
                         <!-- ativar/desativar inicio -->
-                        <form name="form{{$item->id}}" action="{{ url('app/campanhas/'.$item->id) }}" method="post" style="display: none;">
+                        <form name="delete{{$item->id}}" action="{{ url('app/campanhas/'.$item->id) }}" method="post" style="display: none;">
                             @method('PUT')
                             @csrf
                             <input type="hidden" name="description" value="{{$item->description}}" />
                             <input type="hidden" name="slug" value="{{$item->slug}}" />
                             <input type="hidden" name="active" value="{{$item->active==1?'0':'1'}}" />
                         </form>                    
-                        <a href="javascript:void" class="text-secondary" onclick="if(confirm('Você quer mesmo {{$item->active==1?'Desativar':'Ativar'}}?'))return document.form{{$item->id}}.submit();"><span class="fa fa-power-off" data-toggle="tooltip" data-placement="left" title="" data-original-title="{{$item->active==1?'Desativar':'Ativar'}}"></span></a>
+                        <a href="javascript:void" class="text-secondary" onclick="if(confirm('Você quer mesmo {{$item->active==1?'Desativar':'Ativar'}}?'))return document.delete{{$item->id}}.submit();"><span class="fa fa-power-off" data-toggle="tooltip" data-placement="left" title="" data-original-title="{{$item->active==1?'Desativar':'Ativar'}}"></span></a>
                         <!-- ativar/desativar fim -->
                       &nbsp;                                           
                       </td>

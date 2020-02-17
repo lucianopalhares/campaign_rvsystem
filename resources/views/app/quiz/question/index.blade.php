@@ -11,7 +11,7 @@
         <ul class="app-breadcrumb breadcrumb side">
           <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
           <li class="breadcrumb-item">Campanha {{$quizCampaign->id}}</li>
-          <li class="breadcrumb-item">Questões</li>
+          <li class="breadcrumb-item"><a href="{{url('app/campanha/'.$quizCampaign->slug.'/questoes')}}">Questões</a></li>
           <li class="breadcrumb-item active">Tabela</li>
         </ul>
       </div>
@@ -27,8 +27,9 @@
                   <thead>
                     <tr>
                       <th width="7%">#</th>
-                      <th>Descrição</th>
-                      <th>Multipla Escolha</th>
+                      <th>Descrição da Pergunta</th>
+                      <th>Opções da Pergunta</th>
+                      <th>Respostas</th>
                       <th><i class="fa fa-cog"></i></th>
                     </tr>
                   </thead>
@@ -37,26 +38,37 @@
                     <tr>
                       <td>{{$item->id}}</td>
                       <td>{{$item->description}}
-                        @if($item->quiz_questionable()->exists()) 
-                          {{$item->quiz_questionable->nable()}}
+                        @if($item->quiz_questionable_id) 
+                          <span class="badge badge-light">{{$item->quiz_questionable->nable()}}</span>
                         @endif
                         ?
                       </td>
                       <td>
                         @if($item->options_required)
-                          <span class="badge badge-success">Sim</span>
+                          @if($item->options->count()>0)
+                          <a href="{{url('app/campanha/'.$quizCampaign->slug.'/opcoes?quiz_question_id='.$item->id)}}"><span class="badge badge-warning" data-toggle="tooltip" data-placement="left" title="" data-original-title="Ver as Opções desta Pergunta">{{$item->options->count()}} Opções</span></a>
+                          @else 
+                            <span class="badge badge-secondary" data-toggle="tooltip" data-placement="left" title="" data-original-title="Nenhuma Opção Cadastrada nesta Pergunta">0</span>
+                          @endif
                         @else 
-                          <span class="badge badge-danger">Não</span>
+                          <span class="badge badge-danger">Não é Multipla Escolha</span>
+                        @endif
+                      </td>
+                      <td>
+                        @if($item->answers->count()>0)
+                          <a href="{{url('app/campanha/'.$quizCampaign->slug.'/respostas?quiz_question_id='.$item->id)}}"><span class="badge badge-success" data-toggle="tooltip" data-placement="left" title="" data-original-title="Ver as Respostas desta Pergunta">{{$item->answers->count()}} Resposta(s)</span></a>
+                        @else 
+                          <span class="badge badge-secondary">0</span>
                         @endif
                       </td>
                       <td>              
                       <a href="{{url('app/campanha/'.$quizCampaign->slug.'/questoes/'.$item->id.'/edit')}}" class="text-primary"><span class="fa fa-edit" data-toggle="tooltip" data-placement="left" title="" data-original-title="Editar"></span></a>
-                      @if(!$item->options()->exists())
-                        <form name="delete" action="{{url('app/campanha/'.$quizCampaign->slug.'/questoes/'.$item->id)}}" method="POST" style="display: none;">
+                      @if(!$item->options()->exists()&&!$item->answers()->exists())
+                        <form name="delete{{$item->id}}" action="{{url('app/campanha/'.$quizCampaign->slug.'/questoes/'.$item->id)}}" method="POST" style="display: none;">
                             @method('DELETE')
                             @csrf
                         </form>                    
-                        <a href="javascript:void" class="text-danger" onclick="if(confirm('Você quer mesmo deletar?'))document.delete.submit();"><span class="fa fa-trash" data-toggle="tooltip" data-placement="left" title="" data-original-title="Excluir"></span></a>
+                        <a href="javascript:void" class="text-danger" onclick="if(confirm('Você quer mesmo deletar?'))return document.delete{{$item->id}}.submit();"><span class="fa fa-trash" data-toggle="tooltip" data-placement="left" title="" data-original-title="Excluir"></span></a>
                       @endif  
                       &nbsp;                                           
                       </td>

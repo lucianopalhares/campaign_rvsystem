@@ -19,7 +19,8 @@ class CreateQuizOptionsTable extends Migration
             $table->text('description')->nullable();
             //quiz_questionable pode ser politic_id, city_id etc
             $table->integer('quiz_optionable_id')->nullable();// id
-            $table->string('quiz_optionable_type')->nullable();// path/model            
+            $table->string('quiz_optionable_type')->nullable();// path/model  
+            $table->string('quiz_optionable_name')->nullable();// relation ex: collum_id          
             $table->unsignedBigInteger('quiz_campaign_id');//campanha desta opção
             $table->foreign('quiz_campaign_id')->references('id')->on('quiz_campaigns');
             $table->unsignedBigInteger('quiz_question_id');// questão desta opção

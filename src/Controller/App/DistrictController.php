@@ -35,7 +35,7 @@ class DistrictController extends Controller
      */
     public function index()
     {
-        $items = $this->model::paginate(10);
+        $items = $this->model::all();
         return view($this->pathView.'index',compact('items'));
     }
 

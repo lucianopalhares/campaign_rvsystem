@@ -7,7 +7,7 @@
       <div class="app-title">
         <div>
           <h1><i class="fa fa-dashboard"></i> Dashboard</h1>
-          <p>Pagina Inicial</p>
+          <p>Gráficos com Questões de Multipla Escolha e que possuem Respostas</p>
         </div>
         <ul class="app-breadcrumb breadcrumb">
           <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
@@ -15,38 +15,57 @@
           <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
         </ul>
       </div>
-      <div class="row">
-        <div class="col-md-6 col-lg-3" data-toggle="tooltip" data-placement="top" title="Ir para Lista de Questões">
-          <a href="{{url('app/campanha/'.$quizCampaign->slug.'/questoes')}}" target="_blank">
-          <div class="widget-small danger coloured-icon"><i class="icon fa fa-quora fa-3x"></i>
-            <div class="info">
-              <h5>Questões</h5>
-              <p><b>{{$quizCampaign->questions->count()}}</b></p>
+      
+      @foreach($quizCampaign->questions as $question)
+        @if($question->options_required=='1'&&$question->answers->count()>0)
+        <div class="row">
+          
+          <div class="col-md-2"></div>
+          <div class="col-md-8">
+            <div class="tile">
+              <h3 class="tile-title">{{$question->getDescription()}}</h3>
+              <div class="embed-responsive embed-responsive-16by9">
+                <canvas class="embed-responsive-item" id="barChart{{$question->id}}"></canvas>
+              </div>
             </div>
           </div>
-          </a>
+          <div class="col-md-2"></div>
+          <!--
+          <div class="col-md-6 col-lg-3" data-toggle="tooltip" data-placement="top" title="Ir para Lista de Questões">
+            <a href="{{url('app/campanha/'.$quizCampaign->slug.'/questoes')}}" target="_blank">
+            <div class="widget-small danger coloured-icon"><i class="icon fa fa-quora fa-3x"></i>
+              <div class="info">
+                <h5>Questões</h5>
+                <p><b>{{$quizCampaign->questions->count()}}</b></p>
+              </div>
+            </div>
+            </a>
+          </div>
+          <div class="col-md-6 col-lg-3" data-toggle="tooltip" data-placement="top" title="Ver Todas Opções">
+            <a href="{{url('app/campanha/'.$quizCampaign->slug.'/opcoes')}}" target="_blank">
+            <div class="widget-small warning coloured-icon"><i class="icon fa fa-list fa-3x"></i>
+              <div class="info">
+                <h4>Opções</h4>
+                <p><b>{{$quizCampaign->options->count()}}</b></p>
+              </div>
+            </div>
+            </a>
+          </div>        
+          <div class="col-md-6 col-lg-3" data-toggle="tooltip" data-placement="top" title="Ver Lista de Todas Respostas">
+            <a href="{{url('app/campanha/'.$quizCampaign->slug.'/respostas')}}" target="_blank">
+            <div class="widget-small primary coloured-icon"><i class="icon fa fa-quote-right fa-3x"></i>
+              <div class="info">
+                <h4>Respostas</h4>
+                <p><b>{{$quizCampaign->answers->count()}}</b></p>
+              </div>
+            </div>
+            </a>
+          </div>
+        -->
+
         </div>
-        <div class="col-md-6 col-lg-3" data-toggle="tooltip" data-placement="top" title="Ver Todas Opções">
-          <a href="{{url('app/campanha/'.$quizCampaign->slug.'/opcoes')}}" target="_blank">
-          <div class="widget-small warning coloured-icon"><i class="icon fa fa-list fa-3x"></i>
-            <div class="info">
-              <h4>Opções</h4>
-              <p><b>{{$quizCampaign->options->count()}}</b></p>
-            </div>
-          </div>
-          </a>
-        </div>        
-        <div class="col-md-6 col-lg-3" data-toggle="tooltip" data-placement="top" title="Ver Lista de Todas Respostas">
-          <a href="{{url('app/campanha/'.$quizCampaign->slug.'/respostas')}}" target="_blank">
-          <div class="widget-small primary coloured-icon"><i class="icon fa fa-quote-right fa-3x"></i>
-            <div class="info">
-              <h4>Respostas</h4>
-              <p><b>{{$quizCampaign->answers->count()}}</b></p>
-            </div>
-          </div>
-          </a>
-        </div>
-      </div>
+        @endif
+      @endforeach
     </main>
 
 @endsection 
@@ -63,51 +82,43 @@
     <!-- Page specific javascripts-->
     <script type="text/javascript" src="{{ asset('js/plugins/chart.js') }}"></script>
     <script type="text/javascript">
-      var data = {
-      	labels: ["January", "February", "March", "April", "May"],
-      	datasets: [
-      		{
-      			label: "My First dataset",
-      			fillColor: "rgba(220,220,220,0.2)",
-      			strokeColor: "rgba(220,220,220,1)",
-      			pointColor: "rgba(220,220,220,1)",
-      			pointStrokeColor: "#fff",
-      			pointHighlightFill: "#fff",
-      			pointHighlightStroke: "rgba(220,220,220,1)",
-      			data: [65, 59, 80, 81, 56]
-      		},
-      		{
-      			label: "My Second dataset",
-      			fillColor: "rgba(151,187,205,0.2)",
-      			strokeColor: "rgba(151,187,205,1)",
-      			pointColor: "rgba(151,187,205,1)",
-      			pointStrokeColor: "#fff",
-      			pointHighlightFill: "#fff",
-      			pointHighlightStroke: "rgba(151,187,205,1)",
-      			data: [28, 48, 40, 19, 86]
-      		}
-      	]
-      };
-      var pdata = [
-      	{
-      		value: 300,
-      		color: "#46BFBD",
-      		highlight: "#5AD3D1",
-      		label: "Complete"
-      	},
-      	{
-      		value: 50,
-      		color:"#F7464A",
-      		highlight: "#FF5A5E",
-      		label: "In-Progress"
-      	}
-      ]
+    
+      @foreach($quizCampaign->questions as $question)
+    
+        @if($question->options_required=='1'&&$question->answers->count()>0)
+        
+          var labels = [];
+          var datas = [];
+          
+          @foreach($question->options as $option)
+                  
+            labels.push("{{$option->getDescription()}}");
+            datas.push("{{$option->answers->count()}}");
+          
+          @endforeach
+        
+          var data = {
+          	labels: labels,
+          	datasets: [
+          		{
+          			label: "{{$question->getDescription()}}",
+          			fillColor: "rgba(151,187,205,0.2)",
+          			strokeColor: "rgba(151,187,205,1)",
+          			pointColor: "rgba(151,187,205,1)",
+          			pointStrokeColor: "#fff",
+          			pointHighlightFill: "#fff",
+          			pointHighlightStroke: "rgba(151,187,205,1)",
+          			data: datas
+          		}
+          	]
+          };
+          
+          var ctxb = $("#barChart{{$question->id}}").get(0).getContext("2d");
+          var barChart = new Chart(ctxb).Bar(data);
       
-      var ctxl = $("#lineChartDemo").get(0).getContext("2d");
-      var lineChart = new Chart(ctxl).Line(data);
+        @endif
+      @endforeach
       
-      var ctxp = $("#pieChartDemo").get(0).getContext("2d");
-      var pieChart = new Chart(ctxp).Pie(pdata);
     </script>
     <!-- Google analytics script-->
     <script type="text/javascript">
