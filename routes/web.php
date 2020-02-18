@@ -22,6 +22,8 @@ Route::group(['namespace' => 'App','prefix' => 'app','middleware'=>'auth'],funct
     Route::get('/', 'DashboardController@index');    
     Route::resource('/pessoas', 'PersonController');
     Route::resource('/bairros', 'DistrictController');
+    Route::resource('/politicos', 'PoliticController');
+    Route::resource('/partido-politicos', 'PoliticalPartyController');
     Route::resource('/campanhas', 'Quiz\QuizCampaignController');
     Route::get('/error',function() {
       return view('app._utils.error');
@@ -37,6 +39,13 @@ Route::group(['namespace' => 'App','prefix' => 'app','middleware'=>'auth'],funct
                 'as'   => '/',
                 'uses' => 'DashboardController@index',
             ]);
+            Route::get('dashboard', [
+                'as'   => '/',
+                'uses' => 'DashboardController@index',
+            ]);            
+            
+          
+          Route::get('relatorio','DashboardController@downloadPDF');
              
           Route::resource('questoes','QuizQuestionController', array("as"=>"questoes","name"=>"questoes"));
           Route::resource('opcoes','QuizOptionController', array("as"=>"opcoes","name"=>"opcoes"));

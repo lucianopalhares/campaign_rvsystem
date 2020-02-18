@@ -5,6 +5,7 @@ namespace App\Controller\App\Quiz;
 use Illuminate\Http\Request;
 use App\Controller\Controller;
 use Illuminate\Support\Arr;
+use PDF;
 
 class DashboardController extends Controller
 {
@@ -23,50 +24,19 @@ class DashboardController extends Controller
 
 
     public function index()
-    {
-    
-      /*
-        $fichas = 500; 
-        
-        $resposta = '';  
-        
-        $options = [];    
-        
-        foreach ($this->question::whereQuizCampaignId(1)->get() as $question) {
-          
-          $qtdeOpcoes = $question->options->count();
-          
-          foreach ($question->options as $option) {
-            
-            $option =  @json_decode(json_encode($option), true);
-            $option['times'] = 0; 
-                              
-            $dividedAll = $fichas/$qtdeOpcoes;// 100 / 9 = 11.11
-            $restDivided = $fichas-$dividedAll;// 100 - 11.11 = 88
-            $restDividedMinus = $restDivided/$qtdeOpcoes; // 88/9 = 9.87
-            
-            $dividedAllWithMinus = $dividedAll+$restDividedMinus;// 11.11 + 9.87 = 20.98 *
-            $fichas = $fichas-$dividedAllWithMinus; 
-            
-            $a = 1;
-            while ($a <= $dividedAllWithMinus) {   
-                        
-              $a++;
-              $option['times']++;
-            }  
-            $options[] = $option;
-          }  
-        }    
-        
-        foreach ($options as $key => $value) {
-          $resposta .= $value['times'].'<br />';
-        }
-      
-        return $resposta;*/
-        
+    {        
         $quizCampaign = request()->session()->get('quizCampaign');
                 
-        return view('app.quiz.dashboard',compact('quizCampaign'));
-  
+        return view('app.quiz.dashboard2',compact('quizCampaign'));  
+    }
+    public function downloadPDF() {
+      
+      $quizCampaign = request()->session()->get('quizCampaign');
+      
+      return view('app.quiz.dashboard2',compact('quizCampaign'));  
+              
+      //$pdf = PDF::loadView('app.quiz.dashboard2',compact('quizCampaign'));        
+      //return $pdf->download($quizCampaign->slug.'.pdf');
+        
     }
 }

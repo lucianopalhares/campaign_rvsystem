@@ -90,6 +90,18 @@
             <li><a class="treeview-item {{ (request()->is('app/bairros')) ? 'active' : '' }}" href="{{url('app/bairros')}}"><i class="icon fa fa-circle-o"></i> Todos</a></li>
             <li><a class="treeview-item {{ (request()->is('app/bairros/create')) ? 'active' : '' }}" href="{{url('app/bairros/create')}}"><i class="icon fa fa-circle-o"></i> Cadastrar</a></li>
           </ul>
-        </li>    
+        </li>  
+        <li class="treeview {{ (request()->is('app/politicos/*')) ? 'is-expanded' : '' }} {{ (request()->is('app/politicos')) ? 'is-expanded' : '' }}"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-male"></i><span class="app-menu__label">Politicos</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+          <ul class="treeview-menu">
+            <li><a class="treeview-item {{ (request()->is('app/politicos')) ? 'active' : '' }}" href="{{url('app/politicos')}}"><i class="icon fa fa-circle-o"></i> Todos</a></li>
+            <li><a class="treeview-item {{ (request()->is('app/politicos/create')) ? 'active' : '' }}" href="{{url('app/politicos/create')}}"><i class="icon fa fa-circle-o"></i> Cadastrar</a></li>
+          </ul>
+        </li>   
+        <li class="treeview {{ (request()->is('app/partido-politicos/*')) ? 'is-expanded' : '' }} {{ (request()->is('app/partido-politicos')) ? 'is-expanded' : '' }}"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-legal"></i><span class="app-menu__label">Partido Politico</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+          <ul class="treeview-menu">
+            <li><a class="treeview-item {{ (request()->is('app/partido-politicos')) ? 'active' : '' }}" href="{{url('app/partido-politicos')}}"><i class="icon fa fa-circle-o"></i> Todos</a></li>
+            <li><a class="treeview-item {{ (request()->is('app/partido-politicos/create')) ? 'active' : '' }}" href="{{url('app/partido-politicos/create')}}"><i class="icon fa fa-circle-o"></i> Cadastrar</a></li>
+          </ul>
+        </li>  
       </ul>
     </aside>

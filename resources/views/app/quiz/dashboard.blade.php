@@ -6,8 +6,14 @@
       @include('app._utils.flash_msg')
       <div class="app-title">
         <div>
-          <h1><i class="fa fa-dashboard"></i> Dashboard</h1>
-          <p>Gráficos com Questões de Multipla Escolha e que possuem Respostas</p>
+          <h1><i class="fa fa-dashboard"></i> Dashboard
+      
+          </h1>
+          <p>Gráficos com Questões de Multipla Escolha e que possuem Respostas
+            <a href="{{url('app/campanha/'.$quizCampaign->slug.'/relatorio')}}" target="_blank" data-toggle="tooltip" data-placement="left" title="" data-original-title="Gerar Relatório">
+              <span class="badge badge-secondary"><i class="fa fa-download"></i>&nbsp; Baixar PDF</span>
+            </a>            
+        </p>
         </div>
         <ul class="app-breadcrumb breadcrumb">
           <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>

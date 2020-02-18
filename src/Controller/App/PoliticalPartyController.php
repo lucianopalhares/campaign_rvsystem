@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller\App\Quiz;
+namespace App\Controller\App;
 
-use App\Domain\Quiz\Model\QuizCampaign;
+use App\Domain\Political\Model\PoliticalParty;
 use Illuminate\Http\Request;
 use App\Controller\Controller;
 use Illuminate\Database\QueryException;
@@ -11,20 +11,25 @@ use Exception;
 use Illuminate\Validation\Rule;
 use \App;
 
-class QuizCampaignController extends Controller
+class PoliticalPartyController extends Controller
 {
     protected $name;
     protected $link;
     protected $pathView;
     protected $model;
-    protected $question;
+    protected $person;
+    protected $city;
+    protected $political_office;
+    protected $political_party;
     
-    public function __construct(QuizCampaign $model){
-      $this->name = 'Campanha';
-      $this->link = '/app/campanhas';
-      $this->pathView = 'app.campaign.';
-      $this->model = $model;
-      //$this->question = App::make("App\Domain\Quiz\Model\QuizQuestion");
+    public function __construct(PoliticalParty $model){
+      $this->name = 'Partido Politico';
+      $this->link = '/app/partido-politicos';
+      $this->pathView = 'app.political_party.';
+      $this->model = $model;      
+      $this->person = App::make("App\Domain\Person\Model\Person");
+      $this->political_office = App::make("App\Domain\Political\Model\PoliticalOffice");
+      $this->political_party = App::make("App\Domain\Political\Model\PoliticalParty");
     }
     /**
      * Display a listing of the resource.
@@ -43,7 +48,7 @@ class QuizCampaignController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
+    {  
         return view($this->pathView.'form');
     }
 
@@ -56,17 +61,16 @@ class QuizCampaignController extends Controller
     public function store(Request $request)
     {        
         $rules = [
-            'description' =>  'required',
-            'slug' => 'required|unique:quiz_campaigns|max:100',
+            'name' => 'required|unique:political_parties|max:100',
         ]; 
 
         $this->validate($request, $rules);
-        
+                
         try {
             $model = new $this->model;
-            $model->description = $request->description;
-            $model->active = $request->active;
-            $model->slug = str_slug($request->slug);
+            
+            $model->name = $request->name;
+            $model->slug = str_slug($request->name);       
             
             $save = $model->save();
             
@@ -103,28 +107,28 @@ class QuizCampaignController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\QuizCampaign  $model
+     * @param  \App\PoliticalParty  $model
      * @return \Illuminate\Http\Response
      */
-    public function show(QuizCampaign $campanha)
+    public function show(PoliticalParty $partido_politico)
     {
-        //
+    
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\QuizCampaign  $model
+     * @param  \App\PoliticalParty  $model
      * @return \Illuminate\Http\Response
      */
-    public function edit(QuizCampaign $campanha)
+    public function edit(PoliticalParty $partido_politico)
     {
         try {
                       
-            $item = $campanha;
+            $item = $partido_politico;
                         
-            return view($this->pathView.'form',compact('item'));  
-            
+            return view($this->pathView.'form',compact('item'));
+                    
         } catch (\Exception $e) {//errors exceptions
           
             $response = null;
@@ -148,25 +152,22 @@ class QuizCampaignController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\QuizCampaign  $model
+     * @param  \App\PoliticalParty  $model
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, QuizCampaign $campanha)
+    public function update(Request $request, PoliticalParty $partido_politico)
     {
         $rules = [
-          'description' =>  'required',
-          'slug' =>  ['required','max:100',Rule::unique('quiz_campaigns')->ignore($request->id)],
-        ];  
-        
+            'name' =>  ['required','max:100',Rule::unique('political_parties')->ignore($request->id)],
+        ]; 
+
         $this->validate($request, $rules);
-        
+                
         try {
-          
-            $model = $campanha;
+            $model = $partido_politico;
             
-            $model->description = $request->description;
-            $model->active = $request->active;
-            $model->slug = str_slug($request->slug);
+            $model->name = $request->name;
+            $model->slug = str_slug($request->name);        
             
             $save = $model->save();
             
@@ -203,14 +204,14 @@ class QuizCampaignController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\QuizCampaign  $model
+     * @param  \App\PoliticalParty  $model
      * @return \Illuminate\Http\Response
      */
-    public function destroy(QuizCampaign $campanha)
+    public function destroy(PoliticalParty $partido_politico)
     {
         try {
                       
-            $campanha->delete();
+            $partido_politico->delete();
             
             $response = $this->name;
             
@@ -240,10 +241,6 @@ class QuizCampaignController extends Controller
           
         }  
     }
-    public function questions(QuizCampaign $campanha){
-      return response()->json($campanha->questions);
-    }
-
 }
 
 

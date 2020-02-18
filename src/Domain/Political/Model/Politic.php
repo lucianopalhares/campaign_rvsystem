@@ -23,11 +23,7 @@ class Politic extends Model
     {
         return $this->morphMany('App\Domain\Quiz\Model\QuizOption', 'quiz_optionable');
     }
-    public function getFullNameAttribute()
-    {
-       return ucfirst($this->first_name) . ' ' . ucfirst($this->last_name);
-    }
     public function nable(){
-      return $this->getFullNameAttribute();
+      return $this->person->getFullNameAttribute();
     }
 }

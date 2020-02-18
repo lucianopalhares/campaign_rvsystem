@@ -25,6 +25,7 @@ class QuizOptionController extends Controller
     protected $politic;
     protected $city;
     protected $district;
+    protected $person;
     
     public function __construct(){
       $this->name = 'Opção';
@@ -38,6 +39,7 @@ class QuizOptionController extends Controller
       $this->state = App::make("App\Domain\City\Model\State");
       $this->city = App::make("App\Domain\City\Model\City");
       $this->district = App::make("App\Domain\City\Model\District");
+      $this->person = App::make("App\Domain\Person\Model\Person");
     }
     /**
      * Display a listing of the resource.
@@ -74,13 +76,14 @@ class QuizOptionController extends Controller
         
         $questions = $this->question::whereQuizCampaignId($quizCampaign->id)->whereOptionsRequired('1')->get();
 
+        $people = $this->person::all();
         $political_parties = $this->political_party::all();
         $politics = $this->politic::with('political_office')->get();   
         $states = $this->state::all();
         $cities = $this->city::with('state')->get();
         $districts = $this->district::with('city','city.state')->get();
                                 
-        return view($this->pathView.'form',compact('quizCampaign','questions','political_parties','politics','states','cities','districts'));
+        return view($this->pathView.'form',compact('quizCampaign','questions','political_parties','politics','states','cities','districts','people'));
     
     }
 
@@ -179,13 +182,14 @@ class QuizOptionController extends Controller
 
           $questions = $this->question::whereQuizCampaignId($quizCampaign->id)->whereOptionsRequired('1')->get();
 
+          $people = $this->person::all();
           $political_parties = $this->political_party::all();
           $politics = $this->politic::with('political_office')->get();   
           $states = $this->state::all();
           $cities = $this->city::with('state')->get();
           $districts = $this->district::with('city','city.state')->get();
                                   
-          return view($this->pathView.'form',compact('item','quizCampaign','questions','political_parties','politics','states','cities','districts'));
+          return view($this->pathView.'form',compact('item','quizCampaign','questions','political_parties','politics','states','cities','districts','people'));
       
             
         } catch (\Exception $e) {//errors exceptions

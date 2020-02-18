@@ -57,7 +57,7 @@ class PersonController extends Controller
         $rules = [
             'first_name' =>  'required',
             'last_name' =>  'required',
-            'cpf' =>  'required',
+            'cpf' =>  'required|unique:people|max:100',
             'sex' =>  'required',
             'birth' => 'nullable|date_format:d/m/Y|before:'.Carbon::now()->subDays(6570)->format('d/m/Y'),
             'years_old' => 'nullable|integer',
@@ -196,7 +196,7 @@ class PersonController extends Controller
         $rules = [
             'first_name' =>  'required',
             'last_name' =>  'required',
-            'cpf' =>  'required',
+            'cpf' =>  ['required','max:100',Rule::unique('people')->ignore($request->id)],
             'sex' =>  'required',
             'birth' => 'nullable|date_format:d/m/Y|before:'.Carbon::now()->subDays(6570)->format('d/m/Y'),
             'years_old' => 'nullable|integer',

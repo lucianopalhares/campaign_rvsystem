@@ -96,6 +96,7 @@
                     <option value="">            
                       Somente a Descrição 1
                     </option>
+                    <option value="person_id" {{isset($item)&&$item->quiz_optionable_name=='person_id'?"selected='selected'":''}}">Adicionar uma Pessoa</option>
                     <option value="political_party_id" {{isset($item)&&$item->quiz_optionable_name=='political_party_id'?"selected='selected'":''}}">Um Partido Politico</option>
                     <option value="politic_id" {{isset($item)&&$item->quiz_optionable_name=='politic_id'?"selected='selected'":''}}">Um Politico</option>
                     <option value="state_id" {{isset($item)&&$item->quiz_optionable_name=='state_id'?"selected='selected'":''}}">Um Estado</option>
@@ -109,6 +110,30 @@
                 <input type="hidden" name="quiz_optionable_name" id="quiz_optionable_name" value="{{ old('quiz_optionable_name',isset($item->quiz_optionable_name)?$item->quiz_optionable_name:' ') }}" />
 
                 <hr />
+                
+                <!-- quiz_optionable_name == person_id / start--> 
+                <div id="person_id">  
+                  <div class="form-group">
+                    <label class="control-label">Pessoa</label>
+                    <select {{isset($show)?"disabled='disabled'":''}} onchange="changeQuizOptionableId(this.value)" class="form-control" id="person_id" name="person_id">
+                      @if($people->count())
+                      <option value="">Selecione a Pessoa</option>
+                      @endif
+                      @forelse($people as $person)
+                        <option value="{{$person->id}}" {{ isset($item->quiz_optionable_name) && $item->quiz_optionable_name == 'person_id' && $item->quiz_questionable_id == $person->id ? "selected='selected'" : '' }}>
+                          {{$person->getFullNameAttribute()}}
+                        </option>
+                      @empty
+                        <option value="">            
+                          Nenhuma Pessoa foi cadastrada ainda
+                        </option>
+                      @endforelse
+                    </select>
+                  </div>  
+                </div>
+                <!-- quiz_optionable_name == person_id / end--> 
+                
+                
                 <!-- quiz_optionable_name == political_party_id / start--> 
                 <div id="political_party_id">  
                   <div class="form-group">
@@ -247,6 +272,7 @@
     $('select').select2();
 
       var quiz_optionable_types = {
+        person_id : 'App\\Domain\\Person\\Model\\Person',
         political_party_id : 'App\\Domain\\Political\\Model\\PoliticalParty',
         politic_id : 'App\\Domain\\Political\\Model\\Politic',
         state_id : 'App\\Domain\\City\\Model\\State',
@@ -269,6 +295,7 @@
 
       $('#save').prop('disabled', false);
       
+      jQuery('#person_id').hide();
       jQuery('#political_party_id').hide();
       jQuery('#politic_id').hide();
       jQuery('#state_id').hide();

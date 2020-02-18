@@ -63,8 +63,11 @@
                         <a href="javascript:void" class="text-secondary" onclick="if(confirm('Você quer mesmo {{$item->active==1?'Desativar':'Ativar'}}?'))return document.delete{{$item->id}}.submit();"><span class="fa fa-power-off" data-toggle="tooltip" data-placement="left" title="" data-original-title="{{$item->active==1?'Desativar':'Ativar'}}"></span></a>
                         <!-- ativar/desativar fim -->
                       &nbsp;    
+                          <a href="{{url('app/campanha/'.$item->slug.'/relatorio')}}" target="_blank" data-toggle="tooltip" data-placement="left" title="" data-original-title="Gerar Relatório">
+                            <span class="badge badge-secondary"><i class="fa fa-download"></i>&nbsp; Baixar PDF</span>
+                          </a>  
                           <a href="{{url('app/campanha/'.$item->slug.'/dashboard')}}" target="_blank" data-toggle="tooltip" data-placement="left" title="" data-original-title="Entrar nesta Campanha">
-                            <span class="badge badge-warning"><i class="fa fa-mail-forward"></i>Entrar</span>
+                            <span class="badge badge-warning"><i class="fa fa-mail-forward"></i>&nbsp; Entrar</span>
                           </a>                                        
                       </td>
                     </tr>
