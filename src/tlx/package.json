@@ -1,0 +1,72 @@
+{
+  "_from": "tlx@>=1.0.26",
+  "_id": "tlx@1.0.45",
+  "_inBundle": false,
+  "_integrity": "sha512-6KL3NOVBr9O3+opQ7aN/ZrKtihfaNIJktArwUBk8tpo91aaGNeithlQqAjfP7D82NwqFVvdy8ZPyn7PLgV2M+A==",
+  "_location": "/tlx",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "tlx@>=1.0.26",
+    "name": "tlx",
+    "escapedName": "tlx",
+    "rawSpec": ">=1.0.26",
+    "saveSpec": null,
+    "fetchSpec": ">=1.0.26"
+  },
+  "_requiredBy": [
+    "/tlx-chart"
+  ],
+  "_resolved": "https://registry.npmjs.org/tlx/-/tlx-1.0.45.tgz",
+  "_shasum": "4abb1852dc5993d5e203199d252306eacc5893a1",
+  "_spec": "tlx@>=1.0.26",
+  "_where": "/var/www/html/campaign_rvsystem/node_modules/tlx-chart",
+  "author": {
+    "name": "Simon Y. Blackwell",
+    "email": "syblackwell@anywhichway.com",
+    "url": "http://www.github.com/anywhichway"
+  },
+  "bugs": {
+    "url": "https://github.com/anywhichway/tlx/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "jsdom": "^13.0.0"
+  },
+  "deprecated": false,
+  "description": "TLX is a small (< 5K minimized and gzipped) multi-paradigm front-end library.",
+  "devDependencies": {
+    "benchmark": "^2.1.3",
+    "benchtest": "^2.0.2",
+    "blanket": "^1.2.3",
+    "chai": "^3.4.1",
+    "codacy-coverage": "^2.0.0",
+    "codeclimate-test-reporter": "^0.2.0",
+    "istanbul": "^0.4.2",
+    "mocha": "^2.3.4",
+    "uglify-es": "^3.1.6"
+  },
+  "engines": {},
+  "homepage": "https://github.com/anywhichway/tlx#readme",
+  "keywords": [
+    "JSX",
+    "React",
+    "preact",
+    "hyperhtml",
+    "hyperapp",
+    "CustomElements",
+    "VUE",
+    "Riot"
+  ],
+  "license": "MIT",
+  "name": "tlx",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anywhichway/tlx.git"
+  },
+  "scripts": {
+    "prepare": "cp index.js ./browser/tlx.js && uglifyjs browser/tlx.js --mangle -o browser/tlx.min.js"
+  },
+  "version": "1.0.45"
+}

@@ -14,6 +14,9 @@
 Route::get('/', function () {
     return redirect('/login');
 });
+Route::get('/home', function () {
+    return redirect('/app');
+});
 
 Auth::routes();
 
@@ -45,7 +48,8 @@ Route::group(['namespace' => 'App','prefix' => 'app','middleware'=>'auth'],funct
             ]);            
             
           
-          Route::get('relatorio','DashboardController@downloadPDF');
+          Route::get('relatorio','DashboardController@relatorio');
+          Route::get('espelho','DashboardController@espelho');
              
           Route::resource('questoes','QuizQuestionController', array("as"=>"questoes","name"=>"questoes"));
           Route::resource('opcoes','QuizOptionController', array("as"=>"opcoes","name"=>"opcoes"));

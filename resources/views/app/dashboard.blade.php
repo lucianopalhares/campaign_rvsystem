@@ -16,7 +16,7 @@
       </div>
       <div class="row">
         <div class="col-md-6 col-lg-3" data-toggle="tooltip" data-placement="top" title="Ver Lista de Todas Campanhas">
-          <a href="{{url('app/quiz/campanhas')}}" target="_blank">
+          <a href="{{url('app/campanhas')}}" target="_blank">
           <div class="widget-small info coloured-icon"><i class="icon fa fa-braille fa-3x"></i>
             <div class="info">
               <h4>Campanhas</h4>
@@ -25,36 +25,38 @@
           </div>
           </a>
         </div>
+        
         <div class="col-md-6 col-lg-3" data-toggle="tooltip" data-placement="top" title="Ir para Lista de Questões">
-          <a href="{{url('app/quiz/questoes')}}" target="_blank">
-          <div class="widget-small danger coloured-icon"><i class="icon fa fa-quora fa-3x"></i>
+          <a href="{{url('app/pessoas')}}" target="_blank">
+          <div class="widget-small danger coloured-icon"><i class="icon fa fa-users fa-3x"></i>
             <div class="info">
-              <h5>Questões</h5>
-              <p><b>{{$questions}}</b></p>
+              <h5>Pessoas</h5>
+              <p><b>{{$people}}</b></p>
             </div>
           </div>
           </a>
         </div>
         <div class="col-md-6 col-lg-3" data-toggle="tooltip" data-placement="top" title="Ver Todas Opções">
-          <a href="{{url('app/quiz/opcoes')}}" target="_blank">
-          <div class="widget-small warning coloured-icon"><i class="icon fa fa-list fa-3x"></i>
+          <a href="{{url('app/politicos')}}" target="_blank">
+          <div class="widget-small primary coloured-icon"><i class="icon fa fa-male fa-3x"></i>
             <div class="info">
-              <h4>Opções</h4>
-              <p><b>{{$options}}</b></p>
+              <h4>Politicos</h4>
+              <p><b>{{$politics}}</b></p>
             </div>
           </div>
           </a>
         </div>        
         <div class="col-md-6 col-lg-3" data-toggle="tooltip" data-placement="top" title="Ver Lista de Todas Respostas">
-          <a href="{{url('app/quiz/respostas')}}" target="_blank">
-          <div class="widget-small primary coloured-icon"><i class="icon fa fa-quote-right fa-3x"></i>
+          <a href="{{url('app/partido_politicos')}}" target="_blank">
+          <div class="widget-small warning coloured-icon"><i class="icon fa fa-gavel fa-3x"></i>
             <div class="info">
-              <h4>Respostas</h4>
-              <p><b>{{$answers}}</b></p>
+              <h4>Partidos Politicos</h4>
+              <p><b>{{$political_parties}}</b></p>
             </div>
           </div>
           </a>
         </div>
+    
       </div>
     </main>
 

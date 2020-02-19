@@ -85,12 +85,12 @@ class QuizAnswerSeeder extends Seeder
           
             foreach ($question->options as $option) {
                                               
-              $dividedAll = $fichas/$qtdeOpcoes;// 100 / 9 = 11.11
-              $restDivided = $fichas-$dividedAll;// 100 - 11.11 = 88
+              $dividedAll = $fichas_restantes/$qtdeOpcoes;// 100 / 9 = 11.11
+              $restDivided = $fichas_restantes-$dividedAll;// 100 - 11.11 = 88
               $restDividedMinus = $restDivided/$qtdeOpcoes; // 88/9 = 9.87
               
               $dividedAllWithMinus = $dividedAll+$restDividedMinus;// 11.11 + 9.87 = 20.98 *
-              $fichas = $fichas-$dividedAllWithMinus; 
+              $fichas_restantes = $fichas_restantes-$dividedAllWithMinus; 
               
               $a = 1;
               while ($a <= $dividedAllWithMinus) {                             

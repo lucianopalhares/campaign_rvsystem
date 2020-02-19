@@ -1,0 +1,32 @@
+<html lang="en">
+<head>
+	<!--  default to loading current deployed version in case user is not running from tlx directory -->
+	<script src="https://unpkg.com/tlx/browser/tlx.min.js"></script>
+	<!-- load most current version -->
+	<script src="../index.js"></script>
+</head>
+<body>
+Open debugger to see results
+<div id="routed">
+<a id="link1" href="/functionpath/">click me /functionpath/</a><br>
+<a id="link2" href="/regexppath/">click me /regexppath/</a>
+</div>
+<script>
+const routed = document.getElementById("routed"),
+	router =  tlx.router({
+	  [(url) => url.pathname==="/functionpath/" ? "the arg" : undefined ]: function(args) {
+	    console.log(this); // should be an event object
+	    console.log(args);
+	 	this.stopRoute(); // stop routing, don't change view
+	  },
+	  [/regexp.*/]: function(args) {
+	    console.log(this); // should be an event object
+	    console.log(args);
+	 	this.stopRoute(); // stop routing, don't change view
+	  }
+	  }),
+	  handlers = tlx.handlers({click:router});
+tlx.view(routed,{controller:handlers});
+</script>
+</body>
+</html>

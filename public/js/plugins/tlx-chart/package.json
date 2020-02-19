@@ -1,0 +1,73 @@
+{
+  "_from": "tlx-chart",
+  "_id": "tlx-chart@0.0.8",
+  "_inBundle": false,
+  "_integrity": "sha512-uezKDmLuLl1ZWypTUvESOnekCib4TUaN2+aMnlSWpbo5y9ZugGsAjkpaNXbsRAQiBJ1MYrb+Kk3mkkBofP2yfQ==",
+  "_location": "/tlx-chart",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "tlx-chart",
+    "name": "tlx-chart",
+    "escapedName": "tlx-chart",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/tlx-chart/-/tlx-chart-0.0.8.tgz",
+  "_shasum": "7f5f3d66ce921969e718697385e48394785ee292",
+  "_spec": "tlx-chart",
+  "_where": "/var/www/html/campaign_rvsystem",
+  "author": {
+    "name": "Simon Y. Blackwell",
+    "email": "syblackwell@anywhichway.com",
+    "url": "http://www.github.com/anywhichway"
+  },
+  "bugs": {
+    "url": "https://github.com/anywhichway/tlx-chart/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "tlx": ">=1.0.26"
+  },
+  "deprecated": false,
+  "description": "Charts and gauges without JavaScript ... well just a tiny bit.",
+  "devDependencies": {
+    "blanket": "^1.2.3",
+    "chai": "^3.4.1",
+    "codacy-coverage": "^2.0.0",
+    "codeclimate-test-reporter": "^0.2.0",
+    "istanbul": "^0.4.2",
+    "mocha": "^2.3.4",
+    "uglify-es": "^3.2.0"
+  },
+  "engines": {},
+  "homepage": "https://github.com/anywhichway/tlx-chart#readme",
+  "keywords": [
+    "JSX",
+    "React",
+    "preact",
+    "hyperhtml",
+    "hyperapp",
+    "VUE",
+    "webix",
+    "dojo",
+    "kendo",
+    "chart"
+  ],
+  "license": "MIT",
+  "name": "tlx-chart",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anywhichway/tlx-chart.git"
+  },
+  "scripts": {
+    "prepare": "cp index.js ./browser/tlx-chart.js && uglifyjs browser/tlx-chart.js -o browser/tlx-chart.min.js"
+  },
+  "version": "0.0.8"
+}

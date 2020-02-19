@@ -11,7 +11,12 @@
           </h1>
           <p>Gráficos com Questões de Multipla Escolha e que possuem Respostas
             <a href="{{url('app/campanha/'.$quizCampaign->slug.'/relatorio')}}" target="_blank" data-toggle="tooltip" data-placement="left" title="" data-original-title="Gerar Relatório">
-              <span class="badge badge-secondary"><i class="fa fa-download"></i>&nbsp; Baixar PDF</span>
+              <span class="badge badge-secondary"><i class="fa fa-download"></i>&nbsp; Gerar Relatório</span>
+          
+            </a>  
+            <a href="{{url('app/campanha/'.$quizCampaign->slug.'/espelho')}}" target="_blank" data-toggle="tooltip" data-placement="left" title="" data-original-title="Gerar Espelho da Pesquisa">
+              <span class="badge badge-secondary"><i class="fa fa-download"></i>&nbsp; Gerar Espelho da Pesquisa</span>
+          
             </a>            
         </p>
         </div>

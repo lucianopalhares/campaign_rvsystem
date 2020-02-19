@@ -101,7 +101,7 @@
       </ul>
     </aside>
     
-    <main class="app-content">
+    <main class="app-content" id="pdf0">
     
       <div class="app-title">
         <div>
@@ -110,7 +110,10 @@
           </h1>
           <p>Gráficos com Questões de Multipla Escolha e que possuem Respostas
             <a href="{{url('app/campanha/'.$quizCampaign->slug.'/relatorio')}}" target="_blank" data-toggle="tooltip" data-placement="left" title="" data-original-title="Gerar Relatório">
+              
               <span class="badge badge-secondary" id="downloadPdf"><i class="fa fa-download"></i>&nbsp; Baixar PDF</span>
+  
+                <span class="badge badge-secondary" id="downloadPdf2"><i class="fa fa-download"></i>&nbsp; Baixar PDF 2</span>
     
             </a>            
         </p>
@@ -122,7 +125,7 @@
         </ul>
       </div>
       
-      <div class="pdf"><!-- inicio do pdf -->   
+      <div id="pdf" style="width:90%;height:auto;"><!-- inicio do pdf -->   
       
       <div id="graficos">   
       
@@ -148,6 +151,10 @@
       </div>
       
     </div><!-- fim do pdf -->
+    
+    <div id="resultsDiv">
+      
+    </div>
       
     </main>
 
@@ -170,6 +177,10 @@
     
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.debug.js"></script>
+    
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+    
+    
    
 
 <script type="text/javascript">
@@ -294,7 +305,7 @@ $('#downloadPdf').click(function(event) {
     // get the chart height/width
     var canvasHeight = $(this).innerHeight();
     var canvasWidth = $(this).innerWidth();
-
+    
     // draw the chart into the new canvas
     pdfctx.drawImage($(this)[0], pdfctxX, pdfctxY, canvasWidth, canvasHeight);
     pdfctxX += canvasWidth + buffer;
@@ -318,6 +329,39 @@ $('#downloadPdf').click(function(event) {
   pdf.save('{{$quizCampaign->slug}}.pdf');
   
 
+});
+
+
+$('#downloadPdf2').click(function(event) {
+
+	// Convert the div to image (canvas)
+	html2canvas(document.getElementById("reportPage")).then(function (canvas) {
+
+		// Get the image data as JPEG and 0.9 quality (0.0 - 1.0)
+		console.log(canvas.toDataURL("image/jpeg", 0.9));
+	});
+      
+  // create new pdf and add our new canvas as an image
+  /*var pdf = new jsPDF();
+  pdf.addImage(pdfCanvas, 'PNG', 0, 120);//ultimo digito desce
+
+   pdf.fromHTML($('.pdf').html(), 15, 15, {
+        'width': 250
+    });
+    
+  // download the pdf
+  pdf.save('{{$quizCampaign->slug}}.pdf');
+  */
+
+});
+
+  $(document).ready(function() {
+      html2canvas(document.getElementById("pdf0")).then(function (canvas) {
+        
+        var ur = canvas.toDataURL("image/jpeg",1);
+        // Get the image data as JPEG and 0.9 quality (0.0 - 1.0)
+        console.log(ur);
+      });
 });
     </script>
 

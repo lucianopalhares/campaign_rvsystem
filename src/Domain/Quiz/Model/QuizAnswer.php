@@ -21,4 +21,7 @@ class QuizAnswer extends Model
     public function option3(){
       return $this->belongsTo("App\Domain\Quiz\Model\QuizOption","quiz_option_id3");
     }
+    public function district(){
+      return $this->belongsTo("App\Domain\City\Model\District","district_id");
+    }
 }

@@ -64,7 +64,10 @@
                         <!-- ativar/desativar fim -->
                       &nbsp;    
                           <a href="{{url('app/campanha/'.$item->slug.'/relatorio')}}" target="_blank" data-toggle="tooltip" data-placement="left" title="" data-original-title="Gerar Relatório">
-                            <span class="badge badge-secondary"><i class="fa fa-download"></i>&nbsp; Baixar PDF</span>
+                            <span class="badge badge-secondary"><i class="fa fa-download"></i>&nbsp; Gerar Relatório</span>
+                          </a>  
+                          <a href="{{url('app/campanha/'.$item->slug.'/espelho')}}" target="_blank" data-toggle="tooltip" data-placement="left" title="" data-original-title="Gerar Espelho da Pesquisa">
+                            <span class="badge badge-secondary"><i class="fa fa-download"></i>&nbsp; Gerar Espelho da Pesquisa</span>
                           </a>  
                           <a href="{{url('app/campanha/'.$item->slug.'/dashboard')}}" target="_blank" data-toggle="tooltip" data-placement="left" title="" data-original-title="Entrar nesta Campanha">
                             <span class="badge badge-warning"><i class="fa fa-mail-forward"></i>&nbsp; Entrar</span>
