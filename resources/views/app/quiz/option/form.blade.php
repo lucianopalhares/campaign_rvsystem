@@ -99,9 +99,11 @@
                     <option value="person_id" {{isset($item)&&$item->quiz_optionable_name=='person_id'?"selected='selected'":''}}">Adicionar uma Pessoa</option>
                     <option value="political_party_id" {{isset($item)&&$item->quiz_optionable_name=='political_party_id'?"selected='selected'":''}}">Um Partido Politico</option>
                     <option value="politic_id" {{isset($item)&&$item->quiz_optionable_name=='politic_id'?"selected='selected'":''}}">Um Politico</option>
+                  <!--  
                     <option value="state_id" {{isset($item)&&$item->quiz_optionable_name=='state_id'?"selected='selected'":''}}">Um Estado</option>
                     <option value="city_id" {{isset($item)&&$item->quiz_optionable_name=='city_id'?"selected='selected'":''}}">Uma Cidade</option>
                     <option value="district_id" {{isset($item)&&$item->quiz_optionable_name=='district_id'?"selected='selected'":''}}">Um Bairro</option>
+                  -->
                   </select>                  
                 </div>                  
                 
@@ -230,7 +232,14 @@
                       @endif
                       @forelse($districts as $district)                        
                         <option value="{{$district->id}}" {{ isset($item->quiz_optionable_name) && $item->quiz_optionable_name == 'district_id' && $item->quiz_optionable_id == $district->id ? "selected='selected'" : '' }}>
-                          {{$district->name}}, {{$district->city->title}}/{{$district->city->state->letter}}
+                          @if($district->name)                          
+                            {{$district->name}}
+                          @else 
+                            {{$district->type}}
+                          @endif
+                          @if($district->city_id)
+                            ,{{$district->city->title}}/{{$district->city->state->letter}}
+                          @endif
                         </option>
                       @empty
                         <option value="">            

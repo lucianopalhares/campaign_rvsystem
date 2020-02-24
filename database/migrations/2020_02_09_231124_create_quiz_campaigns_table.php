@@ -18,6 +18,10 @@ class CreateQuizCampaignsTable extends Migration
             $table->integer('active')->nullable()->default(0);
             $table->text('description');
             $table->string('slug',50)->unique();
+            $table->unsignedBigInteger('state_id');
+            $table->foreign('state_id')->references('id')->on('states');
+            $table->unsignedBigInteger('city_id');
+            $table->foreign('city_id')->references('id')->on('cities');
             $table->timestamps();
         });
     }

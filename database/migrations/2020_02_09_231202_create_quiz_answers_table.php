@@ -64,7 +64,9 @@ class CreateQuizAnswersTable extends Migration
             $table->unsignedBigInteger('district_id')->nullable();
             $table->foreign('district_id')->references('id')->on('districts');
             $table->string('address')->nullable()->default('Não Respondeu');
-            $table->string('zip_code')->nullable()->default('Não Respondeu');           
+            $table->string('zip_code')->nullable()->default('Não Respondeu'); 
+            $table->string('latitude')->nullable();      
+            $table->string('longitude')->nullable();      
             $table->timestamps();
         });
     }

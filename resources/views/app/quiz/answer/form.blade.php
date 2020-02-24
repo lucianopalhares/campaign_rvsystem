@@ -61,7 +61,9 @@
 
                 <input type="hidden" name="quiz_campaign_id" value="{{ old('quiz_campaign_id',isset($item->quiz_campaign_id)?$item->quiz_campaign_id:$quizCampaign->id) }}" />
                 <input type="hidden" name="answered_times" value="{{ old('answered_times',isset($item->answered_times)?$item->answered_times:'0') }}" />
-      
+                <input type="hidden" name="latitude" value="{{ old('latitude',isset($item->latitude)?$item->latitude:' ') }}" class="form-control {{ $errors->has('latitude')? 'is-invalid':'' }}" id="latitude">
+                <input type="hidden" name="longitude" value="{{ old('longitude',isset($item->longitude)?$item->longitude:' ') }}" class="form-control {{ $errors->has('longitude')? 'is-invalid':'' }}" id="longitude">
+                
                 <div class="form-group">
                   <label class="control-label">Questão (pergunta) *</label>
                   <select {{isset($show)?"disabled='disabled'":''}} onchange="changeQuestion(this.value)" required="required" class="form-control {{ $errors->has('quiz_question_id')? 'is-invalid':'' }}" required="required" id="quiz_question_id" name="quiz_question_id">
@@ -225,13 +227,15 @@
                     <div class="form-group">
                     <label class="control-label">Estado/UF</label>
                     <select {{isset($show)?"disabled='disabled'":''}} onchange="changeState(this.value)" class="form-control {{ $errors->has('state_id')? 'is-invalid':'' }}" id="state_id" name="state_id">
-                      <option value="">            
+                      <!--<option value="">            
                         Não Respondeu
-                      </option>   
+                      </option>  --> 
                       @foreach($states as $state)
-                        <option value="{{$state->id}}" {{ old('state_id') == $state->id ? "selected='selected'" : isset($item->state_id) && $item->state_id == $state->id ? "selected='selected'" : '' }}>
-                          {{$state->title}}
-                        </option>
+                        @if($state->id==$quizCampaign->state_id)
+                          <option value="{{$state->id}}" {{ old('state_id') == $state->id ? "selected='selected'" : isset($item->state_id) && $item->state_id == $state->id ? "selected='selected'" : '' }}>
+                            {{$state->title}}
+                          </option>
+                        @endif
                       @endforeach
                     </select>
                     {!! $errors->has('state_id')? '<small id="passwordHelpBlock" class="form-text text-danger">'.$errors->first('state_id').'</small>':'' !!}
@@ -256,17 +260,19 @@
                 <div class="row">
                   <div class="col-7">
                     <div class="form-group">
-                    <label class="control-label">Bairro </label>
+                    <label class="control-label">Bairro <small class="text-danger"><i class="text-danger" id="no_districts"></i></small></label>
                     <select {{isset($show)?"disabled='disabled'":''}} class="form-control {{ $errors->has('district_id')? 'is-invalid':'' }}" id="district_id" name="district_id">
                       <option value="">            
                         Não Respondeu
                       </option>                    
-                      <option value="">            
-                        Primeiro Selecione a Cidade
+                      <option value="1" {{ old('district_id') == '1' ? "selected='selected'" : isset($item->district_id) && $item->district_id == '1' ? "selected='selected'" : '' }}>
+                          Area Urbana - Centro e Bairros
                       </option>
-
+                      <option value="2" {{ old('district_id') == '2' ? "selected='selected'" : isset($item->district_id) && $item->district_id == '2' ? "selected='selected'" : '' }}>
+                          Zona Rural - Povoados,Chacaras,Fazendas e Outros
+                      </option>
                     </select>
-                    {!! $errors->has('district_id')? '<small id="passwordHelpBlock" class="form-text text-danger">'.$errors->first('district_id').'</small>':'' !!}
+                    {!! $errors->has('district_id')? '<small id="passwordHelpBlockDistrict" class="form-text text-danger">'.$errors->first('district_id').'</small>':'' !!}
                     </div>                    
                   </div>
                   <div class="col-5">
@@ -285,7 +291,24 @@
                   <input type="text" {{isset($show)?"disabled='disabled'":''}} name="address" value="{{ old('address',isset($item->address)?$item->address:' ') }}" class="form-control {{ $errors->has('address')? 'is-invalid':'' }}" id="address" placeholder="Não Respondeu">
                   {!! $errors->has('address')? '<small id="passwordHelpBlock" class="form-text text-danger">'.$errors->first('address').'</small>':'' !!}
                 </div>  
-                                                                                                                                                                      
+
+                <div class="row">
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label class="control-label">Latitude </label>
+                      <input type="text" disabled='disabled' value="{{ old('latitude',isset($item->latitude)?$item->latitude:' ') }}" class="form-control">
+        
+                    </div>                       
+                  </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label class="control-label">Longitude </label>
+                      <input type="text" disabled='disabled' value="{{ old('longitude',isset($item->longitude)?$item->longitude:' ') }}" class="form-control">
+        
+                    </div>                       
+                  </div>
+                </div>
+                                                                                                                                                                                      
                 <div class="form-group">
                   <label class="control-label">Descrição</label>
                   <textarea {{isset($show)?"disabled='disabled'":''}} rows="3" name="description" class="form-control {{ $errors->has('description')? 'is-invalid':'' }}" id="description">{{ old('description',isset($item->description)?$item->description:'') }}</textarea>
@@ -314,6 +337,7 @@
 @section('page-js')
   
   <script type="text/javascript" src="{{ asset('js/plugins/select2.min.js') }}"></script>
+  
   <script type="text/javascript">
     $('select').select2();
      
@@ -322,21 +346,25 @@
     var quiz_question_id_selected = "{{ old('quiz_question_id', isset($item) ? $item->quiz_question_id : '') }}";
     var quiz_option_id_selected = "{{ old('quiz_option_id', isset($item) ? $item->quiz_option_id : '') }}";
     changeQuestion(quiz_question_id_selected,quiz_option_id_selected);
-    var state_id_selected = "{{ old('state_id', isset($item) ? $item->state_id : '') }}";
-    var city_id_selected = "{{ old('city_id', isset($item) ? $item->city_id : '') }}";    
-    changeState(state_id_selected,city_id_selected);
+    var state_id_selected = "{{ old('state_id', isset($item) ? $item->state_id : $quizCampaign->state_id) }}";
+    var city_id_selected = "{{ old('city_id', isset($item) ? $item->city_id : $quizCampaign->city_id) }}";      
+    changeState(state_id_selected,city_id_selected);    
     var district_id_selected = "{{ old('district_id', isset($item) ? $item->district_id : '') }}"; 
     changeCity(city_id_selected,district_id_selected);
-  });
+    
 
+
+  });
+  
     
     function changeQuestion(quiz_question_id,option_selected = null){
                       
         var token = $("meta[name='csrf-token']").attr("content");
-        var select_option = document.getElementById("quiz_option_id");  
-        select_option.options.length = 0;
+        var select_option = document.getElementById("quiz_option_id");          
                         
         if(!parseInt(quiz_question_id)) return false;
+        
+          select_option.options.length = 0;
                           
           $.ajax({
             url: "{{url('api/options/')}}"+"/"+quiz_question_id, 
@@ -369,10 +397,11 @@
     function changeState(state_id,city_selected = null){
                       
         var token = $("meta[name='csrf-token']").attr("content");
-        var select_city = document.getElementById("city_id");
-        select_city.options.length = 0;
+        var select_city = document.getElementById("city_id");        
                         
         if(!parseInt(state_id)) return false;
+        
+          select_city.options.length = 0;
                           
           $.ajax({
             url: "{{url('api/cities/')}}"+"/"+state_id, 
@@ -386,12 +415,12 @@
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
               success: function (data){
                 
-                select_city.options[select_city.options.length] = new Option('Selecione',' ');
+                //select_city.options[select_city.options.length] = new Option('Não Respondeu',' ');
                 for(index in data) {
                     if(data[index]['id']==parseInt(city_selected)){
                       select_city.options[select_city.options.length] = new Option(data[index]['title'], data[index]['id'],true,true);
                     }else{
-                      select_city.options[select_city.options.length] = new Option(data[index]['title'], data[index]['id']);
+                      //select_city.options[select_city.options.length] = new Option(data[index]['title'], data[index]['id']);
                     } 
                 }
               }
@@ -400,10 +429,11 @@
     function changeCity(city_id,district_selected = null){
                       
         var token = $("meta[name='csrf-token']").attr("content");
-        var select_district = document.getElementById("district_id");
-        select_district.options.length = 0;
+        var select_district = document.getElementById("district_id");        
                         
         if(!parseInt(city_id)) return false;
+        
+          select_district.options.length = 0;
                           
           $.ajax({
             url: "{{url('api/districts/')}}"+"/"+city_id, 
@@ -417,7 +447,9 @@
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
               success: function (data){
                 if(data.length){
-                  select_district.options[select_district.options.length] = new Option('Selecione',' ');
+                  select_district.options[select_district.options.length] = new Option('Não Respondeu',' ');
+                  select_district.options[select_district.options.length] = new Option('1','Area Urbana - Centro e Bairros');
+                  select_district.options[select_district.options.length] = new Option('2','Zona Rural - Povoados,Chacaras,Fazendas e Outros');
                   for(index in data) {
                       if(data[index]['id']==parseInt(district_selected)){
                         select_district.options[select_district.options.length] = new Option(data[index]['name'], data[index]['id'],true,true);
@@ -426,7 +458,10 @@
                       } 
                   }
                 }else{
-                  select_district.options[select_district.options.length] = new Option('Nenhum Bairro Cadastrado',' ');
+                  $('#no_districts').html('(sem bairros cadastrados nesta cidade)');
+                  select_district.options[select_district.options.length] = new Option('Não Respondeu',' ');
+                  select_district.options[select_district.options.length] = new Option('Area Urbana - Centro e Bairros','1');
+                  select_district.options[select_district.options.length] = new Option('Zona Rural - Povoados,Chacaras,Fazendas e Outros','2');
                 }
               }
           });      

@@ -54,7 +54,36 @@
                   {!! $errors->has('description')? '<small id="passwordHelpBlock" class="form-text text-danger">'.$errors->first('description').'</small>':'' !!}
                 </div>       
 
-     
+                <div class="row">
+                  <div class="col-5">
+                    <div class="form-group">
+                    <label class="control-label">Estado da Campanha *</label>
+                    <select {{isset($show)?"disabled='disabled'":''}} required="required" onchange="changeState(this.value)" class="form-control {{ $errors->has('state_id')? 'is-invalid':'' }}" id="state_id" name="state_id">
+                      <option value="">            
+                        Selecione
+                      </option>   
+                      @foreach($states as $state)
+                        <option value="{{$state->id}}" {{ old('state_id') == $state->id ? "selected='selected'" : isset($item->state_id) && $item->state_id == $state->id ? "selected='selected'" : '' }}>
+                          {{$state->title}}
+                        </option>
+                      @endforeach
+                    </select>
+                    {!! $errors->has('state_id')? '<small id="passwordHelpBlock" class="form-text text-danger">'.$errors->first('state_id').'</small>':'' !!}
+                    </div>                      
+                  </div>
+                  <div class="col-7">
+                    <div class="form-group">
+                    <label class="control-label">Cidade da Campanha *</label>
+                    <select {{isset($show)?"disabled='disabled'":''}} required="required" class="form-control {{ $errors->has('city_id')? 'is-invalid':'' }}" id="city_id" name="city_id">
+                                 
+                      <option value="">            
+                        Primeiro Selecione o Estado
+                      </option>
+                    </select>
+                    {!! $errors->has('city_id')? '<small id="passwordHelpBlock" class="form-text text-danger">'.$errors->first('city_id').'</small>':'' !!}
+                    </div>                    
+                  </div>
+                </div>     
                             
                 <div class="form-group">
                   <label class="control-label">Status</label>
@@ -94,5 +123,47 @@
   <script type="text/javascript" src="{{ asset('js/plugins/select2.min.js') }}"></script>
   <script type="text/javascript">
     $('select').select2();
+
+  jQuery(document).ready(function(){
+    
+    var state_id_selected = "{{ old('state_id', isset($item) ? $item->state_id : '') }}";
+    var city_id_selected = "{{ old('city_id', isset($item) ? $item->city_id : '') }}";    
+    changeState(state_id_selected,city_id_selected);
+
+
+  });
+      
+    function changeState(state_id,city_selected = null){
+                      
+        var token = $("meta[name='csrf-token']").attr("content");
+        var select_city = document.getElementById("city_id");        
+                        
+        if(!parseInt(state_id)) return false;
+        
+          select_city.options.length = 0;
+                          
+          $.ajax({
+            url: "{{url('api/cities/')}}"+"/"+state_id, 
+            type: 'get',
+            dataType: "json",
+            data: {
+              _token: token,
+                  id: state_id,
+                  _method: 'get'
+                },
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+              success: function (data){
+                
+                select_city.options[select_city.options.length] = new Option('Selecione',' ');
+                for(index in data) {
+                    if(data[index]['id']==parseInt(city_selected)){
+                      select_city.options[select_city.options.length] = new Option(data[index]['title'], data[index]['id'],true,true);
+                    }else{
+                      select_city.options[select_city.options.length] = new Option(data[index]['title'], data[index]['id']);
+                    } 
+                }
+              }
+          });      
+    }
   </script>
 @endsection  

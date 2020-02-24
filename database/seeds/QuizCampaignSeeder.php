@@ -15,7 +15,9 @@ class QuizCampaignSeeder extends Seeder
             'id' => 1,
             'active' => 1,
             'description' => 'Descrição da Campanha Teste',
-            'slug' => 'campanha-teste'
+            'slug' => 'campanha-teste',
+            'state_id' => 11,
+            'city_id' => 2342
         ]);
     }
 }

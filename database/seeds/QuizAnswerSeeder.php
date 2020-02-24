@@ -72,7 +72,7 @@ class QuizAnswerSeeder extends Seeder
         ];
         $education_levels =  @json_decode(json_encode($education_levels), true);        
 
-        $districts =  @json_decode(json_encode(District::whereCityId(2342)->get()), true);
+        $districts =  @json_decode(json_encode(District::whereCityId(2342)->orWhere('city_id',null)->get()), true);
 
                                                     
         foreach ($campaign->questions as $question) {
@@ -124,8 +124,8 @@ class QuizAnswerSeeder extends Seeder
                     'years_old' => $years_old,
                     'salary' => $salary,
                     'education_level' => $education_level,
-                    'state_id' => 11,
-                    'city_id' => 2342,
+                    'state_id' => $campaign->state_id,
+                    'city_id' => $campaign->city_id,
                     'district_id' => $district_id,
                     'address' => 'Rua Teste, Nº 999',
                     'zip_code' => '99999-999',

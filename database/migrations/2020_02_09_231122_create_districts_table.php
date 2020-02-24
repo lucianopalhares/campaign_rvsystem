@@ -17,7 +17,7 @@ class CreateDistrictsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('city_id')->nullable();
             $table->foreign('city_id')->references('id')->on('cities');
-            $table->string('name',150);
+            $table->string('name',150)->nullable();
             $table->enum('type',['Area Urbana - Centro e Bairros','Zona Rural - Povoados,Chacaras,Fazendas e Outros'])->nullable()->default('Area Urbana - Centro e Bairros');
             $table->timestamps();
         });

@@ -164,6 +164,8 @@ class QuizAnswerController extends Controller
             $model->district_id = $request->district_id; 
             $model->address = $request->address;               
             $model->zip_code = $request->zip_code;  
+            $model->latitude = $request->latitude;  
+            $model->longitude = $request->longitude;  
             
             $save = $model->save();
             
@@ -353,7 +355,9 @@ class QuizAnswerController extends Controller
             $model->district_id = $request->district_id; 
             $model->address = $request->address;               
             $model->zip_code = $request->zip_code;     
-            
+            $model->latitude = $request->latitude;  
+            $model->longitude = $request->longitude;  
+                        
             $save = $model->save();
             
             $response = $this->name;

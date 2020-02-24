@@ -66,12 +66,13 @@ class DashboardController extends Controller
       $pdf->SetFont( 'Arial', '', 22 );
       $pdf->Cell( 0, 15, $reportName, 0, 0, 'C' );
       $pdf->SetTextColor( $textColour[0], $textColour[1], $textColour[2] );
-      
+
       $pdf->Ln( 8 );
       $pdf->SetTextColor( $headerColour[0], $headerColour[1], $headerColour[2] );
-      $pdf->SetFont( 'Arial', '', 10 );
-      $pdf->Cell( 0, 15, "Amostra utilizada de ".$answers->count()." eleitores", 0, 0, 'C' );
+      $pdf->SetFont( 'Arial', '', 12 );
+      $pdf->Cell( 0, 15, "Amostra utilizada de ".$answers->count()." eleitores da cidade de ".$quizCampaign->city->title.'/'.$quizCampaign->state->letter, 0, 0, 'C' );
       $pdf->SetTextColor( $textColour[0], $textColour[1], $textColour[2] );
+            
       
       $pdf->SetFont( 'Arial', '', 20 );
       $pdf->Write( 19, utf8_decode("1 - Metodologia de Pesquisa:"));
@@ -649,23 +650,24 @@ class DashboardController extends Controller
             
             $data[utf8_decode($option->getDescription())] = round($option->answers->count()*100/$question->answers->count());
           }          
-        } 
-        $pdf->SetFont('Arial', 'BIU', 12);
-        $pdf->Cell(0, 5, utf8_decode($question->getDescription()), 0, 1);
-        $pdf->Ln(8);
-        $valX = $pdf->GetX();
-        $valY = $pdf->GetY();
-        $pdf->BarDiagram(190, 70, $data, '%l : %v (%p)', array(255,175,100));  
-        $pdf->SetXY($valX, $valY + 80); 
         
-        $space_left=$page_height-($pdf->GetY()+$bottom_margin); // space left on page 
-        if($space_left<75){
-          $pdf->AddPage();
-          $pdf->SetTextColor( $headerColour[0], $headerColour[1], $headerColour[2] );
-          $pdf->SetFont( 'Arial', '', 22 );
-          $pdf->Cell( 0, 15, $reportName, 0, 0, 'C' );
-          $pdf->SetTextColor( $textColour[0], $textColour[1], $textColour[2] );
-          $pdf->Ln(17);
+          $pdf->SetFont('Arial', 'BIU', 12);
+          $pdf->Cell(0, 5, utf8_decode($question->getDescription()), 0, 1);
+          $pdf->Ln(8);
+          $valX = $pdf->GetX();
+          $valY = $pdf->GetY();
+          $pdf->BarDiagram(190, 70, $data, '%l : %v (%p)', array(255,175,100));  
+          $pdf->SetXY($valX, $valY + 80); 
+          
+          $space_left=$page_height-($pdf->GetY()+$bottom_margin); // space left on page 
+          if($space_left<75){
+            $pdf->AddPage();
+            $pdf->SetTextColor( $headerColour[0], $headerColour[1], $headerColour[2] );
+            $pdf->SetFont( 'Arial', '', 22 );
+            $pdf->Cell( 0, 15, $reportName, 0, 0, 'C' );
+            $pdf->SetTextColor( $textColour[0], $textColour[1], $textColour[2] );
+            $pdf->Ln(17);
+          }
         }
       }
       
@@ -794,7 +796,9 @@ class DashboardController extends Controller
             $pdf->Ln( 5 );
             $pdf->SetFont( 'Arial', '', 10 );
             $pdf->Write( 6, utf8_decode('       '));
-            $pdf->Write( 6, utf8_decode($resposta->district->type.' - '.$resposta->district->name.', '.$resposta->district->city->title.'/'.$resposta->district->city->state->letter));
+            $city = $resposta->district->name?$resposta->district->name.', ':'';
+            $city .= $resposta->district->city_id?', '.$resposta->district->city->title.'/'.$resposta->district->city->state->letter:'';
+            $pdf->Write( 6, utf8_decode($resposta->district->type.' '.$city));
           }
 
           //pula pagina - inicio

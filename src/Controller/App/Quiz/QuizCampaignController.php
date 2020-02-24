@@ -18,14 +18,14 @@ class QuizCampaignController extends Controller
     protected $link;
     protected $pathView;
     protected $model;
-    protected $question;
+    protected $state;
     
     public function __construct(QuizCampaign $model){
       $this->name = 'Campanha';
       $this->link = '/app/campanhas';
       $this->pathView = 'app.campaign.';
       $this->model = $model;
-      //$this->question = App::make("App\Domain\Quiz\Model\QuizQuestion");
+      $this->state = App::make("App\Domain\City\Model\State");
     }
     /**
      * Display a listing of the resource.
@@ -51,7 +51,8 @@ class QuizCampaignController extends Controller
      */
     public function create()
     {
-        return view($this->pathView.'form');
+        $states = $this->state::all();
+        return view($this->pathView.'form',compact('states'));
     }
 
     /**
@@ -64,6 +65,8 @@ class QuizCampaignController extends Controller
     {        
         $rules = [
             'description' =>  'required',
+            'state_id' =>  'required',
+            'city_id' =>  'required',
             'slug' => 'required|unique:quiz_campaigns|max:100',
         ]; 
 
@@ -84,7 +87,9 @@ class QuizCampaignController extends Controller
             $model->description = $request->description;
             $model->active = $request->active;
             $model->slug = str_slug($request->slug);
-            
+            $model->state_id = $request->state_id;
+            $model->city_id = $request->city_id;
+                        
             $save = $model->save();
             
             $response = $this->name;
@@ -130,7 +135,7 @@ class QuizCampaignController extends Controller
         try {
           
           $item = $campanha;
-
+          
           return response()->json(['data'=>$item]);
             
         } catch (\Exception $e) {//errors exceptions
@@ -163,8 +168,9 @@ class QuizCampaignController extends Controller
         try {
                       
             $item = $campanha;
+            $states = $this->state::all();
                         
-            return view($this->pathView.'form',compact('item'));  
+            return view($this->pathView.'form',compact('item','states'));  
             
         } catch (\Exception $e) {//errors exceptions
           
@@ -196,6 +202,8 @@ class QuizCampaignController extends Controller
     {
         $rules = [
           'description' =>  'required',
+          'state_id' =>  'required',
+          'city_id' =>  'required',
           'slug' =>  ['required','max:100',Rule::unique('quiz_campaigns')->ignore($request->id)],
         ];  
         
@@ -218,6 +226,8 @@ class QuizCampaignController extends Controller
             $model->description = $request->description;
             $model->active = $request->active;
             $model->slug = str_slug($request->slug);
+            $model->state_id = $request->state_id;
+            $model->city_id = $request->city_id;
             
             $save = $model->save();
             
