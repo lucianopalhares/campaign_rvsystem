@@ -11,6 +11,7 @@ use Illuminate\Validation\ValidationException;
 use Exception;
 use Illuminate\Validation\Rule;
 use \App;
+use Illuminate\Support\Facades\Validator;
 
 class QuizOptionController extends Controller
 {
@@ -58,8 +59,13 @@ class QuizOptionController extends Controller
         if($request->has('quiz_question_id')){
           $items = $this->model::whereQuizQuestionId($request->quiz_question_id)->whereQuizCampaignId($quizCampaign->id)->get();
         }               
+
+        if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+          return response()->json(['data'=>$items]);
+        }else{
+          return view($this->pathView.'index',compact('items','quizCampaign'));
+        }           
         
-        return view($this->pathView.'index',compact('items','quizCampaign'));
     }
 
     /**
@@ -100,7 +106,17 @@ class QuizOptionController extends Controller
             'quiz_question_id' =>  'required'
         ]; 
 
-        $this->validate($request, $rules);
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+              return response()->json(['status'=>false,'msg'=>$validator->errors()]);
+            }else{
+              return redirect()->back()
+                        ->withErrors($validator->errors())
+                        ->withInput();
+            }     
+        } 
         
         if(!$request->quiz_optionable_id||!$request->quiz_optionable_type||!$request->quiz_optionable_name){
             $request->quiz_optionable_id = null;
@@ -109,7 +125,13 @@ class QuizOptionController extends Controller
         }
 
         if(!$request->quiz_optionable_id&&strlen($request->description)==0){
-            return back()->withInput($request->toArray())->withErrors('Preencha a Descrição 1 ou a Descrição 2');
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+              return response()->json(['status'=>false,'msg'=>'Preencha a Descrição 1 ou a Descrição 2']);
+            }else{
+              return redirect()->back()
+                        ->withErrors('Preencha a Descrição 1 ou a Descrição 2')
+                        ->withInput();
+            } 
         }
                         
         try {
@@ -127,7 +149,7 @@ class QuizOptionController extends Controller
             
             $response .= ' Cadastrado(a) com Sucesso!';
             
-            if (request()->wantsJson()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>true,'msg'=>$response]);
             }else{
               return back()->with('success', $response);
@@ -142,9 +164,11 @@ class QuizOptionController extends Controller
               case Exception::class:$response = $e->getMessage();
               case ValidationException::class:$response = $e;
               default: $response = get_class($e);
-            }              
+            }    
             
-            if (request()->wantsJson()) {
+            $response = method_exists($e,'getMessage')?$e->getMessage():get_class($e);           
+            
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>false,'msg'=>$response]);
             }else{
               return back()->withInput($request->toArray())->withErrors($response);
@@ -225,16 +249,32 @@ class QuizOptionController extends Controller
             'quiz_question_id'=>  'required'
         ]; 
 
-        $this->validate($request, $rules);
+        $validator = Validator::make($request->all(), $rules);
 
+        if ($validator->fails()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+              return response()->json(['status'=>false,'msg'=>$validator->errors()]);
+            }else{
+              return redirect()->back()
+                        ->withErrors($validator->errors())
+                        ->withInput();
+            }     
+        } 
+        
         if(!$request->quiz_optionable_id||!$request->quiz_optionable_type||!$request->quiz_optionable_name){
             $request->quiz_optionable_id = null;
             $request->quiz_optionable_type = null;
             $request->quiz_optionable_name = null;          
         }
-        
+
         if(!$request->quiz_optionable_id&&strlen($request->description)==0){
-            return back()->withInput($request->toArray())->withErrors('Preencha a Descrição 1 ou a Descrição 2');
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+              return response()->json(['status'=>false,'msg'=>'Preencha a Descrição 1 ou a Descrição 2']);
+            }else{
+              return redirect()->back()
+                        ->withErrors('Preencha a Descrição 1 ou a Descrição 2')
+                        ->withInput();
+            } 
         }
               
         try {
@@ -253,7 +293,7 @@ class QuizOptionController extends Controller
             
             $response .= ' Atualizado(a) com Sucesso!';
             
-            if (request()->wantsJson()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>true,'msg'=>$response]);
             }else{
               return back()->with('success', $response);
@@ -268,9 +308,11 @@ class QuizOptionController extends Controller
               case Exception::class:$response = $e->getMessage();
               case ValidationException::class:$response = $e;
               default: $response = get_class($e);
-            }              
+            }         
             
-            if (request()->wantsJson()) {
+            $response = method_exists($e,'getMessage')?$e->getMessage():get_class($e);      
+            
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>false,'msg'=>$response]);
             }else{
               return back()->withInput($request->toArray())->withErrors($response);
@@ -295,7 +337,7 @@ class QuizOptionController extends Controller
             
             $response .= ' Deletado(a) com Sucesso!';
                                                 
-            if (request()->wantsJson()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>true,'msg'=>$response]);
             }else{
               return back()->with('success', $response);
@@ -311,7 +353,7 @@ class QuizOptionController extends Controller
               default: $response = get_class($e);
             }              
             
-            if (request()->wantsJson()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>false,'msg'=>$response]);
             }else{
               return redirect($this->link)->withErrors($response);

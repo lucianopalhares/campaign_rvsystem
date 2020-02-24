@@ -11,6 +11,7 @@ use Illuminate\Validation\ValidationException;
 use Exception;
 use Illuminate\Validation\Rule;
 use \App;
+use Illuminate\Support\Facades\Validator;
 
 class QuizQuestionController extends Controller
 {
@@ -54,7 +55,13 @@ class QuizQuestionController extends Controller
         /* inserir em todos metodos - fim */    
                 
         $items = $this->model::whereQuizCampaignId($quizCampaign->id)->get();
-        return view($this->pathView.'index',compact('items','quizCampaign'));
+        
+        if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+          $items = $this->model::with('options','answers')->whereQuizCampaignId($quizCampaign->id)->get();
+          return response()->json(['data'=>$items]);
+        }else{
+          return view($this->pathView.'index',compact('items','quizCampaign'));
+        }  
     }
 
     /**
@@ -88,18 +95,27 @@ class QuizQuestionController extends Controller
      */
     public function store(Request $request, $quizCampaignSlug)
     {        
-        $rules = [
+        
+        $validator = Validator::make($request->all(), [
             'quiz_campaign_id' =>  'required',
             'description' =>  'required'
-        ]; 
+        ]);
 
-        $this->validate($request, $rules);
+        if ($validator->fails()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+              return response()->json(['status'=>false,'msg'=>$validator->errors()]);
+            }else{
+              return redirect()->back()
+                        ->withErrors($validator->errors())
+                        ->withInput();
+            }     
+        }           
         
         if(!$request->quiz_questionable_id||!$request->quiz_questionable_type||!$request->quiz_questionable_name){
             $request->quiz_questionable_id = null;
             $request->quiz_questionable_type = null;
             $request->quiz_questionable_name = null;          
-        }
+        }   
                 
         try {
             $model = new $this->model;
@@ -116,7 +132,7 @@ class QuizQuestionController extends Controller
             
             $response .= ' Cadastrado(a) com Sucesso!';
             
-            if (request()->wantsJson()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>true,'msg'=>$response]);
             }else{
               return back()->with('success', $response);
@@ -133,7 +149,9 @@ class QuizQuestionController extends Controller
               default: $response = get_class($e);
             }              
             
-            if (request()->wantsJson()) {
+            $response = method_exists($e,'getMessage')?$e->getMessage():get_class($e); 
+            
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>false,'msg'=>$response]);
             }else{
               return back()->withInput($request->toArray())->withErrors($response);
@@ -207,12 +225,20 @@ class QuizQuestionController extends Controller
      */
     public function update(Request $request, $quizCampaignSlug, QuizQuestion $questo)
     {
-        $rules = [
+        $validator = Validator::make($request->all(), [
             'quiz_campaign_id' =>  'required',
             'description' =>  'required'
-        ]; 
+        ]);
 
-        $this->validate($request, $rules);
+        if ($validator->fails()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+              return response()->json(['status'=>false,'msg'=>$validator->errors()]);
+            }else{
+              return redirect()->back()
+                        ->withErrors($validator->errors())
+                        ->withInput();
+            }     
+        }   
 
         if(!$request->quiz_questionable_id||!$request->quiz_questionable_type||!$request->quiz_questionable_name){
             $request->quiz_questionable_id = null;
@@ -236,7 +262,7 @@ class QuizQuestionController extends Controller
             
             $response .= ' Atualizado(a) com Sucesso!';
             
-            if (request()->wantsJson()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>true,'msg'=>$response]);
             }else{
               return back()->with('success', $response);
@@ -251,9 +277,11 @@ class QuizQuestionController extends Controller
               case Exception::class:$response = $e->getMessage();
               case ValidationException::class:$response = $e;
               default: $response = get_class($e);
-            }              
+            }     
             
-            if (request()->wantsJson()) {
+            $response = method_exists($e,'getMessage')?$e->getMessage():get_class($e);          
+            
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>false,'msg'=>$response]);
             }else{
               return back()->withInput($request->toArray())->withErrors($response);
@@ -278,7 +306,7 @@ class QuizQuestionController extends Controller
             
             $response .= ' Deletado(a) com Sucesso!';
                                                 
-            if (request()->wantsJson()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>true,'msg'=>$response]);
             }else{
               return back()->with('success', $response);
@@ -294,7 +322,7 @@ class QuizQuestionController extends Controller
               default: $response = get_class($e);
             }              
             
-            if (request()->wantsJson()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>false,'msg'=>$response]);
             }else{
               return redirect($this->link)->withErrors($response);

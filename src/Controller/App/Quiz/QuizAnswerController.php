@@ -11,6 +11,7 @@ use Illuminate\Validation\ValidationException;
 use Exception;
 use Illuminate\Validation\Rule;
 use \App;
+use Illuminate\Support\Facades\Validator;
 
 class QuizAnswerController extends Controller
 {
@@ -61,8 +62,13 @@ class QuizAnswerController extends Controller
         if($request->has('quiz_option_id')){
           $items = $this->model::whereQuizOptionId($request->quiz_option_id)->whereQuizCampaignId($quizCampaign->id)->get();
         }  
-                        
-        return view($this->pathView.'index',compact('items','quizCampaign'));
+
+        if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+          return response()->json(['data'=>$items]);
+        }else{
+          return view($this->pathView.'index',compact('items','quizCampaign'));
+        }                        
+        
     }
 
     /**
@@ -105,19 +111,42 @@ class QuizAnswerController extends Controller
             //'city_id' =>  'required'
         ]; 
 
-        $this->validate($request, $rules);
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+              return response()->json(['status'=>false,'msg'=>$validator->errors()]);
+            }else{
+              return redirect()->back()
+                        ->withErrors($validator->errors())
+                        ->withInput();
+            }     
+        }       
         
-        if($this->question::findOrFail($request->quiz_question_id)->options_required){
-          if(!$request->quiz_option_id){
-            return back()->withInput($request->toArray())->withErrors('Escolha uma Opção como Resposta ou aguarde o cadastro de novas opções (questão multipla escolha)');
-          }
-        }else{
-          if(strlen($request->description)==0){
-            return back()->withInput($request->toArray())->withErrors('Responda a Questão na DESCRIÇÃO, não é multipla escolha (não tem opções cadastradas para esta questão)');
-          }
-        }
+
         
-        try {
+        try {          
+                
+            if($this->question::findOrFail($request->quiz_question_id)->options_required){
+              if(!$request->quiz_option_id){            
+                if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+                  return response()->json(['status'=>false,'msg'=>'Escolha uma Opção como Resposta ou aguarde o cadastro de novas opções (questão multipla escolha)']);
+                }else{
+                
+                  return back()->withInput($request->toArray())->withErrors('Escolha uma Opção como Resposta ou aguarde o cadastro de novas opções (questão multipla escolha)');
+                }
+              }
+            }else{
+              if(strlen($request->description)==0){
+                if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+                  return response()->json(['status'=>false,'msg'=>'Responda a Questão na DESCRIÇÃO, não é multipla escolha (não tem opções cadastradas para esta questão)']);
+                }else{
+                
+                  return back()->withInput($request->toArray())->withErrors('Responda a Questão na DESCRIÇÃO, não é multipla escolha (não tem opções cadastradas para esta questão)');
+                }
+              }
+            }
+        
             $model = new $this->model;
             
             $model->quiz_campaign_id = $request->quiz_campaign_id;
@@ -142,7 +171,7 @@ class QuizAnswerController extends Controller
             
             $response .= ' Cadastrado(a) com Sucesso!';
             
-            if (request()->wantsJson()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>true,'msg'=>$response]);
             }else{
               return back()->with('success', $response);
@@ -152,14 +181,16 @@ class QuizAnswerController extends Controller
           
             $response = null;
             
-            switch (get_class($e)) {
+            switch (get_class($e)) {            
               case QueryException::class:$response = $e->getMessage();
               case Exception::class:$response = $e->getMessage();
               case ValidationException::class:$response = $e;
               default: $response = get_class($e);
-            }              
+            }      
             
-            if (request()->wantsJson()) {
+            $response = method_exists($e,'getMessage')?$e->getMessage():get_class($e);
+            
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>false,'msg'=>$response]);
             }else{
               return back()->withInput($request->toArray())->withErrors($response);
@@ -269,19 +300,42 @@ class QuizAnswerController extends Controller
             'name' =>  'required',
         ]; 
 
-        $this->validate($request, $rules);
+        $validator = Validator::make($request->all(), $rules);
 
-        if($this->question::findOrFail($request->quiz_question_id)->options_required){
-          if(!$request->quiz_option_id){
-            return back()->withInput($request->toArray())->withErrors('Escolha uma Opção como Resposta ou aguarde o cadastro de novas opções (questão multipla escolha)');
-          }
-        }else{
-          if(strlen($request->description)==0){
-            return back()->withInput($request->toArray())->withErrors('Responda a Questão na DESCRIÇÃO, não é multipla escolha (não tem opções cadastradas para esta questão)');
-          }
-        }
+        if ($validator->fails()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+              return response()->json(['status'=>false,'msg'=>$validator->errors()]);
+            }else{
+              return redirect()->back()
+                        ->withErrors($validator->errors())
+                        ->withInput();
+            }     
+        }   
+        
+
                 
         try {
+          
+            if($this->question::findOrFail($request->quiz_question_id)->options_required){
+              if(!$request->quiz_option_id){            
+                if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+                  return response()->json(['status'=>false,'msg'=>'Escolha uma Opção como Resposta ou aguarde o cadastro de novas opções (questão multipla escolha)']);
+                }else{
+                
+                  return back()->withInput($request->toArray())->withErrors('Escolha uma Opção como Resposta ou aguarde o cadastro de novas opções (questão multipla escolha)');
+                }
+              }
+            }else{
+              if(strlen($request->description)==0){
+                if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+                  return response()->json(['status'=>false,'msg'=>'Responda a Questão na DESCRIÇÃO, não é multipla escolha (não tem opções cadastradas para esta questão)']);
+                }else{
+                
+                  return back()->withInput($request->toArray())->withErrors('Responda a Questão na DESCRIÇÃO, não é multipla escolha (não tem opções cadastradas para esta questão)');
+                }
+              }
+            }
+        
             $model = $resposta;
             
             $model->quiz_campaign_id = $request->quiz_campaign_id;
@@ -306,7 +360,7 @@ class QuizAnswerController extends Controller
             
             $response .= ' Atualizado(a) com Sucesso!';
             
-            if (request()->wantsJson()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>true,'msg'=>$response]);
             }else{
               return back()->with('success', $response);
@@ -318,12 +372,14 @@ class QuizAnswerController extends Controller
             
             switch (get_class($e)) {
               case QueryException::class:$response = $e->getMessage();
-              case Exception::class:$response = $e->getMessage();
+              case Exception::class:$response = $e->getMessage();           
               case ValidationException::class:$response = $e;
               default: $response = get_class($e);
-            }              
+            }             
             
-            if (request()->wantsJson()) {
+            $response = method_exists($e,'getMessage')?$e->getMessage():get_class($e); 
+            
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>false,'msg'=>$response]);
             }else{
               return back()->withInput($request->toArray())->withErrors($response);
@@ -348,7 +404,7 @@ class QuizAnswerController extends Controller
             
             $response .= ' Deletado(a) com Sucesso!';
                                                 
-            if (request()->wantsJson()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>true,'msg'=>$response]);
             }else{
               return back()->with('success', $response);
@@ -364,7 +420,7 @@ class QuizAnswerController extends Controller
               default: $response = get_class($e);
             }              
             
-            if (request()->wantsJson()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>false,'msg'=>$response]);
             }else{
               return redirect($this->link)->withErrors($response);

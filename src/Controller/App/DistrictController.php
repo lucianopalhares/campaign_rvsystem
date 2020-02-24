@@ -10,6 +10,7 @@ use Illuminate\Validation\ValidationException;
 use Exception;
 use Illuminate\Validation\Rule;
 use \App;
+use Illuminate\Support\Facades\Validator;
 
 class DistrictController extends Controller
 {
@@ -35,8 +36,13 @@ class DistrictController extends Controller
      */
     public function index()
     {
-        $items = $this->model::all();
-        return view($this->pathView.'index',compact('items'));
+        $items = $this->model::all();       
+        
+        if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+          return response()->json(['data'=>$items]);
+        }else{
+          return view($this->pathView.'index',compact('items'));
+        }  
     }
 
     /**
@@ -65,7 +71,17 @@ class DistrictController extends Controller
             'type' =>  'required'
         ]; 
 
-        $this->validate($request, $rules);
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+              return response()->json(['status'=>false,'msg'=>$validator->errors()]);
+            }else{
+              return redirect()->back()
+                        ->withErrors($validator->errors())
+                        ->withInput();
+            }     
+        } 
         
         try {
             $model = new $this->model;
@@ -79,7 +95,7 @@ class DistrictController extends Controller
             
             $response .= ' Cadastrado(a) com Sucesso!';
             
-            if (request()->wantsJson()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>true,'msg'=>$response]);
             }else{
               return back()->with('success', $response);
@@ -94,9 +110,11 @@ class DistrictController extends Controller
               case Exception::class:$response = $e->getMessage();
               case ValidationException::class:$response = $e;
               default: $response = get_class($e);
-            }              
+            }  
             
-            if (request()->wantsJson()) {
+            $response = method_exists($e,'getMessage')?$e->getMessage():get_class($e);             
+            
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>false,'msg'=>$response]);
             }else{
               return back()->withInput($request->toArray())->withErrors($response);
@@ -166,7 +184,17 @@ class DistrictController extends Controller
             'type' =>  'required'
         ]; 
 
-        $this->validate($request, $rules);
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+              return response()->json(['status'=>false,'msg'=>$validator->errors()]);
+            }else{
+              return redirect()->back()
+                        ->withErrors($validator->errors())
+                        ->withInput();
+            }     
+        } 
         
         try {
             $model = $bairro;
@@ -181,7 +209,7 @@ class DistrictController extends Controller
             
             $response .= ' Atualizado(a) com Sucesso!';
             
-            if (request()->wantsJson()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>true,'msg'=>$response]);
             }else{
               return back()->with('success', $response);
@@ -196,9 +224,11 @@ class DistrictController extends Controller
               case Exception::class:$response = $e->getMessage();
               case ValidationException::class:$response = $e;
               default: $response = get_class($e);
-            }              
+            }      
             
-            if (request()->wantsJson()) {
+            $response = method_exists($e,'getMessage')?$e->getMessage():get_class($e);         
+            
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>false,'msg'=>$response]);
             }else{
               return back()->withInput($request->toArray())->withErrors($response);
@@ -223,7 +253,7 @@ class DistrictController extends Controller
             
             $response .= ' Deletado(a) com Sucesso!';
                                                 
-            if (request()->wantsJson()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>true,'msg'=>$response]);
             }else{
               return back()->with('success', $response);
@@ -239,7 +269,7 @@ class DistrictController extends Controller
               default: $response = get_class($e);
             }              
             
-            if (request()->wantsJson()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>false,'msg'=>$response]);
             }else{
               return redirect($this->link)->withErrors($response);

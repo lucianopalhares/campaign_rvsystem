@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Validation\Rule;
 use \App;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class PersonController extends Controller
 {
@@ -32,8 +33,13 @@ class PersonController extends Controller
      */
     public function index()
     {
-        $items = $this->model::all();
-        return view($this->pathView.'index',compact('items'));
+        $items = $this->model::all();        
+        
+        if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+          return response()->json(['data'=>$items]);
+        }else{
+          return view($this->pathView.'index',compact('items'));
+        }  
     }
 
     /**
@@ -63,7 +69,17 @@ class PersonController extends Controller
             'years_old' => 'nullable|integer',
         ]; 
 
-        $this->validate($request, $rules);
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+              return response()->json(['status'=>false,'msg'=>$validator->errors()]);
+            }else{
+              return redirect()->back()
+                        ->withErrors($validator->errors())
+                        ->withInput();
+            }     
+        } 
         
         if(strlen($request->birth)>0){
           $data = explode('/',$request->birth);
@@ -90,7 +106,7 @@ class PersonController extends Controller
             
             $response .= ' Cadastrado(a) com Sucesso!';
             
-            if (request()->wantsJson()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>true,'msg'=>$response]);
             }else{
               return back()->with('success', $response);
@@ -105,9 +121,11 @@ class PersonController extends Controller
               case Exception::class:$response = $e->getMessage();
               case ValidationException::class:$response = $e;
               default: $response = get_class($e);
-            }              
+            }    
             
-            if (request()->wantsJson()) {
+            $response = method_exists($e,'getMessage')?$e->getMessage():get_class($e);           
+            
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>false,'msg'=>$response]);
             }else{
               return back()->withInput($request->toArray())->withErrors($response);
@@ -202,7 +220,17 @@ class PersonController extends Controller
             'years_old' => 'nullable|integer',
         ]; 
 
-        $this->validate($request, $rules);
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+              return response()->json(['status'=>false,'msg'=>$validator->errors()]);
+            }else{
+              return redirect()->back()
+                        ->withErrors($validator->errors())
+                        ->withInput();
+            }     
+        } 
 
         if(strlen($request->birth)>0){
           $data = explode('/',$request->birth);
@@ -230,7 +258,7 @@ class PersonController extends Controller
             
             $response .= ' Atualizado(a) com Sucesso!';
             
-            if (request()->wantsJson()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>true,'msg'=>$response]);
             }else{
               return back()->with('success', $response);
@@ -245,9 +273,11 @@ class PersonController extends Controller
               case Exception::class:$response = $e->getMessage();
               case ValidationException::class:$response = $e;
               default: $response = get_class($e);
-            }              
+            }        
             
-            if (request()->wantsJson()) {
+            $response = method_exists($e,'getMessage')?$e->getMessage():get_class($e);       
+            
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>false,'msg'=>$response]);
             }else{
               return back()->withInput($request->toArray())->withErrors($response);
@@ -272,7 +302,7 @@ class PersonController extends Controller
             
             $response .= ' Deletado(a) com Sucesso!';
                                                 
-            if (request()->wantsJson()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>true,'msg'=>$response]);
             }else{
               return back()->with('success', $response);
@@ -288,7 +318,7 @@ class PersonController extends Controller
               default: $response = get_class($e);
             }              
             
-            if (request()->wantsJson()) {
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
               return response()->json(['status'=>false,'msg'=>$response]);
             }else{
               return redirect($this->link)->withErrors($response);
