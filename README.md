@@ -9,11 +9,11 @@
 Projeto de pesquisa eleitoral.
 
 <p align="center">
-<img src="public/images/print-examples/panel.png"  width="500" />
-<img src="public/images/print-examples/campanha.png"  width="500" />
-<img src="public/images/print-examples/questao.png"  width="500" />
-<img src="public/images/print-examples/opcao.png"  width="500" />
-<img src="public/images/print-examples/resposta.png"  width="500" />
+<img src="public/images/print-examples/panel.png" />
+<img src="public/images/print-examples/campanha.png" />
+<img src="public/images/print-examples/questao.png" />
+<img src="public/images/print-examples/opcao.png" />
+<img src="public/images/print-examples/resposta.png" />
 </p>
 
 ## Instalação (comandos)
