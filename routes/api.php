@@ -54,7 +54,10 @@ Route::group(['namespace' => 'App','middleware' => 'web'],function() {
 });
 ///ROTAS API - FIM
 
+Route::get('/states', 'App\StateController@index');
 Route::get('/cities/{state}', 'App\StateController@cities');
+Route::get('/cities', 'App\CityController@index');
+Route::get('/districts', 'App\DistrictController@index');
 Route::get('/districts/{city}', 'App\CityController@districts');
 Route::get('/questions/{campanha}', 'App\Quiz\QuizCampaignController@questions');
 Route::get('/options/{questo}', 'App\Quiz\QuizQuestionController@options');

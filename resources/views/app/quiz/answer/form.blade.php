@@ -340,7 +340,54 @@
   
   <script type="text/javascript">
     $('select').select2();
-     
+  
+  
+	var info_pesquisa = [
+		quiz_campaign_id= 3
+	];
+  /*
+	var pesquisa_respostas = [{
+		quiz_question_id: 12,
+		resposta_id: 37,
+		resposta: Area Urbana - Centro e Bairros
+	}, {
+		quiz_question_id: 13,
+		resposta_id: 39,
+		resposta: Masculino
+	}, {
+		quiz_question_id: 14,
+		resposta_id: 41,
+		resposta: 16 - 24 anos
+	}, {
+		quiz_question_id: 15,
+		resposta_id: 46,
+		resposta: Nunca Estudou
+	}, {
+		quiz_question_id: 16,
+		resposta_id: 51,
+		resposta: Ate 1 Salario Minimo
+	}, {
+		quiz_question_id: 17,
+		resposta_id: 57,
+		resposta: Desemprego
+	}, {
+		quiz_question_id: 18,
+		resposta_id: 66,
+		resposta: Não sabe / Não Respondeu
+	}, {
+		quiz_question_id: 19,
+		resposta_id: 75,
+		resposta: Não sabe / não respondeu
+	}, {
+		quiz_question_id: 20,
+		resposta_id: 82,
+		resposta: Otimo / Bom
+	}, {
+		quiz_question_id: 21,
+		resposta_id: 86,
+		resposta: Ótimo / Bom
+	}];
+  */
   jQuery(document).ready(function(){
     
     var quiz_question_id_selected = "{{ old('quiz_question_id', isset($item) ? $item->quiz_question_id : '') }}";
@@ -353,7 +400,7 @@
     changeCity(city_id_selected,district_id_selected);
     
 
-
+    console.log(info_pesquisa);
   });
   
     

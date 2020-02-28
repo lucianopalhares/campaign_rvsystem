@@ -49,6 +49,7 @@ class QuizAnswerController extends Controller
      */
     public function index($quizCampaignSlug, Request $request)
     {
+        
         /* inserir em todos metodos - inicio */
         $quizCampaign = request()->session()->get('quizCampaign');
         $this->link .= $quizCampaign->slug.'/opcoes';
@@ -97,7 +98,38 @@ class QuizAnswerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {        
+    {      
+      $is_api = false;
+      if(request()->wantsJson() or str_contains(url()->current(), 'api')){
+        $is_api = true;
+      }
+      //salvar api - start
+      if ($is_api) {                    
+        if(isset($request->info_pesquisa)&&is_array($request->info_pesquisa)&&count($request->info_pesquisa)>0){
+          isset($request->info_pesquisa['quiz_campaign_id'])?$request->merge([ 'quiz_campaign_id' => $request->info_pesquisa['quiz_campaign_id'] ]):'';
+          isset($request->info_pesquisa['name'])?$request->merge([ 'name' => $request->info_pesquisa['name'] ]):'';        
+          isset($request->info_pesquisa['city_id'])?$request->merge([ 'city_id' => $request->info_pesquisa['city_id'] ]):'';  
+          isset($request->info_pesquisa['state_id'])?$request->merge([ 'state_id' => $request->info_pesquisa['state_id'] ]):'';  
+          isset($request->info_pesquisa['district_id'])?$request->merge([ 'district_id' => $request->info_pesquisa['district_id'] ]):'';  
+          isset($request->info_pesquisa['address'])?$request->merge([ 'address' => $request->info_pesquisa['address'] ]):'';  
+          isset($request->info_pesquisa['zip_code'])?$request->merge([ 'zip_code' => $request->info_pesquisa['zip_code'] ]):'';  
+          isset($request->info_pesquisa['latitude'])?$request->merge([ 'latitude' => $request->info_pesquisa['latitude'] ]):'';  
+          isset($request->info_pesquisa['longitude'])?$request->merge([ 'longitude' => $request->info_pesquisa['longitude'] ]):'';            
+          isset($request->info_pesquisa['answered_times'])?$request->merge([ 'answered_times' => $request->info_pesquisa['answered_times'] ]):$request->merge([ 'answered_times' => null ]);  
+          isset($request->info_pesquisa['sex'])?$request->merge([ 'sex' => $request->info_pesquisa['sex'] ]):$request->merge([ 'sex' => null ]);
+          isset($request->info_pesquisa['years_old'])?$request->merge([ 'years_old' => $request->info_pesquisa['years_old'] ]):$request->merge([ 'years_old' => null ]);
+          isset($request->info_pesquisa['salary'])?$request->merge([ 'salary' => $request->info_pesquisa['salary'] ]):$request->merge([ 'salary' => null ]);
+          isset($request->info_pesquisa['education_level'])?$request->merge([ 'education_level' => $request->info_pesquisa['education_level'] ]):$request->merge([ 'education_level' => null ]);
+          isset($request->info_pesquisa['sex'])?$request->merge([ 'sex' => $request->info_pesquisa['sex'] ]):$request->merge([ 'sex' => null ]);
+          isset($request->info_pesquisa['sex'])?$request->merge([ 'sex' => $request->info_pesquisa['sex'] ]):$request->merge([ 'sex' => null ]);
+          isset($request->info_pesquisa['sex'])?$request->merge([ 'sex' => $request->info_pesquisa['sex'] ]):$request->merge([ 'sex' => null ]);
+          isset($request->info_pesquisa['sex'])?$request->merge([ 'sex' => $request->info_pesquisa['sex'] ]):$request->merge([ 'sex' => null ]);
+          isset($request->info_pesquisa['sex'])?$request->merge([ 'sex' => $request->info_pesquisa['sex'] ]):$request->merge([ 'sex' => null ]);
+        }
+      }
+      
+      //salvar api - end           
+        
         $rules = [
             'quiz_campaign_id' =>  'required',
             'quiz_question_id' =>  'required',
@@ -110,70 +142,81 @@ class QuizAnswerController extends Controller
             //'state_id' =>  'required',
             //'city_id' =>  'required'
         ]; 
+        if (!$is_api) {
+          $validator = Validator::make($request->all(), $rules);
 
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) {
-            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
-              return response()->json(['status'=>false,'msg'=>$validator->errors()]);
-            }else{
-              return redirect()->back()
-                        ->withErrors($validator->errors())
-                        ->withInput();
-            }     
-        }       
+          if ($validator->fails()) {
+              if ($is_api) {
+                //nao valida via api
+                //return response()->json(['status'=>false,'msg'=>$validator->errors()]);
+              }else{
+                return redirect()->back()
+                          ->withErrors($validator->errors())
+                          ->withInput();
+              }     
+          } 
+        }    
         
-
-        
-        try {          
-                
-            if($this->question::findOrFail($request->quiz_question_id)->options_required){
-              if(!$request->quiz_option_id){            
-                if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
-                  return response()->json(['status'=>false,'msg'=>'Escolha uma Opção como Resposta ou aguarde o cadastro de novas opções (questão multipla escolha)']);
-                }else{
-                
-                  return back()->withInput($request->toArray())->withErrors('Escolha uma Opção como Resposta ou aguarde o cadastro de novas opções (questão multipla escolha)');
-                }
-              }
-            }else{
-              if(strlen($request->description)==0){
-                if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
-                  return response()->json(['status'=>false,'msg'=>'Responda a Questão na DESCRIÇÃO, não é multipla escolha (não tem opções cadastradas para esta questão)']);
-                }else{
-                
-                  return back()->withInput($request->toArray())->withErrors('Responda a Questão na DESCRIÇÃO, não é multipla escolha (não tem opções cadastradas para esta questão)');
-                }
-              }
+        try { 
+          
+            if(!$is_api){         
+          
+              $pesquisa_respostas = [];
+              $pesquisa_respostas[] = ['quiz_question_id'=>$request->quiz_question_id,'resposta_id'=>$request->quiz_option_id,'resposta'=>$request->description];     
+              
+              $request->merge([ 'pesquisa_respostas' => $pesquisa_respostas ]);
             }
-        
-            $model = new $this->model;
-            
-            $model->quiz_campaign_id = $request->quiz_campaign_id;
-            $model->quiz_question_id = $request->quiz_question_id;
-            $model->answered_times = $request->answered_times;
-            $model->description = $request->description; 
-            $model->quiz_option_id = $request->quiz_option_id;                            
-            $model->name = $request->name;  
-            $model->sex = $request->sex;
-            $model->years_old = $request->years_old;
-            $model->salary = $request->salary;
-            $model->education_level = $request->education_level; 
-            $model->state_id = $request->state_id; 
-            $model->city_id = $request->city_id; 
-            $model->district_id = $request->district_id; 
-            $model->address = $request->address;               
-            $model->zip_code = $request->zip_code;  
-            $model->latitude = $request->latitude;  
-            $model->longitude = $request->longitude;  
-            
-            $save = $model->save();
+                      
+            foreach ($request->pesquisa_respostas as $pesquisa_resposta) {            
+                
+              if($this->question::findOrFail($pesquisa_resposta['quiz_question_id'])->options_required){
+                if(!$pesquisa_resposta['resposta_id']){            
+                  if ($is_api) {
+                    return response()->json(['status'=>false,'msg'=>'Escolha uma Opção como Resposta ou aguarde o cadastro de novas opções (questão multipla escolha)']);
+                  }else{
+                  
+                    return back()->withInput($request->toArray())->withErrors('Escolha uma Opção como Resposta ou aguarde o cadastro de novas opções (questão multipla escolha)');
+                  }
+                }
+              }else{
+                if(strlen($pesquisa_resposta['resposta'])==0){
+                  if ($is_api) {
+                    return response()->json(['status'=>false,'msg'=>'Responda a Questão na DESCRIÇÃO, não é multipla escolha (não tem opções cadastradas para esta questão)']);
+                  }else{
+                  
+                    return back()->withInput($request->toArray())->withErrors('Responda a Questão na DESCRIÇÃO, não é multipla escolha (não tem opções cadastradas para esta questão)');
+                  }
+                }
+              }              
+          
+              $model = new $this->model;
+              
+              $model->quiz_campaign_id = $request->quiz_campaign_id;
+              $model->quiz_question_id = $pesquisa_resposta['quiz_question_id'];
+              $model->answered_times = $request->answered_times;
+              $model->description = $pesquisa_resposta['resposta'];
+              $model->quiz_option_id = $pesquisa_resposta['resposta_id'];                          
+              $model->name = $request->name;  
+              $model->sex = $request->sex;
+              $model->years_old = $request->years_old;
+              $model->salary = $request->salary;
+              $model->education_level = $request->education_level; 
+              $model->state_id = $request->state_id; 
+              $model->city_id = $request->city_id; 
+              $model->district_id = $request->district_id; 
+              $model->address = $request->address;               
+              $model->zip_code = $request->zip_code;  
+              $model->latitude = $request->latitude;  
+              $model->longitude = $request->longitude;  
+              
+              $save = $model->save();
+            }
             
             $response = $this->name;
             
             $response .= ' Cadastrado(a) com Sucesso!';
             
-            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+            if ($is_api) {
               return response()->json(['status'=>true,'msg'=>$response]);
             }else{
               return back()->with('success', $response);
@@ -192,7 +235,7 @@ class QuizAnswerController extends Controller
             
             $response = method_exists($e,'getMessage')?$e->getMessage():get_class($e);
             
-            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+            if ($is_api) {
               return response()->json(['status'=>false,'msg'=>$response]);
             }else{
               return back()->withInput($request->toArray())->withErrors($response);
