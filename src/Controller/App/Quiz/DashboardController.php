@@ -90,7 +90,11 @@ class DashboardController extends Controller
 
 
     
+<<<<<<< HEAD
       /*
+=======
+      
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
 
       ///tabela bairro/localidade - inicio
       $pdf->Ln( 10 );
@@ -174,9 +178,96 @@ class DashboardController extends Controller
         $pdf->Ln( 10 );
       }
       ///tabela bairro/localidade - fim
+<<<<<<< HEAD
       */
       $pdf->Ln( 10 );
       
+=======
+  
+      ///tabela sexo- inicio
+      $pdf->Ln( 10 );
+      $pdf->SetFont( 'Arial', '', 12 );
+      $pdf->Write( 6, utf8_decode("2 - Sexo" ));
+
+      $data = [];
+      $rowLabels = ['Feminino','Masculino','Não Respondeu'];
+      $male = 0;
+      $femine = 0;
+      $sex_nao = 0;
+        
+      foreach ($answers as $answer) {        
+
+        if($answer->sex){
+          if($answer->sex=='M'){
+            $male++;
+          }elseif($answer->sex=='M'){
+            $femine++;
+          }else{
+            $sex_nao++;
+          }
+        }      
+      }
+      $maleP = $male*100/$answers->count();
+      $maleA = $male;
+      $maleAP = $maleP;
+
+      $femineP = $femine*100/$answers->count();
+      $femineA = $male+$femine;
+      $femineAP = $maleP+$femineP;
+      
+      $sex_naoP = $sex_nao*100/$answers->count();
+      $sex_naoA = $male+$femine+$sex_nao;
+      $sex_naoAP = $maleP+$femineP+$sex_naoP;   
+                  
+      $data[] = [$male,$maleP,$maleA,$maleAP];
+      $data[] = [$femine,$femineP,$femineA,$femineAP];
+      $data[] = [$sex_nao,$sex_naoP,$sex_naoA,$sex_naoAP];     
+
+
+      $columnLabels = array( "Freq.", "Perc", "Freq. Acumul", "Perc. Acumul" );
+      $pdf->SetDrawColor( $tableBorderColour[0], $tableBorderColour[1], $tableBorderColour[2] );
+      $pdf->Ln( 10 );
+      // Create the table header row
+      $pdf->SetFont( 'Arial', 'B', 10 );
+      // "Resposta" cell
+      $pdf->SetTextColor( $tableHeaderTopFirstLineTextColour[0], $tableHeaderTopFirstLineTextColour[1], $tableHeaderTopFirstLineTextColour[2] );
+      $pdf->SetFillColor( $tableHeaderTopFirstLineFillColour[0], $tableHeaderTopFirstLineFillColour[1], $tableHeaderTopFirstLineFillColour[2] );
+      $pdf->Cell( 75, 10, " Resposta", 1, 0, 'L', true );
+      // Remaining header cells
+      $pdf->SetTextColor( $tableHeaderTopTextColour[0], $tableHeaderTopTextColour[1], $tableHeaderTopTextColour[2] );
+      $pdf->SetFillColor( $tableHeaderTopFillColour[0], $tableHeaderTopFillColour[1], $tableHeaderTopFillColour[2] );
+
+      for ( $i=0; $i<count($columnLabels); $i++ ) {
+        $pdf->Cell( 28, 10, $columnLabels[$i], 1, 0, 'C', true );
+      }
+      $pdf->Ln( 10 );
+      $fill = false;
+      $row = 0;
+      foreach ( $data as $dataRow ) {
+        // Create the left header cell
+        $pdf->SetFont( 'Arial', 'B', 10 );
+        $pdf->SetTextColor( $tableHeaderLeftTextColour[0], $tableHeaderLeftTextColour[1], $tableHeaderLeftTextColour[2] );
+        $pdf->SetFillColor( $tableHeaderLeftFillColour[0], $tableHeaderLeftFillColour[1], $tableHeaderLeftFillColour[2] );
+        $pdf->Cell( 75, 10, " " . utf8_decode($rowLabels[$row]), 1, 0, 'L', $fill );
+        // Create the data cells
+        $pdf->SetTextColor( $textColour[0], $textColour[1], $textColour[2] );
+        $pdf->SetFillColor( $tableRowFillColour[0], $tableRowFillColour[1], $tableRowFillColour[2] );
+        $pdf->SetFont( 'Arial', '', 10 );
+        for ( $i=0; $i<count($columnLabels); $i++ ) {
+          //$pdf->Cell( 36, 10, ( '' . number_format( $dataRow[$i] ) ), 1, 0, 'C', $fill );
+          if($i==1||$i==3){
+            $pdf->Cell( 28, 10, ( '' . number_format( $dataRow[$i] ). '%' ), 1, 0, 'C', $fill );
+          }else{
+            $pdf->Cell( 28, 10, ( '' . number_format( $dataRow[$i] ) ), 1, 0, 'C', $fill );
+          }
+        }
+        $row++;
+        $fill = !$fill;
+        $pdf->Ln( 10 );
+      }
+      ///tabela sexo - fim  
+
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
         $space_left=$page_height-($pdf->GetY()+$bottom_margin); // space left on page 
         if($space_left<75){
           $pdf->AddPage();
@@ -185,8 +276,386 @@ class DashboardController extends Controller
           $pdf->Cell( 0, 15, $reportName, 0, 0, 'C' );
           $pdf->SetTextColor( $textColour[0], $textColour[1], $textColour[2] );
           $pdf->Ln(17);
+<<<<<<< HEAD
         } 
        
+=======
+        }
+          
+      ///tabela idade- inicio
+      $pdf->Ln( 10 );
+      $pdf->SetFont( 'Arial', '', 12 );
+      $pdf->Write( 6, utf8_decode("3 - Idade" ));
+
+      $data = [];
+      $rowLabels = ['16-24 Anos','25-34 Anos','35-44 Anos','45-59 Anos','Acima de 60 Anos','Não Respondeu'];
+      $um = 0;
+      $dois = 0;
+      $tres = 0;
+      $quatro = 0;
+      $cinco = 0;
+      $seis = 0;
+        
+      foreach ($answers as $answer) {        
+
+        if($answer->years_old){
+          if($answer->years_old=='16-24 Anos'){
+            $um++;
+          }elseif($answer->years_old=='25-34 Anos'){
+            $dois++;
+          }elseif($answer->years_old=='35-44 Anos'){
+            $tres++;
+          }elseif($answer->years_old=='45-59 Anos'){
+            $quatro++;
+          }elseif($answer->years_old=='Acima de 60 Anos'){
+            $cinco++;
+          }else{
+            $seis++;
+          }
+        }      
+      }
+      $umP = $um*100/$answers->count();
+      $umA = $um;
+      $umAP = $umP;
+
+      $doisP = $dois*100/$answers->count();
+      $doisA = $um+$dois;
+      $doisAP = $umP+$doisP;
+      
+      $tresP = $tres*100/$answers->count();
+      $tresA = $um+$dois+$tres;
+      $tresAP = $umP+$doisP+$tresP;  
+      
+      $quatroP = $quatro*100/$answers->count();
+      $quatroA = $um+$dois+$tres+$quatro;
+      $quatroAP = $umP+$doisP+$tresP+$quatroP; 
+
+      $cincoP = $cinco*100/$answers->count();
+      $cincoA = $um+$dois+$tres+$quatro+$cinco;
+      $cincoAP = $umP+$doisP+$tresP+$quatroP+$cincoP;
+      
+      $seisP = $seis*100/$answers->count();
+      $seisA = $um+$dois+$tres+$quatro+$cinco+$seis;
+      $seisAP = $umP+$doisP+$tresP+$quatroP+$cincoP+$seisP;
+                  
+      $data[] = [$um,$umP,$umA,$umAP];
+      $data[] = [$dois,$doisP,$doisA,$doisAP];
+      $data[] = [$tres,$tresP,$tresA,$tresAP];
+      $data[] = [$quatro,$quatroP,$quatroA,$quatroAP];  
+      $data[] = [$cinco,$cincoP,$cincoA,$cincoAP];  
+      $data[] = [$seis,$seisP,$seisA,$seisAP];       
+
+
+      $columnLabels = array( "Freq.", "Perc", "Freq. Acumul", "Perc. Acumul" );
+      $pdf->SetDrawColor( $tableBorderColour[0], $tableBorderColour[1], $tableBorderColour[2] );
+      $pdf->Ln( 10 );
+      // Create the table header row
+      $pdf->SetFont( 'Arial', 'B', 10 );
+      // "Resposta" cell
+      $pdf->SetTextColor( $tableHeaderTopFirstLineTextColour[0], $tableHeaderTopFirstLineTextColour[1], $tableHeaderTopFirstLineTextColour[2] );
+      $pdf->SetFillColor( $tableHeaderTopFirstLineFillColour[0], $tableHeaderTopFirstLineFillColour[1], $tableHeaderTopFirstLineFillColour[2] );
+      $pdf->Cell( 75, 10, " Resposta", 1, 0, 'L', true );
+      // Remaining header cells
+      $pdf->SetTextColor( $tableHeaderTopTextColour[0], $tableHeaderTopTextColour[1], $tableHeaderTopTextColour[2] );
+      $pdf->SetFillColor( $tableHeaderTopFillColour[0], $tableHeaderTopFillColour[1], $tableHeaderTopFillColour[2] );
+
+      for ( $i=0; $i<count($columnLabels); $i++ ) {
+        $pdf->Cell( 28, 10, $columnLabels[$i], 1, 0, 'C', true );
+      }
+      $pdf->Ln( 10 );
+      $fill = false;
+      $row = 0;
+      foreach ( $data as $dataRow ) {
+        // Create the left header cell
+        $pdf->SetFont( 'Arial', 'B', 10 );
+        $pdf->SetTextColor( $tableHeaderLeftTextColour[0], $tableHeaderLeftTextColour[1], $tableHeaderLeftTextColour[2] );
+        $pdf->SetFillColor( $tableHeaderLeftFillColour[0], $tableHeaderLeftFillColour[1], $tableHeaderLeftFillColour[2] );
+        $pdf->Cell( 75, 10, " " . utf8_decode($rowLabels[$row]), 1, 0, 'L', $fill );
+        // Create the data cells
+        $pdf->SetTextColor( $textColour[0], $textColour[1], $textColour[2] );
+        $pdf->SetFillColor( $tableRowFillColour[0], $tableRowFillColour[1], $tableRowFillColour[2] );
+        $pdf->SetFont( 'Arial', '', 10 );
+        for ( $i=0; $i<count($columnLabels); $i++ ) {
+          //$pdf->Cell( 36, 10, ( '' . number_format( $dataRow[$i] ) ), 1, 0, 'C', $fill );
+          if($i==1||$i==3){
+            $pdf->Cell( 28, 10, ( '' . number_format( $dataRow[$i] ). '%' ), 1, 0, 'C', $fill );
+          }else{
+            $pdf->Cell( 28, 10, ( '' . number_format( $dataRow[$i] ) ), 1, 0, 'C', $fill );
+          }
+        }
+        $row++;
+        $fill = !$fill;
+        $pdf->Ln( 10 );
+      }
+      $pdf->Ln( 10 );
+      ///tabela idade - fim  
+
+        $space_left=$page_height-($pdf->GetY()+$bottom_margin); // space left on page 
+        if($space_left<75){
+          $pdf->AddPage();
+          $pdf->SetTextColor( $headerColour[0], $headerColour[1], $headerColour[2] );
+          $pdf->SetFont( 'Arial', '', 22 );
+          $pdf->Cell( 0, 15, $reportName, 0, 0, 'C' );
+          $pdf->SetTextColor( $textColour[0], $textColour[1], $textColour[2] );
+          $pdf->Ln(17);
+        }
+        
+      ///tabela escolaridade- inicio
+      $pdf->Ln( 10 );
+      $pdf->SetFont( 'Arial', '', 12 );
+      $pdf->Write( 6, utf8_decode("4 - Escolaridade" ));
+
+      $data = [];
+      $rowLabels = ['Ensino Fundamental / Incompleto','Ensino Fundamental / Completo','Ensino Médio / Incompleto','Ensino Médio / Completo','Nunca Estudou','Superior / Incompleto','Superior / Completo','Não Respondeu'];
+      $um = 0;
+      $dois = 0;
+      $tres = 0;
+      $quatro = 0;
+      $cinco = 0;
+      $seis = 0;
+      $sete = 0;
+      $oito = 0;
+        
+      foreach ($answers as $answer) {        
+
+        if($answer->education_level){
+          if($answer->education_level=='Ensino Fundamental / Incompleto'){
+            $um++;
+          }elseif($answer->education_level=='Ensino Fundamental / Completo'){
+            $dois++;
+          }elseif($answer->education_level=='Ensino Médio / Incompleto'){
+            $tres++;
+          }elseif($answer->education_level=='Ensino Médio / Completo'){
+            $quatro++;
+          }elseif($answer->education_level=='Nunca Estudou'){
+            $cinco++;
+          }elseif($answer->education_level=='Superior / Incompleto'){
+            $seis++;
+          }elseif($answer->education_level=='Superior / Completo'){
+            $sete++;
+          }else{
+            $oito++;
+          }
+        }      
+      }
+      $umP = $um*100/$answers->count();
+      $umA = $um;
+      $umAP = $umP;
+
+      $doisP = $dois*100/$answers->count();
+      $doisA = $um+$dois;
+      $doisAP = $umP+$doisP;
+      
+      $tresP = $tres*100/$answers->count();
+      $tresA = $um+$dois+$tres;
+      $tresAP = $umP+$doisP+$tresP;  
+      
+      $quatroP = $quatro*100/$answers->count();
+      $quatroA = $um+$dois+$tres+$quatro;
+      $quatroAP = $umP+$doisP+$tresP+$quatroP; 
+
+      $cincoP = $cinco*100/$answers->count();
+      $cincoA = $um+$dois+$tres+$quatro+$cinco;
+      $cincoAP = $umP+$doisP+$tresP+$quatroP+$cincoP;
+      
+      $seisP = $seis*100/$answers->count();
+      $seisA = $um+$dois+$tres+$quatro+$cinco+$seis;
+      $seisAP = $umP+$doisP+$tresP+$quatroP+$cincoP+$seisP;
+
+      $seteP = $sete*100/$answers->count();
+      $seteA = $um+$dois+$tres+$quatro+$cinco+$seis+$sete;
+      $seteAP = $umP+$doisP+$tresP+$quatroP+$cincoP+$seisP+$seteP;
+
+      $oitoP = $sete*100/$answers->count();
+      $oitoA = $um+$dois+$tres+$quatro+$cinco+$seis+$sete+$oito;
+      $oitoAP = $umP+$doisP+$tresP+$quatroP+$cincoP+$seisP+$seteP+$oitoP;
+                              
+      $data[] = [$um,$umP,$umA,$umAP];
+      $data[] = [$dois,$doisP,$doisA,$doisAP];
+      $data[] = [$tres,$tresP,$tresA,$tresAP];
+      $data[] = [$quatro,$quatroP,$quatroA,$quatroAP];  
+      $data[] = [$cinco,$cincoP,$cincoA,$cincoAP];  
+      $data[] = [$seis,$seisP,$seisA,$seisAP];       
+      $data[] = [$sete,$seteP,$seteA,$seteAP];  
+      $data[] = [$oito,$oitoP,$oitoA,$oitoAP];  
+
+      $columnLabels = array( "Freq.", "Perc", "Freq. Acumul", "Perc. Acumul" );
+      $pdf->SetDrawColor( $tableBorderColour[0], $tableBorderColour[1], $tableBorderColour[2] );
+      $pdf->Ln( 10 );
+      // Create the table header row
+      $pdf->SetFont( 'Arial', 'B', 10 );
+      // "Resposta" cell
+      $pdf->SetTextColor( $tableHeaderTopFirstLineTextColour[0], $tableHeaderTopFirstLineTextColour[1], $tableHeaderTopFirstLineTextColour[2] );
+      $pdf->SetFillColor( $tableHeaderTopFirstLineFillColour[0], $tableHeaderTopFirstLineFillColour[1], $tableHeaderTopFirstLineFillColour[2] );
+      $pdf->Cell( 75, 10, " Resposta", 1, 0, 'L', true );
+      // Remaining header cells
+      $pdf->SetTextColor( $tableHeaderTopTextColour[0], $tableHeaderTopTextColour[1], $tableHeaderTopTextColour[2] );
+      $pdf->SetFillColor( $tableHeaderTopFillColour[0], $tableHeaderTopFillColour[1], $tableHeaderTopFillColour[2] );
+
+      for ( $i=0; $i<count($columnLabels); $i++ ) {
+        $pdf->Cell( 28, 10, $columnLabels[$i], 1, 0, 'C', true );
+      }
+      $pdf->Ln( 10 );
+      $fill = false;
+      $row = 0;
+      foreach ( $data as $dataRow ) {
+        // Create the left header cell
+        $pdf->SetFont( 'Arial', 'B', 10 );
+        $pdf->SetTextColor( $tableHeaderLeftTextColour[0], $tableHeaderLeftTextColour[1], $tableHeaderLeftTextColour[2] );
+        $pdf->SetFillColor( $tableHeaderLeftFillColour[0], $tableHeaderLeftFillColour[1], $tableHeaderLeftFillColour[2] );
+        $pdf->Cell( 75, 10, " " . utf8_decode($rowLabels[$row]), 1, 0, 'L', $fill );
+        // Create the data cells
+        $pdf->SetTextColor( $textColour[0], $textColour[1], $textColour[2] );
+        $pdf->SetFillColor( $tableRowFillColour[0], $tableRowFillColour[1], $tableRowFillColour[2] );
+        $pdf->SetFont( 'Arial', '', 10 );
+        for ( $i=0; $i<count($columnLabels); $i++ ) {
+          //$pdf->Cell( 36, 10, ( '' . number_format( $dataRow[$i] ) ), 1, 0, 'C', $fill );
+          if($i==1||$i==3){
+            $pdf->Cell( 28, 10, ( '' . number_format( $dataRow[$i] ). '%' ), 1, 0, 'C', $fill );
+          }else{
+            $pdf->Cell( 28, 10, ( '' . number_format( $dataRow[$i] ) ), 1, 0, 'C', $fill );
+          }
+        }
+        $row++;
+        $fill = !$fill;
+        $pdf->Ln( 10 );
+      }
+      $pdf->Ln( 10 );
+      ///tabela escolaridade - fim    
+  
+        $space_left=$page_height-($pdf->GetY()+$bottom_margin); // space left on page 
+        if($space_left<75){
+          $pdf->AddPage();
+          $pdf->SetTextColor( $headerColour[0], $headerColour[1], $headerColour[2] );
+          $pdf->SetFont( 'Arial', '', 22 );
+          $pdf->Cell( 0, 15, $reportName, 0, 0, 'C' );
+          $pdf->SetTextColor( $textColour[0], $textColour[1], $textColour[2] );
+          $pdf->Ln(17);
+        }  
+  
+      ///tabela renda- inicio
+      $pdf->Ln( 10 );
+      $pdf->SetFont( 'Arial', '', 12 );
+      $pdf->Write( 6, utf8_decode("5 - Renda" ));
+
+      $data = [];
+      $rowLabels = ['Até 1 Salário Minimo','Entre 1 e 2 Salários Minimos','Entre 2 e 5 Salários Minimos','Entre 5 e 10 Salários Minimos','Mais de 10 Salários Minimos','Não Respondeu'];
+      $um = 0;
+      $dois = 0;
+      $tres = 0;
+      $quatro = 0;
+      $cinco = 0;
+      $seis = 0;
+      $sete = 0;
+      $oito = 0;
+        
+      foreach ($answers as $answer) {        
+
+        if($answer->salary){
+          if($answer->salary=='Até 1 Salário Minimo'){
+            $um++;
+          }elseif($answer->salary=='Entre 1 e 2 Salários Minimos'){
+            $dois++;
+          }elseif($answer->salary=='Entre 2 e 5 Salários Minimos'){
+            $tres++;
+          }elseif($answer->salary=='Entre 5 e 10 Salários Minimos'){
+            $quatro++;
+          }elseif($answer->salary=='Mais de 10 Salários Minimos'){
+            $cinco++;
+          }else{
+            $seis++;
+          }
+        }      
+      }
+      $umP = $um*100/$answers->count();
+      $umA = $um;
+      $umAP = $umP;
+
+      $doisP = $dois*100/$answers->count();
+      $doisA = $um+$dois;
+      $doisAP = $umP+$doisP;
+      
+      $tresP = $tres*100/$answers->count();
+      $tresA = $um+$dois+$tres;
+      $tresAP = $umP+$doisP+$tresP;  
+      
+      $quatroP = $quatro*100/$answers->count();
+      $quatroA = $um+$dois+$tres+$quatro;
+      $quatroAP = $umP+$doisP+$tresP+$quatroP; 
+
+      $cincoP = $cinco*100/$answers->count();
+      $cincoA = $um+$dois+$tres+$quatro+$cinco;
+      $cincoAP = $umP+$doisP+$tresP+$quatroP+$cincoP;
+      
+      $seisP = $seis*100/$answers->count();
+      $seisA = $um+$dois+$tres+$quatro+$cinco+$seis;
+      $seisAP = $umP+$doisP+$tresP+$quatroP+$cincoP+$seisP;
+                              
+      $data[] = [$um,$umP,$umA,$umAP];
+      $data[] = [$dois,$doisP,$doisA,$doisAP];
+      $data[] = [$tres,$tresP,$tresA,$tresAP];
+      $data[] = [$quatro,$quatroP,$quatroA,$quatroAP];  
+      $data[] = [$cinco,$cincoP,$cincoA,$cincoAP];  
+      $data[] = [$seis,$seisP,$seisA,$seisAP];      
+
+      $columnLabels = array( "Freq.", "Perc", "Freq. Acumul", "Perc. Acumul" );
+      $pdf->SetDrawColor( $tableBorderColour[0], $tableBorderColour[1], $tableBorderColour[2] );
+      $pdf->Ln( 10 );
+      // Create the table header row
+      $pdf->SetFont( 'Arial', 'B', 10 );
+      // "Resposta" cell
+      $pdf->SetTextColor( $tableHeaderTopFirstLineTextColour[0], $tableHeaderTopFirstLineTextColour[1], $tableHeaderTopFirstLineTextColour[2] );
+      $pdf->SetFillColor( $tableHeaderTopFirstLineFillColour[0], $tableHeaderTopFirstLineFillColour[1], $tableHeaderTopFirstLineFillColour[2] );
+      $pdf->Cell( 75, 10, " Resposta", 1, 0, 'L', true );
+      // Remaining header cells
+      $pdf->SetTextColor( $tableHeaderTopTextColour[0], $tableHeaderTopTextColour[1], $tableHeaderTopTextColour[2] );
+      $pdf->SetFillColor( $tableHeaderTopFillColour[0], $tableHeaderTopFillColour[1], $tableHeaderTopFillColour[2] );
+
+      for ( $i=0; $i<count($columnLabels); $i++ ) {
+        $pdf->Cell( 28, 10, $columnLabels[$i], 1, 0, 'C', true );
+      }
+      $pdf->Ln( 10 );
+      $fill = false;
+      $row = 0;
+      foreach ( $data as $dataRow ) {
+        // Create the left header cell
+        $pdf->SetFont( 'Arial', 'B', 10 );
+        $pdf->SetTextColor( $tableHeaderLeftTextColour[0], $tableHeaderLeftTextColour[1], $tableHeaderLeftTextColour[2] );
+        $pdf->SetFillColor( $tableHeaderLeftFillColour[0], $tableHeaderLeftFillColour[1], $tableHeaderLeftFillColour[2] );
+        $pdf->Cell( 75, 10, " " . utf8_decode($rowLabels[$row]), 1, 0, 'L', $fill );
+        // Create the data cells
+        $pdf->SetTextColor( $textColour[0], $textColour[1], $textColour[2] );
+        $pdf->SetFillColor( $tableRowFillColour[0], $tableRowFillColour[1], $tableRowFillColour[2] );
+        $pdf->SetFont( 'Arial', '', 10 );
+        for ( $i=0; $i<count($columnLabels); $i++ ) {
+          //$pdf->Cell( 36, 10, ( '' . number_format( $dataRow[$i] ) ), 1, 0, 'C', $fill );
+          if($i==1||$i==3){
+            $pdf->Cell( 28, 10, ( '' . number_format( $dataRow[$i] ). '%' ), 1, 0, 'C', $fill );
+          }else{
+            $pdf->Cell( 28, 10, ( '' . number_format( $dataRow[$i] ) ), 1, 0, 'C', $fill );
+          }
+        }
+        $row++;
+        $fill = !$fill;
+        $pdf->Ln( 10 );
+      }
+      $pdf->Ln( 10 );
+      ///tabela renda - fim    
+  
+        $space_left=$page_height-($pdf->GetY()+$bottom_margin); // space left on page 
+        if($space_left<75){
+          $pdf->AddPage();
+          $pdf->SetTextColor( $headerColour[0], $headerColour[1], $headerColour[2] );
+          $pdf->SetFont( 'Arial', '', 22 );
+          $pdf->Cell( 0, 15, $reportName, 0, 0, 'C' );
+          $pdf->SetTextColor( $textColour[0], $textColour[1], $textColour[2] );
+          $pdf->Ln(17);
+        }    
+  
+  
+
+
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
       foreach($quizCampaign->questions as $question){
         
         $data = [];
@@ -358,7 +827,86 @@ class DashboardController extends Controller
             $pdf->Ln(17);
           }
           //pula pagina - fim
+<<<<<<< HEAD
   
+=======
+                              
+          $pdf->Ln( 10 );
+          $pdf->SetFont( 'Arial', '', 10 );
+          $pdf->Write( 6, utf8_decode('        '));
+          $pdf->Write( 6, utf8_decode('SEXO:'));
+          $pdf->Write( 6, utf8_decode(' '));
+          $pdf->Write( 6, utf8_decode($resposta->sex=='M'?'Masculino':$resposta->sex=='F'?'Feminino':'Não Respondeu'));
+
+          //pula pagina - inicio
+          $space_left=$page_height-($pdf->GetY()+$bottom_margin); // space left on page 
+          if($space_left<50){
+            $pdf->AddPage();
+            $pdf->SetTextColor( $headerColour[0], $headerColour[1], $headerColour[2] );
+            $pdf->SetFont( 'Arial', '', 22 );
+            $pdf->Cell( 0, 15, $reportName, 0, 0, 'C' );
+            $pdf->SetTextColor( $textColour[0], $textColour[1], $textColour[2] );
+            $pdf->Ln(17);
+          }
+          //pula pagina - fim
+          
+          $pdf->Ln( 5 );
+          $pdf->SetFont( 'Arial', '', 10 );
+          $pdf->Write( 6, utf8_decode('        '));
+          $pdf->Write( 6, utf8_decode('IDADE:'));
+          $pdf->Write( 6, utf8_decode(' '));
+          $pdf->Write( 6, utf8_decode($resposta->years_old));
+
+          //pula pagina - inicio
+          $space_left=$page_height-($pdf->GetY()+$bottom_margin); // space left on page 
+          if($space_left<50){
+            $pdf->AddPage();
+            $pdf->SetTextColor( $headerColour[0], $headerColour[1], $headerColour[2] );
+            $pdf->SetFont( 'Arial', '', 22 );
+            $pdf->Cell( 0, 15, $reportName, 0, 0, 'C' );
+            $pdf->SetTextColor( $textColour[0], $textColour[1], $textColour[2] );
+            $pdf->Ln(17);
+          }
+          //pula pagina - fim
+          
+          $pdf->Ln( 5 );
+          $pdf->SetFont( 'Arial', '', 10 );
+          $pdf->Write( 6, utf8_decode('        '));
+          $pdf->Write( 6, utf8_decode('ESCOLARIDADE:'));
+          $pdf->Write( 6, utf8_decode(' '));
+          $pdf->Write( 6, utf8_decode($resposta->education_level));                    
+
+          //pula pagina - inicio
+          $space_left=$page_height-($pdf->GetY()+$bottom_margin); // space left on page 
+          if($space_left<50){
+            $pdf->AddPage();
+            $pdf->SetTextColor( $headerColour[0], $headerColour[1], $headerColour[2] );
+            $pdf->SetFont( 'Arial', '', 22 );
+            $pdf->Cell( 0, 15, $reportName, 0, 0, 'C' );
+            $pdf->SetTextColor( $textColour[0], $textColour[1], $textColour[2] );
+            $pdf->Ln(17);
+          }
+          //pula pagina - fim
+          
+          $pdf->Ln( 5 );
+          $pdf->SetFont( 'Arial', '', 10 );
+          $pdf->Write( 6, utf8_decode('        '));
+          $pdf->Write( 6, utf8_decode('RENDA:'));
+          $pdf->Write( 6, utf8_decode(' '));
+          $pdf->Write( 6, utf8_decode($resposta->salary));  
+
+          //pula pagina - inicio
+          $space_left=$page_height-($pdf->GetY()+$bottom_margin); // space left on page 
+          if($space_left<50){
+            $pdf->AddPage();
+            $pdf->SetTextColor( $headerColour[0], $headerColour[1], $headerColour[2] );
+            $pdf->SetFont( 'Arial', '', 22 );
+            $pdf->Cell( 0, 15, $reportName, 0, 0, 'C' );
+            $pdf->SetTextColor( $textColour[0], $textColour[1], $textColour[2] );
+            $pdf->Ln(17);
+          }
+          //pula pagina - fim
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
           
           $pdf->Ln( 8 );
           $pdf->SetFont( 'Arial', '', 10 );

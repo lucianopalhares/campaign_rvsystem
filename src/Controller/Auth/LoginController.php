@@ -35,7 +35,10 @@ class LoginController extends Controller
      */
     public function __construct()
     {
+<<<<<<< HEAD
   
+=======
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
         $this->middleware('guest')->except('logout');
     }
 }

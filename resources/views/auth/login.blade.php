@@ -21,7 +21,11 @@
         <h1>Quiz</h1>
       </div>
       <div class="login-box">
+<<<<<<< HEAD
         <form class="login-form" method="post" action="{{ url('login') }}">
+=======
+        <form class="login-form" method="post" action="{{ route('login') }}">
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
             @csrf
           <h3 class="login-head"><i class="fa fa-lg fa-fw fa-user"></i>Entrar</h3>
           <div class="form-group">

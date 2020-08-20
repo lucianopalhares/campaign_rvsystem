@@ -27,7 +27,11 @@ class QuizAnswerController extends Controller
     protected $politic;
     protected $city;
     protected $district;
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
     public function __construct(QuizAnswer $model){
       $this->name = 'Resposta';
       $this->link = '/app/campanha/';
@@ -35,7 +39,11 @@ class QuizAnswerController extends Controller
       $this->model = App::make("App\Domain\Quiz\Model\QuizAnswer");
       $this->option = App::make("App\Domain\Quiz\Model\QuizOption");
       $this->question = App::make("App\Domain\Quiz\Model\QuizQuestion");
+<<<<<<< HEAD
       $this->campaign = App::make("App\Domain\Quiz\Model\QuizCampaign");
+=======
+      $this->campaign = App::make("App\Domain\Quiz\Model\QuizCampaign");      
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
       $this->political_party = App::make("App\Domain\Political\Model\PoliticalParty");
       $this->politic = App::make("App\Domain\Political\Model\Politic");
       $this->state = App::make("App\Domain\City\Model\State");
@@ -49,6 +57,7 @@ class QuizAnswerController extends Controller
      */
     public function index($quizCampaignSlug, Request $request)
     {
+<<<<<<< HEAD
 
         /* inserir em todos metodos - inicio */
         $quizCampaign = request()->session()->get('quizCampaign');
@@ -70,6 +79,29 @@ class QuizAnswerController extends Controller
           return view($this->pathView.'index',compact('items','quizCampaign'));
         }
 
+=======
+        
+        /* inserir em todos metodos - inicio */
+        $quizCampaign = request()->session()->get('quizCampaign');
+        $this->link .= $quizCampaign->slug.'/opcoes';
+        /* inserir em todos metodos - fim */    
+        
+        $items = $this->model::whereQuizCampaignId($quizCampaign->id)->get();
+        
+        if($request->has('quiz_question_id')){
+          $items = $this->model::whereQuizQuestionId($request->quiz_question_id)->whereQuizCampaignId($quizCampaign->id)->get();
+        }   
+        if($request->has('quiz_option_id')){
+          $items = $this->model::whereQuizOptionId($request->quiz_option_id)->whereQuizCampaignId($quizCampaign->id)->get();
+        }  
+
+        if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+          return response()->json(['data'=>$items]);
+        }else{
+          return view($this->pathView.'index',compact('items','quizCampaign'));
+        }                        
+        
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
     }
 
     /**
@@ -83,6 +115,7 @@ class QuizAnswerController extends Controller
         $quizCampaign = request()->session()->get('quizCampaign');
         $this->link .= $quizCampaign->slug.'/questoes';
         /* inserir em todos metodos - fim */
+<<<<<<< HEAD
 
         $states = $this->state::all();
         $districts = $this->district::whereQuizCampaignId($quizCampaign->id)->get();
@@ -90,6 +123,14 @@ class QuizAnswerController extends Controller
 
         return view($this->pathView.'form',compact('quizCampaign','states','questions','districts'));
 
+=======
+           
+        $states = $this->state::all();
+        $questions = $this->question::whereQuizCampaignId($quizCampaign->id)->get();
+                                
+        return view($this->pathView.'form',compact('quizCampaign','states','questions'));
+    
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
     }
 
     /**
@@ -99,17 +140,22 @@ class QuizAnswerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
+<<<<<<< HEAD
     {
         /* inserir em todos metodos - inicio */
         $quizCampaign = request()->session()->get('quizCampaign');
         $this->link .= $quizCampaign->slug.'/questoes';
         /* inserir em todos metodos - fim */
 
+=======
+    {      
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
       $is_api = false;
       if(request()->wantsJson() or str_contains(url()->current(), 'api')){
         $is_api = true;
       }
       //salvar api - start
+<<<<<<< HEAD
       if ($is_api) {
         if(isset($request->info_pesquisa)&&is_array($request->info_pesquisa)&&count($request->info_pesquisa)>0){
           isset($request->info_pesquisa['quiz_campaign_id'])?$request->merge([ 'quiz_campaign_id' => $request->info_pesquisa['quiz_campaign_id'] ]):'';
@@ -126,6 +172,34 @@ class QuizAnswerController extends Controller
 
       //salvar api - end
 
+=======
+      if ($is_api) {                    
+        if(isset($request->info_pesquisa)&&is_array($request->info_pesquisa)&&count($request->info_pesquisa)>0){
+          isset($request->info_pesquisa['quiz_campaign_id'])?$request->merge([ 'quiz_campaign_id' => $request->info_pesquisa['quiz_campaign_id'] ]):'';
+          isset($request->info_pesquisa['name'])?$request->merge([ 'name' => $request->info_pesquisa['name'] ]):'';        
+          isset($request->info_pesquisa['city_id'])?$request->merge([ 'city_id' => $request->info_pesquisa['city_id'] ]):'';  
+          isset($request->info_pesquisa['state_id'])?$request->merge([ 'state_id' => $request->info_pesquisa['state_id'] ]):'';  
+          isset($request->info_pesquisa['district_id'])?$request->merge([ 'district_id' => $request->info_pesquisa['district_id'] ]):'';  
+          isset($request->info_pesquisa['address'])?$request->merge([ 'address' => $request->info_pesquisa['address'] ]):'';  
+          isset($request->info_pesquisa['zip_code'])?$request->merge([ 'zip_code' => $request->info_pesquisa['zip_code'] ]):'';  
+          isset($request->info_pesquisa['latitude'])?$request->merge([ 'latitude' => $request->info_pesquisa['latitude'] ]):'';  
+          isset($request->info_pesquisa['longitude'])?$request->merge([ 'longitude' => $request->info_pesquisa['longitude'] ]):'';            
+          isset($request->info_pesquisa['answered_times'])?$request->merge([ 'answered_times' => $request->info_pesquisa['answered_times'] ]):$request->merge([ 'answered_times' => null ]);  
+          isset($request->info_pesquisa['sex'])?$request->merge([ 'sex' => $request->info_pesquisa['sex'] ]):$request->merge([ 'sex' => null ]);
+          isset($request->info_pesquisa['years_old'])?$request->merge([ 'years_old' => $request->info_pesquisa['years_old'] ]):$request->merge([ 'years_old' => null ]);
+          isset($request->info_pesquisa['salary'])?$request->merge([ 'salary' => $request->info_pesquisa['salary'] ]):$request->merge([ 'salary' => null ]);
+          isset($request->info_pesquisa['education_level'])?$request->merge([ 'education_level' => $request->info_pesquisa['education_level'] ]):$request->merge([ 'education_level' => null ]);
+          isset($request->info_pesquisa['sex'])?$request->merge([ 'sex' => $request->info_pesquisa['sex'] ]):$request->merge([ 'sex' => null ]);
+          isset($request->info_pesquisa['sex'])?$request->merge([ 'sex' => $request->info_pesquisa['sex'] ]):$request->merge([ 'sex' => null ]);
+          isset($request->info_pesquisa['sex'])?$request->merge([ 'sex' => $request->info_pesquisa['sex'] ]):$request->merge([ 'sex' => null ]);
+          isset($request->info_pesquisa['sex'])?$request->merge([ 'sex' => $request->info_pesquisa['sex'] ]):$request->merge([ 'sex' => null ]);
+          isset($request->info_pesquisa['sex'])?$request->merge([ 'sex' => $request->info_pesquisa['sex'] ]):$request->merge([ 'sex' => null ]);
+        }
+      }
+      
+      //salvar api - end           
+        
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
         $rules = [
             'quiz_campaign_id' =>  'required',
             'quiz_question_id' =>  'required',
@@ -137,7 +211,11 @@ class QuizAnswerController extends Controller
             //'zip_code' =>  'required',
             //'state_id' =>  'required',
             //'city_id' =>  'required'
+<<<<<<< HEAD
         ];
+=======
+        ]; 
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
         if (!$is_api) {
           $validator = Validator::make($request->all(), $rules);
 
@@ -149,6 +227,7 @@ class QuizAnswerController extends Controller
                 return redirect()->back()
                           ->withErrors($validator->errors())
                           ->withInput();
+<<<<<<< HEAD
               }
           }
         }
@@ -263,10 +342,76 @@ class QuizAnswerController extends Controller
 
             $response .= ' Cadastrado(a) com Sucesso!';
 
+=======
+              }     
+          } 
+        }    
+        
+        try { 
+          
+            if(!$is_api){         
+          
+              $pesquisa_respostas = [];
+              $pesquisa_respostas[] = ['quiz_question_id'=>$request->quiz_question_id,'resposta_id'=>$request->quiz_option_id,'resposta'=>$request->description];     
+              
+              $request->merge([ 'pesquisa_respostas' => $pesquisa_respostas ]);
+            }
+                      
+            foreach ($request->pesquisa_respostas as $pesquisa_resposta) {            
+                
+              if($this->question::findOrFail($pesquisa_resposta['quiz_question_id'])->options_required){
+                if(!$pesquisa_resposta['resposta_id']){            
+                  if ($is_api) {
+                    return response()->json(['status'=>false,'msg'=>'Escolha uma Opção como Resposta ou aguarde o cadastro de novas opções (questão multipla escolha)']);
+                  }else{
+                  
+                    return back()->withInput($request->toArray())->withErrors('Escolha uma Opção como Resposta ou aguarde o cadastro de novas opções (questão multipla escolha)');
+                  }
+                }
+              }else{
+                if(strlen($pesquisa_resposta['resposta'])==0){
+                  if ($is_api) {
+                    return response()->json(['status'=>false,'msg'=>'Responda a Questão na DESCRIÇÃO, não é multipla escolha (não tem opções cadastradas para esta questão)']);
+                  }else{
+                  
+                    return back()->withInput($request->toArray())->withErrors('Responda a Questão na DESCRIÇÃO, não é multipla escolha (não tem opções cadastradas para esta questão)');
+                  }
+                }
+              }              
+          
+              $model = new $this->model;
+              
+              $model->quiz_campaign_id = $request->quiz_campaign_id;
+              $model->quiz_question_id = $pesquisa_resposta['quiz_question_id'];
+              $model->answered_times = $request->answered_times;
+              $model->description = $pesquisa_resposta['resposta'];
+              $model->quiz_option_id = $pesquisa_resposta['resposta_id'];                          
+              $model->name = $request->name;  
+              $model->sex = $request->sex;
+              $model->years_old = $request->years_old;
+              $model->salary = $request->salary;
+              $model->education_level = $request->education_level; 
+              $model->state_id = $request->state_id; 
+              $model->city_id = $request->city_id; 
+              $model->district_id = $request->district_id; 
+              $model->address = $request->address;               
+              $model->zip_code = $request->zip_code;  
+              $model->latitude = $request->latitude;  
+              $model->longitude = $request->longitude;  
+              
+              $save = $model->save();
+            }
+            
+            $response = $this->name;
+            
+            $response .= ' Cadastrado(a) com Sucesso!';
+            
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
             if ($is_api) {
               return response()->json(['status'=>true,'msg'=>$response]);
             }else{
               return back()->with('success', $response);
+<<<<<<< HEAD
             }
 
         } catch (\Exception $e) {//errors exceptions
@@ -274,21 +419,43 @@ class QuizAnswerController extends Controller
             $response = null;
 
             switch (get_class($e)) {
+=======
+            }            
+            
+        } catch (\Exception $e) {//errors exceptions
+          
+            $response = null;
+            
+            switch (get_class($e)) {            
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
               case QueryException::class:$response = $e->getMessage();
               case Exception::class:$response = $e->getMessage();
               case ValidationException::class:$response = $e;
               default: $response = get_class($e);
+<<<<<<< HEAD
             }
 
             $response = method_exists($e,'getMessage')?$e->getMessage():get_class($e);
 
+=======
+            }      
+            
+            $response = method_exists($e,'getMessage')?$e->getMessage():get_class($e);
+            
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
             if ($is_api) {
               return response()->json(['status'=>false,'msg'=>$response]);
             }else{
               return back()->withInput($request->toArray())->withErrors($response);
+<<<<<<< HEAD
             }
 
         }
+=======
+            }  
+          
+        } 
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
     }
 
     /**
@@ -300,13 +467,20 @@ class QuizAnswerController extends Controller
     public function show($quizCampaignSlug, QuizAnswer $resposta)
     {
         try {
+<<<<<<< HEAD
 
             $item = $resposta;
 
+=======
+                      
+            $item = $resposta;
+            
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
             /* inserir em todos metodos - inicio */
             $quizCampaign = request()->session()->get('quizCampaign');
             $this->link .= $quizCampaign->slug.'/questoes';
             /* inserir em todos metodos - fim */
+<<<<<<< HEAD
 
             $states = $this->state::all();
             $districts = $this->district::whereQuizCampaignId($quizCampaign->id)->get();
@@ -320,19 +494,44 @@ class QuizAnswerController extends Controller
 
             $response = null;
 
+=======
+               
+            $states = $this->state::all();
+            $questions = $this->question::whereQuizCampaignId($quizCampaign->id)->get();
+            
+            $show = true;
+                                    
+            return view($this->pathView.'form',compact('item','quizCampaign','states','show','questions'));  
+            
+        } catch (\Exception $e) {//errors exceptions
+          
+            $response = null;
+            
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
             switch (get_class($e)) {
               case QueryException::class:$response = $e->getMessage();
               case Exception::class:$response = $e->getMessage();
               default: $response = get_class($e);
+<<<<<<< HEAD
             }
 
+=======
+            }              
+            
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
             if (request()->wantsJson()) {
               return response()->json(['status'=>false,'msg'=>$response]);
             }else{
               return redirect($this->link)->withErrors($response);
+<<<<<<< HEAD
             }
 
         }
+=======
+            }  
+          
+        }  
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
     }
 
     /**
@@ -344,13 +543,20 @@ class QuizAnswerController extends Controller
     public function edit($quizCampaignSlug, QuizAnswer $resposta)
     {
         try {
+<<<<<<< HEAD
 
             $item = $resposta;
 
+=======
+                      
+            $item = $resposta;
+            
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
             /* inserir em todos metodos - inicio */
             $quizCampaign = request()->session()->get('quizCampaign');
             $this->link .= $quizCampaign->slug.'/questoes';
             /* inserir em todos metodos - fim */
+<<<<<<< HEAD
 
             $states = $this->state::all();
             $districts = $this->district::whereQuizCampaignId($quizCampaign->id)->get();
@@ -362,19 +568,42 @@ class QuizAnswerController extends Controller
 
             $response = null;
 
+=======
+               
+            $states = $this->state::all();
+            $questions = $this->question::whereQuizCampaignId($quizCampaign->id)->get();
+                                    
+            return view($this->pathView.'form',compact('item','quizCampaign','states','questions')); 
+            
+        } catch (\Exception $e) {//errors exceptions
+          
+            $response = null;
+            
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
             switch (get_class($e)) {
               case QueryException::class:$response = $e->getMessage();
               case Exception::class:$response = $e->getMessage();
               default: $response = get_class($e);
+<<<<<<< HEAD
             }
 
+=======
+            }              
+            
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
             if (request()->wantsJson()) {
               return response()->json(['status'=>false,'msg'=>$response]);
             }else{
               return redirect($this->link)->withErrors($response);
+<<<<<<< HEAD
             }
 
         }
+=======
+            }  
+          
+        }  
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
     }
 
     /**
@@ -386,28 +615,40 @@ class QuizAnswerController extends Controller
      */
     public function update(Request $request, $quizCampaignSlug, QuizAnswer $resposta)
     {
+<<<<<<< HEAD
         /* inserir em todos metodos - inicio */
         $quizCampaign = request()->session()->get('quizCampaign');
         $this->link .= $quizCampaign->slug.'/questoes';
         /* inserir em todos metodos - fim */
 
+=======
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
         $rules = [
             'quiz_campaign_id' =>  'required',
             'quiz_question_id' =>  'required',
             //'quiz_option_id' =>  'required',
             //'description' =>  'required',
             'name' =>  'required',
+<<<<<<< HEAD
         ];
+=======
+        ]; 
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
 
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
+<<<<<<< HEAD
             if (request()->wantsJson() or str_contains(url()->current(), 'api/')) {
+=======
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
               return response()->json(['status'=>false,'msg'=>$validator->errors()]);
             }else{
               return redirect()->back()
                         ->withErrors($validator->errors())
                         ->withInput();
+<<<<<<< HEAD
             }
         }
 
@@ -421,19 +662,42 @@ class QuizAnswerController extends Controller
                   return response()->json(['status'=>false,'msg'=>'Escolha uma Opção como Resposta ou aguarde o cadastro de novas opções (questão multipla escolha)']);
                 }else{
 
+=======
+            }     
+        }   
+        
+
+                
+        try {
+          
+            if($this->question::findOrFail($request->quiz_question_id)->options_required){
+              if(!$request->quiz_option_id){            
+                if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+                  return response()->json(['status'=>false,'msg'=>'Escolha uma Opção como Resposta ou aguarde o cadastro de novas opções (questão multipla escolha)']);
+                }else{
+                
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
                   return back()->withInput($request->toArray())->withErrors('Escolha uma Opção como Resposta ou aguarde o cadastro de novas opções (questão multipla escolha)');
                 }
               }
             }else{
               if(strlen($request->description)==0){
+<<<<<<< HEAD
                 if (request()->wantsJson() or str_contains(url()->current(), 'api/')) {
                   return response()->json(['status'=>false,'msg'=>'Responda a Questão na DESCRIÇÃO, não é multipla escolha (não tem opções cadastradas para esta questão)']);
                 }else{
 
+=======
+                if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+                  return response()->json(['status'=>false,'msg'=>'Responda a Questão na DESCRIÇÃO, não é multipla escolha (não tem opções cadastradas para esta questão)']);
+                }else{
+                
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
                   return back()->withInput($request->toArray())->withErrors('Responda a Questão na DESCRIÇÃO, não é multipla escolha (não tem opções cadastradas para esta questão)');
                 }
               }
             }
+<<<<<<< HEAD
 
             $model = $resposta;
 
@@ -481,6 +745,60 @@ class QuizAnswerController extends Controller
               return back()->withInput($request->toArray())->withErrors($response);
             }
 
+=======
+        
+            $model = $resposta;
+            
+            $model->quiz_campaign_id = $request->quiz_campaign_id;
+            $model->quiz_question_id = $request->quiz_question_id;
+            $model->answered_times = $request->answered_times;
+            $model->description = $request->description; 
+            $model->quiz_option_id = $request->quiz_option_id;                            
+            $model->name = $request->name;  
+            $model->sex = $request->sex;
+            $model->years_old = $request->years_old;
+            $model->salary = $request->salary;
+            $model->education_level = $request->education_level; 
+            $model->state_id = $request->state_id; 
+            $model->city_id = $request->city_id; 
+            $model->district_id = $request->district_id; 
+            $model->address = $request->address;               
+            $model->zip_code = $request->zip_code;     
+            $model->latitude = $request->latitude;  
+            $model->longitude = $request->longitude;  
+                        
+            $save = $model->save();
+            
+            $response = $this->name;
+            
+            $response .= ' Atualizado(a) com Sucesso!';
+            
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+              return response()->json(['status'=>true,'msg'=>$response]);
+            }else{
+              return back()->with('success', $response);
+            }            
+            
+        } catch (\Exception $e) {//errors exceptions
+          
+            $response = null;
+            
+            switch (get_class($e)) {
+              case QueryException::class:$response = $e->getMessage();
+              case Exception::class:$response = $e->getMessage();           
+              case ValidationException::class:$response = $e;
+              default: $response = get_class($e);
+            }             
+            
+            $response = method_exists($e,'getMessage')?$e->getMessage():get_class($e); 
+            
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+              return response()->json(['status'=>false,'msg'=>$response]);
+            }else{
+              return back()->withInput($request->toArray())->withErrors($response);
+            }  
+          
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
         }
     }
 
@@ -493,6 +811,7 @@ class QuizAnswerController extends Controller
     public function destroy($quizCampaignSlug, QuizAnswer $resposta)
     {
         try {
+<<<<<<< HEAD
 
             $resposta->delete();
 
@@ -510,10 +829,30 @@ class QuizAnswerController extends Controller
 
             $response = null;
 
+=======
+                      
+            $resposta->delete();
+            
+            $response = $this->name;
+            
+            $response .= ' Deletado(a) com Sucesso!';
+                                                
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+              return response()->json(['status'=>true,'msg'=>$response]);
+            }else{
+              return back()->with('success', $response);
+            }    
+            
+        } catch (\Exception $e) {//errors exceptions
+          
+            $response = null;
+            
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
             switch (get_class($e)) {
               case QueryException::class:$response = $e->getMessage();
               case Exception::class:$response = $e->getMessage();
               default: $response = get_class($e);
+<<<<<<< HEAD
             }
 
             if (request()->wantsJson() or str_contains(url()->current(), 'api/')) {
@@ -699,3 +1038,18 @@ class QuizAnswerController extends Controller
         }
     }
 }
+=======
+            }              
+            
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+              return response()->json(['status'=>false,'msg'=>$response]);
+            }else{
+              return redirect($this->link)->withErrors($response);
+            }  
+          
+        }  
+    }
+}
+
+
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af

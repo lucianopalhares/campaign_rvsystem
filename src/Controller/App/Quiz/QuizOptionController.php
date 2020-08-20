@@ -27,14 +27,22 @@ class QuizOptionController extends Controller
     protected $city;
     protected $district;
     protected $person;
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
     public function __construct(){
       $this->name = 'Opção';
       $this->link = '/app/campanha/';
       $this->pathView = 'app.quiz.option.';
       $this->model = App::make("App\Domain\Quiz\Model\QuizOption");
       $this->question = App::make("App\Domain\Quiz\Model\QuizQuestion");
+<<<<<<< HEAD
       $this->campaign = App::make("App\Domain\Quiz\Model\QuizCampaign");
+=======
+      $this->campaign = App::make("App\Domain\Quiz\Model\QuizCampaign");      
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
       $this->political_party = App::make("App\Domain\Political\Model\PoliticalParty");
       $this->politic = App::make("App\Domain\Political\Model\Politic");
       $this->state = App::make("App\Domain\City\Model\State");
@@ -52,6 +60,7 @@ class QuizOptionController extends Controller
         /* inserir em todos metodos - inicio */
         $quizCampaign = request()->session()->get('quizCampaign');
         $this->link .= $quizCampaign->slug.'/opcoes';
+<<<<<<< HEAD
         /* inserir em todos metodos - fim */
 
         $items = $this->model::whereQuizCampaignId($quizCampaign->id)->get();
@@ -66,6 +75,22 @@ class QuizOptionController extends Controller
           return view($this->pathView.'index',compact('items','quizCampaign'));
         }
 
+=======
+        /* inserir em todos metodos - fim */    
+        
+        $items = $this->model::whereQuizCampaignId($quizCampaign->id)->get();
+        
+        if($request->has('quiz_question_id')){
+          $items = $this->model::whereQuizQuestionId($request->quiz_question_id)->whereQuizCampaignId($quizCampaign->id)->get();
+        }               
+
+        if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+          return response()->json(['data'=>$items]);
+        }else{
+          return view($this->pathView.'index',compact('items','quizCampaign'));
+        }           
+        
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
     }
 
     /**
@@ -74,16 +99,25 @@ class QuizOptionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
+<<<<<<< HEAD
     {
+=======
+    {      
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
         /* inserir em todos metodos - inicio */
         $quizCampaign = request()->session()->get('quizCampaign');
         $this->link .= $quizCampaign->slug.'/questoes';
         /* inserir em todos metodos - fim */
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
         $questions = $this->question::whereQuizCampaignId($quizCampaign->id)->whereOptionsRequired('1')->get();
 
         $people = $this->person::all();
         $political_parties = $this->political_party::all();
+<<<<<<< HEAD
         $politics = $this->politic::with('political_office')->get();
         $states = $this->state::all();
         $cities = $this->city::with('state')->get();
@@ -91,6 +125,15 @@ class QuizOptionController extends Controller
 
         return view($this->pathView.'form',compact('quizCampaign','questions','political_parties','politics','states','cities','districts','people'));
 
+=======
+        $politics = $this->politic::with('political_office')->get();   
+        $states = $this->state::all();
+        $cities = $this->city::with('state')->get();
+        $districts = $this->district::with('city','city.state')->get();
+                                
+        return view($this->pathView.'form',compact('quizCampaign','questions','political_parties','politics','states','cities','districts','people'));
+    
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
     }
 
     /**
@@ -100,21 +143,34 @@ class QuizOptionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, $quizCampaignSlug)
+<<<<<<< HEAD
     {
         $rules = [
             'quiz_campaign_id' =>  'required',
             'quiz_question_id' =>  'required'
         ];
+=======
+    {        
+        $rules = [
+            'quiz_campaign_id' =>  'required',
+            'quiz_question_id' =>  'required'
+        ]; 
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
 
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
+<<<<<<< HEAD
             if (request()->wantsJson() or str_contains(url()->current(), 'api/')) {
+=======
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
               return response()->json(['status'=>false,'msg'=>$validator->errors()]);
             }else{
               return redirect()->back()
                         ->withErrors($validator->errors())
                         ->withInput();
+<<<<<<< HEAD
             }
         }
 
@@ -126,14 +182,33 @@ class QuizOptionController extends Controller
 
         if(!$request->quiz_optionable_id&&strlen($request->description)==0){
             if (request()->wantsJson() or str_contains(url()->current(), 'api/')) {
+=======
+            }     
+        } 
+        
+        if(!$request->quiz_optionable_id||!$request->quiz_optionable_type||!$request->quiz_optionable_name){
+            $request->quiz_optionable_id = null;
+            $request->quiz_optionable_type = null;
+            $request->quiz_optionable_name = null;          
+        }
+
+        if(!$request->quiz_optionable_id&&strlen($request->description)==0){
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
               return response()->json(['status'=>false,'msg'=>'Preencha a Descrição 1 ou a Descrição 2']);
             }else{
               return redirect()->back()
                         ->withErrors('Preencha a Descrição 1 ou a Descrição 2')
                         ->withInput();
+<<<<<<< HEAD
             }
         }
 
+=======
+            } 
+        }
+                        
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
         try {
             $model = new $this->model;
             $model->quiz_campaign_id = $request->quiz_campaign_id;
@@ -142,6 +217,7 @@ class QuizOptionController extends Controller
             $model->quiz_optionable_type = $request->quiz_optionable_type;
             $model->quiz_optionable_name = $request->quiz_optionable_name;
             $model->quiz_question_id = $request->quiz_question_id;
+<<<<<<< HEAD
 
             $save = $model->save();
 
@@ -159,11 +235,31 @@ class QuizOptionController extends Controller
 
             $response = null;
 
+=======
+            
+            $save = $model->save();
+            
+            $response = $this->name;
+            
+            $response .= ' Cadastrado(a) com Sucesso!';
+            
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+              return response()->json(['status'=>true,'msg'=>$response]);
+            }else{
+              return back()->with('success', $response);
+            }            
+            
+        } catch (\Exception $e) {//errors exceptions
+          
+            $response = null;
+            
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
             switch (get_class($e)) {
               case QueryException::class:$response = $e->getMessage();
               case Exception::class:$response = $e->getMessage();
               case ValidationException::class:$response = $e;
               default: $response = get_class($e);
+<<<<<<< HEAD
             }
 
             $response = method_exists($e,'getMessage')?$e->getMessage():get_class($e);
@@ -175,6 +271,19 @@ class QuizOptionController extends Controller
             }
 
         }
+=======
+            }    
+            
+            $response = method_exists($e,'getMessage')?$e->getMessage():get_class($e);           
+            
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+              return response()->json(['status'=>false,'msg'=>$response]);
+            }else{
+              return back()->withInput($request->toArray())->withErrors($response);
+            }  
+          
+        } 
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
     }
 
     /**
@@ -201,13 +310,18 @@ class QuizOptionController extends Controller
           $quizCampaign = request()->session()->get('quizCampaign');
           $this->link .= $quizCampaign->slug.'/questoes';
           /* inserir em todos metodos - fim */
+<<<<<<< HEAD
 
+=======
+          
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
           $item = $opco;
 
           $questions = $this->question::whereQuizCampaignId($quizCampaign->id)->whereOptionsRequired('1')->get();
 
           $people = $this->person::all();
           $political_parties = $this->political_party::all();
+<<<<<<< HEAD
           $politics = $this->politic::with('political_office')->get();
           $states = $this->state::all();
           $cities = $this->city::with('state')->get();
@@ -220,19 +334,44 @@ class QuizOptionController extends Controller
 
             $response = null;
 
+=======
+          $politics = $this->politic::with('political_office')->get();   
+          $states = $this->state::all();
+          $cities = $this->city::with('state')->get();
+          $districts = $this->district::with('city','city.state')->get();
+                                  
+          return view($this->pathView.'form',compact('item','quizCampaign','questions','political_parties','politics','states','cities','districts','people'));
+      
+            
+        } catch (\Exception $e) {//errors exceptions
+          
+            $response = null;
+            
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
             switch (get_class($e)) {
               case QueryException::class:$response = $e->getMessage();
               case Exception::class:$response = $e->getMessage();
               default: $response = get_class($e);
+<<<<<<< HEAD
             }
 
+=======
+            }              
+            
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
             if (request()->wantsJson()) {
               return response()->json(['status'=>false,'msg'=>$response]);
             }else{
               return redirect($this->link)->withErrors($response);
+<<<<<<< HEAD
             }
 
         }
+=======
+            }  
+          
+        }  
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
     }
 
     /**
@@ -247,17 +386,26 @@ class QuizOptionController extends Controller
         $rules = [
             'quiz_campaign_id' =>  'required',
             'quiz_question_id'=>  'required'
+<<<<<<< HEAD
         ];
+=======
+        ]; 
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
 
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
+<<<<<<< HEAD
             if (request()->wantsJson() or str_contains(url()->current(), 'api/')) {
+=======
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
               return response()->json(['status'=>false,'msg'=>$validator->errors()]);
             }else{
               return redirect()->back()
                         ->withErrors($validator->errors())
                         ->withInput();
+<<<<<<< HEAD
             }
         }
 
@@ -269,23 +417,46 @@ class QuizOptionController extends Controller
 
         if(!$request->quiz_optionable_id&&strlen($request->description)==0){
             if (request()->wantsJson() or str_contains(url()->current(), 'api/')) {
+=======
+            }     
+        } 
+        
+        if(!$request->quiz_optionable_id||!$request->quiz_optionable_type||!$request->quiz_optionable_name){
+            $request->quiz_optionable_id = null;
+            $request->quiz_optionable_type = null;
+            $request->quiz_optionable_name = null;          
+        }
+
+        if(!$request->quiz_optionable_id&&strlen($request->description)==0){
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
               return response()->json(['status'=>false,'msg'=>'Preencha a Descrição 1 ou a Descrição 2']);
             }else{
               return redirect()->back()
                         ->withErrors('Preencha a Descrição 1 ou a Descrição 2')
                         ->withInput();
+<<<<<<< HEAD
             }
         }
 
         try {
             $model = $opco;
 
+=======
+            } 
+        }
+              
+        try {
+            $model = $opco;
+            
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
             $model->quiz_campaign_id = $request->quiz_campaign_id;
             $model->description = $request->description;
             $model->quiz_optionable_id = $request->quiz_optionable_id;
             $model->quiz_optionable_type = $request->quiz_optionable_type;
             $model->quiz_optionable_name = $request->quiz_optionable_name;
             $model->quiz_question_id = $request->quiz_question_id;
+<<<<<<< HEAD
 
             $save = $model->save();
 
@@ -303,11 +474,31 @@ class QuizOptionController extends Controller
 
             $response = null;
 
+=======
+            
+            $save = $model->save();
+            
+            $response = $this->name;
+            
+            $response .= ' Atualizado(a) com Sucesso!';
+            
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+              return response()->json(['status'=>true,'msg'=>$response]);
+            }else{
+              return back()->with('success', $response);
+            }            
+            
+        } catch (\Exception $e) {//errors exceptions
+          
+            $response = null;
+            
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
             switch (get_class($e)) {
               case QueryException::class:$response = $e->getMessage();
               case Exception::class:$response = $e->getMessage();
               case ValidationException::class:$response = $e;
               default: $response = get_class($e);
+<<<<<<< HEAD
             }
 
             $response = method_exists($e,'getMessage')?$e->getMessage():get_class($e);
@@ -318,6 +509,18 @@ class QuizOptionController extends Controller
               return back()->withInput($request->toArray())->withErrors($response);
             }
 
+=======
+            }         
+            
+            $response = method_exists($e,'getMessage')?$e->getMessage():get_class($e);      
+            
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+              return response()->json(['status'=>false,'msg'=>$response]);
+            }else{
+              return back()->withInput($request->toArray())->withErrors($response);
+            }  
+          
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
         }
     }
 
@@ -330,6 +533,7 @@ class QuizOptionController extends Controller
     public function destroy($quizCampaignSlug, QuizOption $opco)
     {
         try {
+<<<<<<< HEAD
 
             $opco->delete();
 
@@ -347,10 +551,30 @@ class QuizOptionController extends Controller
 
             $response = null;
 
+=======
+                      
+            $opco->delete();
+            
+            $response = $this->name;
+            
+            $response .= ' Deletado(a) com Sucesso!';
+                                                
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+              return response()->json(['status'=>true,'msg'=>$response]);
+            }else{
+              return back()->with('success', $response);
+            }    
+            
+        } catch (\Exception $e) {//errors exceptions
+          
+            $response = null;
+            
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
             switch (get_class($e)) {
               case QueryException::class:$response = $e->getMessage();
               case Exception::class:$response = $e->getMessage();
               default: $response = get_class($e);
+<<<<<<< HEAD
             }
 
             if (request()->wantsJson() or str_contains(url()->current(), 'api/')) {
@@ -362,3 +586,18 @@ class QuizOptionController extends Controller
         }
     }
 }
+=======
+            }              
+            
+            if (request()->wantsJson() or str_contains(url()->current(), 'api')) {
+              return response()->json(['status'=>false,'msg'=>$response]);
+            }else{
+              return redirect($this->link)->withErrors($response);
+            }  
+          
+        }  
+    }
+}
+
+
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af

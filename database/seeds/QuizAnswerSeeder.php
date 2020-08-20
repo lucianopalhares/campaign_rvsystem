@@ -19,6 +19,7 @@ class QuizAnswerSeeder extends Seeder
         $campaign = QuizCampaign::find(1);
         
         $first_names = [
+<<<<<<< HEAD
           ['first_name'=>'Adriano'],
           ['first_name'=>'Sandra'],
           ['first_name'=>'Mateus'],
@@ -29,15 +30,69 @@ class QuizAnswerSeeder extends Seeder
           ['first_name'=>'Marilene'],
           ['first_name'=>'Benicio'],
           ['first_name'=>'Rute'],
+=======
+          ['first_name'=>'Adriano','sex'=>'M'],
+          ['first_name'=>'Sandra','sex'=>'F'],
+          ['first_name'=>'Mateus','sex'=>'Não Respondeu'],
+          ['first_name'=>'Carla','sex'=>'F'],
+          ['first_name'=>'Manoel','sex'=>'M'],
+          ['first_name'=>'Andressa','sex'=>'Não Respondeu'],
+          ['first_name'=>'Lucas','sex'=>'M'],
+          ['first_name'=>'Marilene','sex'=>'F'],
+          ['first_name'=>'Benicio','sex'=>'M'],
+          ['first_name'=>'Rute','sex'=>'Não Respondeu'],
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
         ];
         $middle_names =[
           'Souza','Alencar','Rosa','Oliveira','Pereira','Magalhães'
         ];
         $last_names =[
           'Santana','Dias','Rodrigues','Ferreira','Bretas','Reis'
+<<<<<<< HEAD
         ];                           
 
         $districts =  @json_decode(json_encode(District::whereCityId(2342)->orWhere('city_id',null)->get()), true);
+=======
+        ];
+                
+        $sexs = ['F','M','Não Respondeu'];
+        $sexs =  @json_decode(json_encode($sexs), true);        
+              
+        $years_olds = [
+          '16-24 Anos',
+          '25-34 Anos',
+          '35-44 Anos',
+          '45-59 Anos',
+          'Acima de 60 Anos',
+          'Não Respondeu'
+        ];
+        $years_olds =  @json_decode(json_encode($years_olds), true);        
+        
+        $salaries = [
+          'Até 1 Salário Minimo',
+          'Entre 1 e 2 Salários Minimos',
+          'Entre 2 e 5 Salários Minimos',
+          'Entre 5 e 10 Salários Minimos',
+          'Mais de 10 Salários Minimos',
+          'Não Respondeu'
+        ];
+        $salaries =  @json_decode(json_encode($salaries), true);        
+        
+        $education_levels = [
+          'Ensino Fundamental / Incompleto',
+          'Ensino Fundamental / Completo',
+          'Ensino Médio / Incompleto',
+          'Ensino Médio / Completo',
+          'Nunca Estudou',
+          'Superior / Incompleto',
+          'Superior / Completo',
+          'Não Respondeu'
+        ];
+        $education_levels =  @json_decode(json_encode($education_levels), true);        
+
+        $districts =  @json_decode(json_encode(District::whereCityId(2342)->orWhere('city_id',null)->get()), true);
+
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
                                                     
         foreach ($campaign->questions as $question) {
           
@@ -65,9 +120,22 @@ class QuizAnswerSeeder extends Seeder
                 $last_name = Arr::random($last_names);
                 
                 $name = $first_name['first_name'].' '.$middle_name.' '.$last_name;             
+<<<<<<< HEAD
                                                           
                 $option_id = $option->id;
                                 
+=======
+                            
+                $sex = $first_name['sex'];
+                              
+                $option_id = $option->id;
+                
+                //$sex = Arr::random($sexs);
+                $years_old = Arr::random($years_olds);
+                $salary = Arr::random($salaries);
+                $education_level = Arr::random($education_levels);
+                
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
                 $district = Arr::random($districts);
                 $district_id = $district['id'];
 
@@ -76,7 +144,17 @@ class QuizAnswerSeeder extends Seeder
                     'quiz_question_id' => $question->id,
                     'description' => '',
                     'quiz_option_id' => $option_id,
+<<<<<<< HEAD
                     'name' => $name,          
+=======
+                    'name' => $name,
+                    'sex' => $sex,
+                    'years_old' => $years_old,
+                    'salary' => $salary,
+                    'education_level' => $education_level,
+                    'state_id' => $campaign->state_id,
+                    'city_id' => $campaign->city_id,
+>>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
                     'district_id' => $district_id,
                     'address' => 'Rua Teste, Nº 999',
                     'zip_code' => '99999-999',
