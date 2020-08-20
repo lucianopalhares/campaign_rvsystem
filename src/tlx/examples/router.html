@@ -1,0 +1,25 @@
+<html lang="en">
+<head>
+	<!--  default to loading current deployed version in case user is not running from tlx directory -->
+	<script src="https://unpkg.com/tlx/browser/tlx.min.js"></script>
+	<!-- load most current version -->
+	<script src="../index.js"></script>
+</head>
+<body>
+<div id="routed">
+<a id="link" href="/test/path/1?name=joe&address={city:'Seattle',state:'WA'}">Click Me</a>
+</div>
+<script>
+const routed = document.getElementById("routed"),
+	router =  tlx.router({
+	  '/test/path/:id': function(args) {
+	    console.log(this); // should be an event object
+	    console.log(args,args.raw,args.resolved);
+	 	this.stopRoute(true); // stop routing and push href to history
+	    tlx.view(routed,{template:"You clicked!"}); // show the next view
+	  }}),
+	  handlers = tlx.handlers({click:router});
+tlx.view(routed,{controller:handlers});
+</script>
+</body>
+</html>

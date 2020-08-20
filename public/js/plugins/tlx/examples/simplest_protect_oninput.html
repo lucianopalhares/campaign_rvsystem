@@ -1,0 +1,29 @@
+<html lang="en">
+<head>
+	<!--  default to loading current deployed version in case user is not running from tlx directory -->
+	<script src="https://unpkg.com/tlx/browser/tlx.min.js"></script>
+	<!-- load most current version -->
+	<script src="../index.js"></script>
+	<style>
+	input:invalid {
+  		box-shadow: 0 0 5px 1px red;
+	}
+	</style>
+</head>
+<body>
+<div id="message">
+Hello ${firstName}.
+</div>
+First Name: <input id="name" name="firstName" value="${firstName}" placeholder="Type name and enter">
+<script>
+// turn on automatic protection
+tlx.protect();
+// create an empty reactive model to share
+const model = tlx.reactor();
+// bind message area to model
+tlx.view(document.getElementById("message"),{model});
+// bind field to model and link "name" attribute values to model
+tlx.view(document.getElementById("name"),{model,linkModel:"input"})
+</script>
+</body>
+</html>

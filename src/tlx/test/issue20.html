@@ -1,0 +1,38 @@
+<html>
+<head>
+<script src="../index.js" type="text/javascript"></script>
+<!-- script src="../browser/tlx.min.js" type="text/javascript"></script -->
+</head>
+<body>
+<div id="tstream" t-foreach="${model.events}">
+	<p>${value.data}</p>
+</div>
+<script>
+var data = {
+	      events: [{
+	        session_id: " 123 ",
+	        date: "init",
+	        data: " test data ",
+	        extra: " Additional data ",
+	    }]
+	};
+const model = tlx.reactor(data);
+model.events.push({
+    session_id: " 124 ",
+    date: "init",
+    data: "issue 20 test data ",
+    extra: "Additional data ",
+});
+
+tlx.view(document.getElementById("tstream"),{model,linkModel:true});
+
+setTimeout(() => {
+	model.events.push({
+    session_id: " 124 ",
+    date: "init",
+    data: "more issue 20 test data ",
+    extra: "Additional data ",
+})},2000);
+</script>
+</body>
+</html>

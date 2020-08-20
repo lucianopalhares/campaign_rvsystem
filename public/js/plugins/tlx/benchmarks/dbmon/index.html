@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <link href="./lib/styles.css" rel="stylesheet" type="text/css" />
+    </head>
+  <body class="container">
+    <div id="app">
+	    <table class="latest-data table table-striped" width="100%">
+	    	<tbody t-foreach="${databases}">
+		   		<tr>
+			    	<td class=dbname width="20%">${value.dbname}</td>
+			    	<td class=query-count width="20%">
+			    		<span class="${value.lastSample ? value.lastSample.countClassName : ''}">${value.lastSample ? value.lastSample.nbQueries : ''}</span>
+			    	</td>
+			    	<td t-foreach="${value.lastSample ? value.lastSample.topFiveQueries : []}">
+						<span class="${value.elapsedClassName}" 
+						    title="${value.query}">
+							${value.formatElapsed}
+			       		</span>
+			    	</td>
+		    	</tr>
+		    </tbody>
+	    </table>
+    </div>
+    <script>
+
+    </script>
+
+    <script src="./ENV.js"></script>
+    <script src="./lib/monitor.js"></script>
+    <script src="../../index.js"></script>
+    <script>
+    const app = tlx.view(document.getElementById("app"));
+    ENV.timeout = 250;
+	perfMonitor.startFPSMonitor()
+	perfMonitor.startMemMonitor()
+	perfMonitor.initProfiler("render")
+	let tm;
+	function run() {
+		const model = {databases:ENV.generateData(true).toArray()};
+		perfMonitor.startProfile("render");
+		app.render(model);
+		perfMonitor.endProfile("render");
+		if(!tm) tm = setTimeout(() => { tm = false; run(); }, ENV.timeout);
+	}
+	run();
+	</script>
+  </body>
+</html>
