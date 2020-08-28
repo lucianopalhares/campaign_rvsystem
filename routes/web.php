@@ -21,13 +21,8 @@ Route::get('/home', function () {
 Auth::routes();
 
 Route::group(['namespace' => 'App','prefix' => 'app','middleware'=>'auth'],function() {
-<<<<<<< HEAD
 
     Route::get('/', 'DashboardController@index');
-=======
-  
-    Route::get('/', 'DashboardController@index');    
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
     Route::resource('/pessoas', 'PersonController');
     Route::resource('/bairros', 'DistrictController');
     Route::resource('/politicos', 'PoliticController');
@@ -36,15 +31,9 @@ Route::group(['namespace' => 'App','prefix' => 'app','middleware'=>'auth'],funct
     Route::get('/error',function() {
       return view('app._utils.error');
     });
-<<<<<<< HEAD
 
     Route::group(['prefix'=>'campanha','middleware'=>'auth','namespace'=>'Quiz','as'=>'Quiz'], function (){
 
-=======
-    
-    Route::group(['prefix'=>'campanha','middleware'=>'auth','namespace'=>'Quiz','as'=>'Quiz'], function (){
-             
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
       Route::group([
             'prefix' => '{quizCampaignSlug}',
             'middleware' => 'quizCampaign'
@@ -53,7 +42,6 @@ Route::group(['namespace' => 'App','prefix' => 'app','middleware'=>'auth'],funct
                 'as'   => '/',
                 'uses' => 'DashboardController@index',
             ]);
-<<<<<<< HEAD
 
           Route::get('relatorio','DashboardController@relatorio');
           Route::get('espelho','DashboardController@espelho');
@@ -74,25 +62,3 @@ Route::group(['namespace' => 'App','prefix' => 'app','middleware'=>'auth'],funct
     });
 
 });
-=======
-            Route::get('dashboard', [
-                'as'   => '/',
-                'uses' => 'DashboardController@index',
-            ]);            
-            
-          
-          Route::get('relatorio','DashboardController@relatorio');
-          Route::get('espelho','DashboardController@espelho');
-             
-          Route::resource('questoes','QuizQuestionController', array("as"=>"questoes","name"=>"questoes"));
-          Route::resource('opcoes','QuizOptionController', array("as"=>"opcoes","name"=>"opcoes"));
-          Route::resource('respostas','QuizAnswerController', array("as"=>"respostas","name"=>"respostas"));
-          Route::get('/error',function() {
-            return view('app.error');
-          });      
-      });
-    });
-    
-});
-
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af

@@ -19,20 +19,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
     <!-- Main CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}">
 
     @yield('page-css')
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
     <!-- Font-icon css-->
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
@@ -41,7 +33,6 @@
     <header class="app-header"><a class="app-header__logo" href="{{url('app/campanha/'.$quizCampaign->slug.'/dashboard')}}">Quiz Eleitoral</a>
       <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
       <!-- Navbar Right Menu-->
-<<<<<<< HEAD
 
       <ul class="app-nav">
         <!-- User Menu-->
@@ -52,18 +43,6 @@
         <li class="dropdown"><a class="app-nav__item badge badge-secondary" href="{{url('app/')}}" onclick="return confirm('Quer mesmo ir para a página inicial?');">
           Sair desta Campanha&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-mail-reply fa-lg"></i>
           </a>
-=======
-      
-      <ul class="app-nav">
-        <!-- User Menu-->
-        <li class="dropdown"><a class="app-nav__item" href="javascript:void" data-toggle="dropdown">
-          <span class="badge badge-pill badge-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{$quizCampaign->description}}">CAMPANHA: {{substr($quizCampaign->description, 0, 125) . '...'}}</span>     
-        </a>          
-        </li>
-        <li class="dropdown"><a class="app-nav__item badge badge-secondary" href="{{url('app/')}}" onclick="return confirm('Quer mesmo ir para a página inicial?');">
-          Sair desta Campanha&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-mail-reply fa-lg"></i>
-          </a>          
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
         </li>
         <!-- User Menu-->
         <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Open Profile Menu">{{Auth::user()->name}}&nbsp;&nbsp;<i class="fa fa-user fa-lg"></i></a>
@@ -75,11 +54,7 @@
 
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf
-<<<<<<< HEAD
                   </form>
-=======
-                  </form>        
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
             </li>
           </ul>
         </li>
@@ -90,19 +65,11 @@
     <aside class="app-sidebar">
       <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="{{ asset('images/campaign.png') }}" width="80px;" alt="">
         <div>
-<<<<<<< HEAD
           <p class="app-sidebar__user-name">
             Campanha
           </p>
           <p class="app-sidebar__user-designation alert alert-dark text-center text-primary">
 
-=======
-          <p class="app-sidebar__user-name"> 
-            Campanha
-          </p>
-          <p class="app-sidebar__user-designation alert alert-dark text-center text-primary">
-             
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
              {{$quizCampaign->id}}
           </p>
         </div>
@@ -129,7 +96,6 @@
             <li><a class="treeview-item {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/respostas')) ? 'active' : '' }}" href="{{url('app/campanha/'.$quizCampaign->slug.'/respostas')}}"><i class="icon fa fa-circle-o"></i> Todas Respostas</a></li>
             <li><a class="treeview-item {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/respostas/create')) ? 'active' : '' }}" href="{{url('app/campanha/'.$quizCampaign->slug.'/respostas/create')}}"><i class="icon fa fa-circle-o"></i> Responder Pergunta</a></li>
           </ul>
-<<<<<<< HEAD
         </li>
 
         <li class="treeview {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/bairros/*')) ? 'is-expanded' : '' }} {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/bairros')) ? 'is-expanded' : '' }}"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-map"></i><span class="app-menu__label">Bairros</span><span class="badge badge-primary">{{$quizCampaign->districts->count()}}</span>&nbsp;&nbsp;&nbsp;<i class="treeview-indicator fa fa-angle-right"></i></a>
@@ -146,9 +112,3 @@
 
       </ul>
     </aside>
-=======
-        </li> 
-
-      </ul>
-    </aside>
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af

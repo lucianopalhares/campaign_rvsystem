@@ -2,10 +2,10 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\QuizOption;
+use App\Quizoption;
 use Faker\Generator as Faker;
 
-$factory->define(QuizOption::class, function (Faker $faker) {
+$factory->define(Quizoption::class, function (Faker $faker) {
     return [
         //
     ];

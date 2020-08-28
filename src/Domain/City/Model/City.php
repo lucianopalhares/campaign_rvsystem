@@ -15,12 +15,9 @@ class City extends Model
     public function disctricts(){
       return $this->hasMany("App\Domain\Quiz\Model\QuizAnswer","city_id");
     }
-<<<<<<< HEAD
     public function campaigns(){
       return $this->hasMany("App\Domain\Quiz\Model\QuizCampaign","city_id");
     }
-=======
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
     public function questions()
     {
         return $this->morphMany('App\Domain\Quiz\Model\QuizQuestion', 'quiz_questionable');

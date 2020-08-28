@@ -23,6 +23,7 @@ class CreateQuizQuestionsTable extends Migration
             $table->unsignedBigInteger('quiz_campaign_id');
             $table->foreign('quiz_campaign_id')->references('id')->on('quiz_campaigns');
             $table->integer('options_required')->nullable()->default(0);//vai ter opções?
+            $table->integer('type')->nullable()->default(0);
             $table->timestamps();
         });
     }

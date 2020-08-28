@@ -60,10 +60,6 @@
                 @endif
 
                 <input type="hidden" name="quiz_campaign_id" value="{{ old('quiz_campaign_id',isset($item->quiz_campaign_id)?$item->quiz_campaign_id:$quizCampaign->id) }}" />
-<<<<<<< HEAD
-=======
-                <input type="hidden" name="answered_times" value="{{ old('answered_times',isset($item->answered_times)?$item->answered_times:'0') }}" />
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
                 <input type="hidden" name="latitude" value="{{ old('latitude',isset($item->latitude)?$item->latitude:' ') }}" class="form-control {{ $errors->has('latitude')? 'is-invalid':'' }}" id="latitude">
                 <input type="hidden" name="longitude" value="{{ old('longitude',isset($item->longitude)?$item->longitude:' ') }}" class="form-control {{ $errors->has('longitude')? 'is-invalid':'' }}" id="longitude">
                 
@@ -99,173 +95,30 @@
               
                   
                 <div class="row">
-<<<<<<< HEAD
                   <div class="col-12">
-=======
-                  <div class="col-8">
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
                     <div class="form-group">
                       <label class="control-label">Municipe *</label>
                       <input type="text" required="required" {{isset($show)?"disabled='disabled'":''}} name="name" value="{{ old('name',isset($item->name)?$item->name:' ') }}" class="form-control {{ $errors->has('name')? 'is-invalid':'' }}" id="name" placeholder="">
                       {!! $errors->has('name')? '<small id="passwordHelpBlock" class="form-text text-danger">'.$errors->first('name').'</small>':'' !!}
                     </div>                      
                   </div>
-<<<<<<< HEAD
                 </div>  
      
                 @if($quizCampaign->state_id>0&&$quizCampaign->city_id>0)
-=======
-                  <div class="col-4">
-                    <div class="form-group">
-                      <label class="control-label">Sexo </label>
-                      <select {{isset($show)?"disabled='disabled'":''}} class="form-control {{ $errors->has('sex')? 'is-invalid':'' }}" id="sex" name="sex">
-
-                          <option value="Não Respondeu" {{ old('sex') == "Não Respondeu" ? "selected='selected'" : isset($item->sex) && $item->sex == "Não Respondeu" ? "selected='selected'" : " " }}>
-                            Não Respondeu
-                          </option> 
-                          <option value="M" {{ old('sex') == "M" ? "selected='selected'" : isset($item->sex) && $item->sex == "M" ? "selected='selected'" : " " }}>
-                            Masculino
-                          </option>
-                          <option value="F" {{ old('sex') == "F" ? "selected='selected'" : isset($item->sex) && $item->sex == "F" ? "selected='selected'" : " " }}>
-                            Feminino
-                          </option>  
- 
-                                                                                                                                                          
-                      </select>
-                      {!! $errors->has('sex')? '<small id="passwordHelpBlock" class="form-text text-danger">'.$errors->first('sex').'</small>':'' !!}
-                    </div>                          
-                  </div>
-                </div>  
-
-                <div class="row">
-                  <div class="col-5">
-                    <div class="form-group">
-                      <label class="control-label">Idade </label>
-                      <select {{isset($show)?"disabled='disabled'":''}} class="form-control {{ $errors->has('years_old')? 'is-invalid':'' }}" id="years_old" name="years_old">
-
-                          <option value="Não Respondeu" {{ old('years_old') == "Não Respondeu" ? "selected='selected'" : isset($item->years_old) && $item->years_old == "Não Respondeu" ? "selected='selected'" : " " }}>
-                            Não Respondeu
-                          </option> 
-                          <option value="16-24 Anos" {{ old('years_old') == "16-24 Anos" ? "selected='selected'" : isset($item->years_old) && $item->years_old == "16-24 Anos" ? "selected='selected'" : " " }}>
-                            16-24 Anos
-                          </option>
-                          <option value="25-34 Anos" {{ old('years_old') == "25-34 Anos" ? "selected='selected'" : isset($item->years_old) && $item->years_old == "25-34 Anos" ? "selected='selected'" : " " }}>
-                            25-34 Anos
-                          </option>
-                          <option value="45-59 Anos" {{ old('years_old') == "45-59 Anos" ? "selected='selected'" : isset($item->years_old) && $item->years_old == "45-59 Anos" ? "selected='selected'" : " " }}>
-                            45-59 Anos
-                          </option> 
-                          <option value="Acima de 60 Anos" {{ old('years_old') == "Acima de 60 Anos" ? "selected='selected'" : isset($item->years_old) && $item->years_old == "Acima de 60 Anos" ? "selected='selected'" : " " }}>
-                            Acima de 60 Anos
-                          </option>   
-                                                                                                                     
-                      </select>
-                      {!! $errors->has('years_old')? '<small id="passwordHelpBlock" class="form-text text-danger">'.$errors->first('years_old').'</small>':'' !!}
-                    </div>                          
-                  </div>
-                  <div class="col-7">
-                    <div class="form-group">
-                      <label class="control-label">Salario </label>
-                      <select {{isset($show)?"disabled='disabled'":''}} class="form-control {{ $errors->has('salary')? 'is-invalid':'' }}" id="salary" name="salary">
-
-                          <option value="Não Respondeu" {{ old('salary') == "Não Respondeu" ? "selected='selected'" : isset($item->salary) && $item->salary == "Não Respondeu" ? "selected='selected'" : " " }}>
-                            Não Respondeu
-                          </option> 
-                          <option value="Até 1 Salário Minimo" {{ old('salary') == "Até 1 Salário Minimo" ? "selected='selected'" : isset($item->salary) && $item->salary == "Até 1 Salário Minimo" ? "selected='selected'" : " " }}>
-                            Até 1 Salário Minimo
-                          </option>
-                          <option value="Entre 1 e 2 Salários Minimos" {{ old('salary') == "Entre 1 e 2 Salários Minimos" ? "selected='selected'" : isset($item->salary) && $item->salary == "Entre 1 e 2 Salários Minimos" ? "selected='selected'" : " " }}>
-                            Entre 1 e 2 Salários Minimos
-                          </option>
-                          <option value="Entre 2 e 5 Salários Minimos" {{ old('salary') == "Entre 2 e 5 Salários Minimos" ? "selected='selected'" : isset($item->salary) && $item->salary == "Entre 2 e 5 Salários Minimos" ? "selected='selected'" : " " }}>
-                            Entre 2 e 5 Salários Minimos
-                          </option> 
-                          <option value="Entre 5 e 10 Salários Minimos" {{ old('salary') == "Entre 5 e 10 Salários Minimos" ? "selected='selected'" : isset($item->salary) && $item->salary == "Entre 5 e 10 Salários Minimos" ? "selected='selected'" : " " }}>
-                            Entre 5 e 10 Salários Minimos
-                          </option>   
-                          <option value="Mais de 10 Salários Minimos" {{ old('salary') == "Mais de 10 Salários Minimos" ? "selected='selected'" : isset($item->salary) && $item->salary == "Mais de 10 Salários Minimos" ? "selected='selected'" : " " }}>
-                            Mais de 10 Salários Minimos
-                          </option>   
-                                                                                                                                               
-                      </select>
-                      {!! $errors->has('salary')? '<small id="passwordHelpBlock" class="form-text text-danger">'.$errors->first('salary').'</small>':'' !!}
-                    </div>                          
-                  </div>
-                </div>
-                
-                <div class="row">
-                  <div class="col-12">
-                    <div class="form-group">
-                      <label class="control-label">Escolaridade </label>
-                      <select {{isset($show)?"disabled='disabled'":''}} class="form-control {{ $errors->has('education_level')? 'is-invalid':'' }}" id="education_level" name="education_level">
-
-                          <option value="Não Respondeu" {{ old('education_level') == "Não Respondeu" ? "selected='selected'" : isset($item->education_level) && $item->education_level == "Não Respondeu" ? "selected='selected'" : " " }}>
-                            Não Respondeu
-                          </option> 
-                          <option value="Ensino Fundamental / Incompleto" {{ old('education_level') == "Ensino Fundamental / Incompleto" ? "selected='selected'" : isset($item->education_level) && $item->education_level == "Ensino Fundamental / Incompleto" ? "selected='selected'" : " " }}>
-                            Ensino Fundamental / Incompleto
-                          </option>
-                          <option value="Ensino Fundamental / Completo" {{ old('education_level') == "Ensino Fundamental / Completo" ? "selected='selected'" : isset($item->education_level) && $item->education_level == "Ensino Fundamental / Completo" ? "selected='selected'" : " " }}>
-                            Ensino Fundamental / Completo
-                          </option>
-                          <option value="Ensino Médio / Incompleto" {{ old('education_level') == "Ensino Médio / Incompleto" ? "selected='selected'" : isset($item->education_level) && $item->education_level == "Ensino Médio / Incompleto" ? "selected='selected'" : " " }}>
-                            Ensino Médio / Incompleto
-                          </option> 
-                          <option value="Ensino Médio / Completo" {{ old('education_level') == "Ensino Médio / Completo" ? "selected='selected'" : isset($item->education_level) && $item->education_level == "Ensino Médio / Completo" ? "selected='selected'" : " " }}>
-                            Ensino Médio / Completo
-                          </option>   
-                          <option value="Nunca Estudou" {{ old('education_level') == "Nunca Estudou" ? "selected='selected'" : isset($item->education_level) && $item->education_level == "Nunca Estudou" ? "selected='selected'" : " " }}>
-                            Nunca Estudou
-                          </option>   
-                          <option value="Superior / Incompleto" {{ old('education_level') == "Superior / Incompleto" ? "selected='selected'" : isset($item->education_level) && $item->education_level == "Superior / Incompleto" ? "selected='selected'" : " " }}>
-                            Superior / Incompleto
-                          </option>   
-                          <option value="Superior / Completo" {{ old('education_level') == "Superior / Completo" ? "selected='selected'" : isset($item->education_level) && $item->education_level == "Superior / Completo" ? "selected='selected'" : " " }}>
-                            Superior / Completo
-                          </option>   
-                                                                                                                                                                                                   
-                      </select>
-                      {!! $errors->has('education_level')? '<small id="passwordHelpBlock" class="form-text text-danger">'.$errors->first('education_level').'</small>':'' !!}
-                    </div>                          
-                  </div>
-              
-                </div>  
-
-     
-
-                
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
                 <div class="row">
                   <div class="col-5">
                     <div class="form-group">
                     <label class="control-label">Estado/UF</label>
-<<<<<<< HEAD
                     <select disabled='disabled' class="form-control">
                       <option value="">
                         {{$quizCampaign->state->letter}}
                       </option>
                     </select>
-=======
-                    <select {{isset($show)?"disabled='disabled'":''}} onchange="changeState(this.value)" class="form-control {{ $errors->has('state_id')? 'is-invalid':'' }}" id="state_id" name="state_id">
-                      <!--<option value="">            
-                        Não Respondeu
-                      </option>  --> 
-                      @foreach($states as $state)
-                        @if($state->id==$quizCampaign->state_id)
-                          <option value="{{$state->id}}" {{ old('state_id') == $state->id ? "selected='selected'" : isset($item->state_id) && $item->state_id == $state->id ? "selected='selected'" : '' }}>
-                            {{$state->title}}
-                          </option>
-                        @endif
-                      @endforeach
-                    </select>
-                    {!! $errors->has('state_id')? '<small id="passwordHelpBlock" class="form-text text-danger">'.$errors->first('state_id').'</small>':'' !!}
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
                     </div>                      
                   </div>
                   <div class="col-7">
                     <div class="form-group">
                     <label class="control-label">Cidade</label>
-<<<<<<< HEAD
                     <select disabled='disabled' class="form-control">
                       <option value="">
                         {{$quizCampaign->city->title}}
@@ -276,20 +129,6 @@
                 </div>                
                 @endif
                 
-=======
-                    <select {{isset($show)?"disabled='disabled'":''}} onchange="changeCity(this.value)" class="form-control {{ $errors->has('city_id')? 'is-invalid':'' }}" id="city_id" name="city_id">
-                      <option value="">            
-                        Não Respondeu
-                      </option>                       
-                      <option value="">            
-                        Primeiro Selecione o Estado
-                      </option>
-                    </select>
-                    {!! $errors->has('city_id')? '<small id="passwordHelpBlock" class="form-text text-danger">'.$errors->first('city_id').'</small>':'' !!}
-                    </div>                    
-                  </div>
-                </div>
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
                 
                 <div class="row">
                   <div class="col-7">
@@ -298,17 +137,7 @@
                     <select {{isset($show)?"disabled='disabled'":''}} class="form-control {{ $errors->has('district_id')? 'is-invalid':'' }}" id="district_id" name="district_id">
                       <option value="">            
                         Não Respondeu
-<<<<<<< HEAD
                       </option>       
-=======
-                      </option>                    
-                      <option value="1" {{ old('district_id') == '1' ? "selected='selected'" : isset($item->district_id) && $item->district_id == '1' ? "selected='selected'" : '' }}>
-                          Area Urbana - Centro e Bairros
-                      </option>
-                      <option value="2" {{ old('district_id') == '2' ? "selected='selected'" : isset($item->district_id) && $item->district_id == '2' ? "selected='selected'" : '' }}>
-                          Zona Rural - Povoados,Chacaras,Fazendas e Outros
-                      </option>
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
                     </select>
                     {!! $errors->has('district_id')? '<small id="passwordHelpBlockDistrict" class="form-text text-danger">'.$errors->first('district_id').'</small>':'' !!}
                     </div>                    
@@ -431,7 +260,6 @@
     var quiz_question_id_selected = "{{ old('quiz_question_id', isset($item) ? $item->quiz_question_id : '') }}";
     var quiz_option_id_selected = "{{ old('quiz_option_id', isset($item) ? $item->quiz_option_id : '') }}";
     changeQuestion(quiz_question_id_selected,quiz_option_id_selected);
-<<<<<<< HEAD
     //var state_id_selected = "{{ old('state_id', isset($item) ? $item->state_id : $quizCampaign->state_id) }}";
     //var city_id_selected = "{{ old('city_id', isset($item) ? $item->city_id : $quizCampaign->city_id) }}";      
     //changeState(state_id_selected,city_id_selected);    
@@ -439,16 +267,6 @@
     loadDistricts(district_id_selected);
     
 
-=======
-    var state_id_selected = "{{ old('state_id', isset($item) ? $item->state_id : $quizCampaign->state_id) }}";
-    var city_id_selected = "{{ old('city_id', isset($item) ? $item->city_id : $quizCampaign->city_id) }}";      
-    changeState(state_id_selected,city_id_selected);    
-    var district_id_selected = "{{ old('district_id', isset($item) ? $item->district_id : '') }}"; 
-    changeCity(city_id_selected,district_id_selected);
-    
-
-    console.log(info_pesquisa);
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
   });
   
     
@@ -521,7 +339,6 @@
               }
           });      
     }
-<<<<<<< HEAD
     function loadDistricts(district_selected = null){
                       
         var token = $("meta[name='csrf-token']").attr("content");
@@ -531,38 +348,16 @@
                           
           $.ajax({
             url: "{{url('app/campanha/'.$quizCampaign->slug.'/bairros')}}", 
-=======
-    function changeCity(city_id,district_selected = null){
-                      
-        var token = $("meta[name='csrf-token']").attr("content");
-        var select_district = document.getElementById("district_id");        
-                        
-        if(!parseInt(city_id)) return false;
-        
-          select_district.options.length = 0;
-                          
-          $.ajax({
-            url: "{{url('api/districts/')}}"+"/"+city_id, 
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
             type: 'get',
             dataType: "json",
             data: {
               _token: token,
-<<<<<<< HEAD
-=======
-                  id: city_id,
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
                   _method: 'get'
                 },
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
               success: function (data){
                 if(data.length){
                   select_district.options[select_district.options.length] = new Option('Não Respondeu',' ');
-<<<<<<< HEAD
-=======
-                  select_district.options[select_district.options.length] = new Option('1','Area Urbana - Centro e Bairros');
-                  select_district.options[select_district.options.length] = new Option('2','Zona Rural - Povoados,Chacaras,Fazendas e Outros');
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
                   for(index in data) {
                       if(data[index]['id']==parseInt(district_selected)){
                         select_district.options[select_district.options.length] = new Option(data[index]['name'], data[index]['id'],true,true);
@@ -570,14 +365,6 @@
                         select_district.options[select_district.options.length] = new Option(data[index]['name'], data[index]['id']);
                       } 
                   }
-<<<<<<< HEAD
-=======
-                }else{
-                  $('#no_districts').html('(sem bairros cadastrados nesta cidade)');
-                  select_district.options[select_district.options.length] = new Option('Não Respondeu',' ');
-                  select_district.options[select_district.options.length] = new Option('Area Urbana - Centro e Bairros','1');
-                  select_district.options[select_district.options.length] = new Option('Zona Rural - Povoados,Chacaras,Fazendas e Outros','2');
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
                 }
               }
           });      

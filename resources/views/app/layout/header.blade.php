@@ -85,20 +85,14 @@
             <li><a class="treeview-item {{ (request()->is('app/pessoas/create')) ? 'active' : '' }}" href="{{url('app/pessoas/create')}}"><i class="icon fa fa-circle-o"></i> Cadastrar</a></li>
           </ul>
         </li>
-<<<<<<< HEAD
         <!--
-=======
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
         <li class="treeview {{ (request()->is('app/bairros/*')) ? 'is-expanded' : '' }} {{ (request()->is('app/bairros')) ? 'is-expanded' : '' }}"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-map"></i><span class="app-menu__label">Bairros</span><i class="treeview-indicator fa fa-angle-right"></i></a>
           <ul class="treeview-menu">
             <li><a class="treeview-item {{ (request()->is('app/bairros')) ? 'active' : '' }}" href="{{url('app/bairros')}}"><i class="icon fa fa-circle-o"></i> Todos</a></li>
             <li><a class="treeview-item {{ (request()->is('app/bairros/create')) ? 'active' : '' }}" href="{{url('app/bairros/create')}}"><i class="icon fa fa-circle-o"></i> Cadastrar</a></li>
           </ul>
         </li>  
-<<<<<<< HEAD
       -->
-=======
->>>>>>> 60b1267b93fd8d6fc0bb78ce9aaeffb3820fe4af
         <li class="treeview {{ (request()->is('app/politicos/*')) ? 'is-expanded' : '' }} {{ (request()->is('app/politicos')) ? 'is-expanded' : '' }}"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-male"></i><span class="app-menu__label">Politicos</span><i class="treeview-indicator fa fa-angle-right"></i></a>
           <ul class="treeview-menu">
             <li><a class="treeview-item {{ (request()->is('app/politicos')) ? 'active' : '' }}" href="{{url('app/politicos')}}"><i class="icon fa fa-circle-o"></i> Todos</a></li>

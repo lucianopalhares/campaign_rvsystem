@@ -263,7 +263,7 @@ padding: 0;
               <?php $random = rand(); ?>
 
               let description{{$random}} = "{{preg_replace('/\s+/', ' ', $district->name)}}";
-              let answer_count{{$random}} = "{{$district->answers->count()}}";
+              let answer_count{{$random}} = "{{$district->answersCampaign($quizCampaign->id)->count()}}";
 
                 (function($) {
                     "use strict"; // Start of use strict
