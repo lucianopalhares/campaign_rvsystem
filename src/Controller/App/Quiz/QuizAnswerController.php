@@ -42,7 +42,7 @@ class QuizAnswerController extends Controller
       $this->state = App::make("App\Domain\City\Model\State");
       $this->city = App::make("App\Domain\City\Model\City");
       $this->district = App::make("App\Domain\City\Model\District");
-      $this->card = App::make("App\Domain\City\Model\Card");
+      $this->card = App::make("App\Domain\Quiz\Model\Card");
     }
     /**
      * Display a listing of the resource.

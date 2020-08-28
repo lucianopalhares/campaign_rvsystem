@@ -10,9 +10,8 @@ Projeto de pesquisa eleitoral.
 
 <p align="center">
 <img src="public/images/print-examples/panel.png" />
-<img src="public/images/print-examples/campanha.png" />
-<img src="public/images/print-examples/questao.png" />
-<img src="public/images/print-examples/opcao.png" />
+<img src="public/images/print-examples/chart.png" />
+<img src="public/images/print-examples/form-pergunta.png" />
 <img src="public/images/print-examples/resposta.png" />
 </p>
 
