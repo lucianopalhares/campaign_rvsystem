@@ -318,7 +318,7 @@ class DashboardController extends Controller
 
         $pdf->Ln( 10 );
         $pdf->SetFont( 'Courier', '', 12 );
-        $pdf->Write( 6, utf8_decode($eleitor->name ));
+        $pdf->Write( 6, utf8_decode($eleitor->id.' - '.$eleitor->name ));
 
         //pula pagina - inicio
         $space_left=$page_height-($pdf->GetY()+$bottom_margin); // space left on page

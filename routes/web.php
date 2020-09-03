@@ -49,8 +49,13 @@ Route::group(['namespace' => 'App','prefix' => 'app','middleware'=>'auth'],funct
           Route::resource('questoes','QuizQuestionController', array("as"=>"questoes","name"=>"questoes"));
           Route::resource('opcoes','QuizOptionController', array("as"=>"opcoes","name"=>"opcoes"));
           Route::resource('respostas','QuizAnswerController', array("as"=>"respostas","name"=>"respostas"));
+          Route::post('deletar-respostas-selecionadas','QuizAnswerController@deleteSelecteds', array("as"=>"deletar-respostas-selecionadas","name"=>"deletar-respostas-selecionadas"));
+
           Route::get('responder-perguntas','QuizAnswerController@responderPerguntas');
           Route::post('responder-pergunta','QuizAnswerController@responderPergunta');
+
+          Route::get('excel-perguntas','QuizQuestionController@excel');
+          Route::get('pagina-excel-perguntas','QuizQuestionController@pageExcel');
 
           Route::get('grafico','ChartController@index');
 

@@ -32,11 +32,16 @@ class QuizCampaignController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $items = $this->model::whereActive('1')->get();
+        if($request->has('active')){
+          $items = $this->model::whereActive($request->active)->get();
+        }else{
+          $items = $this->model::all();
+        }        
 
         if (request()->wantsJson() or str_contains(url()->current(), 'api/')) {
+          $items = $this->model::whereActive(1)->get();
           return response()->json(['data'=>$items]);
         }else{
           return view($this->pathView.'index',compact('items'));

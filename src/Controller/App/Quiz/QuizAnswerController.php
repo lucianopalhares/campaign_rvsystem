@@ -155,6 +155,8 @@ class QuizAnswerController extends Controller
           }
         }
 
+        $card = null;
+
         try {
 
             if(!$is_api){
@@ -164,6 +166,19 @@ class QuizAnswerController extends Controller
 
               $request->merge([ 'pesquisa_respostas' => $pesquisa_respostas ]);
             }
+
+
+            $card = new $this->card;
+            $card->quiz_campaign_id = $request->quiz_campaign_id;
+            $card->name = $request->name;
+            $card->district_id = $request->district_id;
+            $card->address = $request->address;
+            $card->zip_code = $request->zip_code;
+            $card->latitude = $request->latitude;
+            $card->longitude = $request->longitude;
+            $card->save();
+
+            $card_id = $card->id;
 
             foreach ($request->pesquisa_respostas as $pesquisa_resposta) {
 
@@ -233,15 +248,6 @@ class QuizAnswerController extends Controller
                 }
               }
 
-              $card = new $this->card;
-              $card->quiz_campaign_id = $request->quiz_campaign_id;
-              $card->name = $request->name;
-              $card->district_id = $request->district_id;
-              $card->address = $request->address;
-              $card->zip_code = $request->zip_code;
-              $card->latitude = $request->latitude;
-              $card->longitude = $request->longitude;
-              $card->save();
 
               foreach ($pesquisa_resposta['respostas'] as $key => $resposta) {
 
@@ -267,7 +273,7 @@ class QuizAnswerController extends Controller
                 $model->latitude = $request->latitude;
                 $model->longitude = $request->longitude;
 
-                $model->card_id = $card->id;
+                $model->card_id = $card_id;
 
                 $save = $model->save();
               }
@@ -277,13 +283,17 @@ class QuizAnswerController extends Controller
 
             $response .= ' Cadastrado(a) com Sucesso!';
 
+            $data = $this->model::whereQuizCampaignId($request->quiz_campaign_id)->whereCardId($card_id)->get();
+
             if ($is_api) {
-              return response()->json(['status'=>true,'msg'=>$response]);
+              return response()->json(['status'=>true,'msg'=>$response,'salvo'=>$data,'enviado'=>$request->all()]);
             }else{
               return back()->with('success', $response);
             }
 
         } catch (\Exception $e) {//errors exceptions
+
+            //isset($card->id)?$this->card::find($card->id)->delete():'';
 
             $response = null;
 
@@ -537,6 +547,40 @@ class QuizAnswerController extends Controller
             }
 
         }
+    }
+    public function deleteSelecteds(Request $request)
+    {
+        try {
+
+          $ids = $request->ids;
+
+          \DB::table("quiz_answers")->whereIn('id',explode(",",$ids))->delete();
+
+          $response = ' Respostas Excluidas com Sucesso!';
+
+          if (request()->wantsJson() or str_contains(url()->current(), 'api/')) {
+            return response()->json(['status'=>true,'msg'=>$response]);
+          }else{
+            return back()->with('success', $response);
+          }
+
+      } catch (\Exception $e) {//errors exceptions
+
+          $response = null;
+
+          switch (get_class($e)) {
+            case QueryException::class:$response = $e->getMessage();
+            case Exception::class:$response = $e->getMessage();
+            default: $response = get_class($e);
+          }
+
+          if (request()->wantsJson() or str_contains(url()->current(), 'api/')) {
+            return response()->json(['status'=>false,'msg'=>$response]);
+          }else{
+            return redirect($this->link)->withErrors($response);
+          }
+
+      }
     }
     public function responderPerguntas(Request $request, $quizCampaignSlug){
 

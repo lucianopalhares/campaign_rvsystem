@@ -12,6 +12,7 @@ use Exception;
 use Illuminate\Validation\Rule;
 use \App;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class QuizQuestionController extends Controller
 {
@@ -48,7 +49,8 @@ class QuizQuestionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index($quizCampaignSlug)
-    {
+    {       
+
         /* inserir em todos metodos - inicio */
         $quizCampaign = request()->session()->get('quizCampaign');
         $this->link .= $quizCampaign->slug.'/questoes';
@@ -382,5 +384,22 @@ class QuizQuestionController extends Controller
         $data['data'][] = $insert;
       }
       return response()->json($data);
+    }
+    public function excel($quizCampaignSlug){
+
+      /* inserir em todos metodos - inicio */
+      $quizCampaign = request()->session()->get('quizCampaign');
+      /* inserir em todos metodos - fim */
+
+      return Excel::download(new \App\Job\QuestionsExcel($quizCampaign), 'questions.xlsx');
+
+    }
+    public function pageExcel($quizCampaignSlug){
+
+      /* inserir em todos metodos - inicio */
+      $quizCampaign = request()->session()->get('quizCampaign');
+      /* inserir em todos metodos - fim */
+
+      return view($this->pathView.'questions-answers',compact('quizCampaign'));
     }
 }

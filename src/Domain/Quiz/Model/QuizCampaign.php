@@ -24,4 +24,8 @@ class QuizCampaign extends Model
     public function answers(){
       return $this->hasMany("App\Domain\Quiz\Model\QuizAnswer","quiz_campaign_id");
     }
+
+    public function answersDescriptions(){
+      return $this->hasMany("App\Domain\Quiz\Model\QuizAnswer","quiz_campaign_id")->select(['description','quiz_question_id']);
+    }
 }

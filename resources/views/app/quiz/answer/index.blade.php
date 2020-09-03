@@ -26,7 +26,8 @@
                 <table class="table table-hover table-bordered" id="sampleTable">
                   <thead>
                     <tr>
-                      <th>#</th>
+                      <th><input type="checkbox" id="master"> <button class="btn btn-danger btn-xs delete_all" data-url="{{url('app/campanha/'.$quizCampaign->slug.'/deletar-respostas-selecionadas')}}"><span class="fa fa-trash" data-toggle="tooltip" data-placement="left" title="" data-original-title="Excluir"></span></button></th>
+                      <th>ID</th>
                       <th>Municipe</th>
                       <th>Questão</th>  
                       <th>Resposta</th>
@@ -35,7 +36,8 @@
                   </thead>
                   <tbody>
                     @foreach($items as $item)
-                    <tr>
+                    <tr id="tr_{{$item->id}}">
+                      <td><input type="checkbox" class="sub_chk" data-id="{{$item->id}}"></td>
                       <td>{{$item->id}}</td>
                       <td>{{$item->name}}</td>
                       <td>
@@ -49,9 +51,7 @@
                                                         
                       </td>
                       <td>
-                        @if($item->quiz_option_id)                          
-                            {{$item->option->getDescription()}}  
-                        @endif
+                       
                         {{$item->description?$item->description:''}}
                       </td>              
                       <td>              
@@ -63,9 +63,9 @@
                             @csrf
                         </form>                    
                         <a href="javascript:void" class="text-danger" onclick="if(confirm('Você quer mesmo deletar?'))return document.delete{{$item->id}}.submit();"><span class="fa fa-trash" data-toggle="tooltip" data-placement="left" title="" data-original-title="Excluir"></span></a>
-                      
-                      &nbsp;                                           
-                      </td>
+                                                                  
+                     
+                    </td>
                     </tr>
                     @endforeach
                   </tbody>
@@ -109,5 +109,76 @@
       }
     </script>
     
+    <script type="text/javascript">
+    $(document).ready(function () {
 
+
+        $('#master').on('click', function(e) {
+         if($(this).is(':checked',true))  
+         {
+            $(".sub_chk").prop('checked', true);  
+         } else {  
+            $(".sub_chk").prop('checked',false);  
+         }  
+        });
+
+
+        $('.delete_all').on('click', function(e) {
+
+
+            var allVals = [];  
+            $(".sub_chk:checked").each(function() {  
+                allVals.push($(this).attr('data-id'));
+            });  
+
+
+            if(allVals.length <=0)  
+            {  
+                alert("Selecione a linha.");  
+            }  else {  
+
+
+                var check = confirm("Quer mesmo excluir esta linha?");  
+                if(check == true){  
+
+
+                    var join_selected_values = allVals.join(","); 
+
+
+                    $.ajax({
+                        url: $(this).data('url'),
+                        type: 'POST',
+                        dataType: "json",
+                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        data: 'ids='+join_selected_values,
+                        success: function (data) {
+                        
+                            if (data.status) {
+                                $(".sub_chk:checked").each(function() {  
+                                    $(this).parents("tr").remove();
+                                });
+                                
+                                $( ".flash_msg" ).html('<div class="alert alert-success text-center" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+data.msg+'</div>');
+
+                            } else if (!data.status) {
+                              $( ".flash_msg" ).html('<div class="alert alert-danger text-center" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+data.msg+'</div>');
+                            } else {
+                              $( ".flash_msg" ).html('<div class="alert alert-danger text-center" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Ops, parece que algo deu errado!</div>');
+                            }
+                        },
+                        error: function (data) {
+                            $( ".flash_msg" ).html('<div class="alert alert-danger text-center" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+data.responseText+'</div>');
+                        }
+                    });
+
+
+                  $.each(allVals, function( index, value ) {
+                      $('table tr').filter("[data-row-id='" + value + "']").remove();
+                  });
+                }  
+            }  
+        });
+
+    });
+</script>
 @endsection
