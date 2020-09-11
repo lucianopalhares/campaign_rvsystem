@@ -81,7 +81,6 @@
           <ul class="treeview-menu">
             <li><a class="treeview-item {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/questoes')) ? 'active' : '' }}" href="{{url('app/campanha/'.$quizCampaign->slug.'/questoes')}}"><i class="icon fa fa-circle-o"></i> Todas Questões</a></li>
             <li><a class="treeview-item {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/questoes/create')) ? 'active' : '' }}" href="{{url('app/campanha/'.$quizCampaign->slug.'/questoes/create')}}"><i class="icon fa fa-circle-o"></i> Nova Questão</a></li>
-            <li><a class="treeview-item {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/pagina-excel-perguntas')) ? 'active' : '' }}" href="{{url('app/campanha/'.$quizCampaign->slug.'/pagina-excel-perguntas')}}"><i class="icon fa fa-circle-o"></i> Página Excel</a></li>
             <li><a class="treeview-item {{ (request()->is('app/campanha/'.$quizCampaign->slug.'/excel-perguntas')) ? 'active' : '' }}" href="{{url('app/campanha/'.$quizCampaign->slug.'/excel-perguntas')}}"><i class="icon fa fa-circle-o"></i> Gerar Excel</a></li>
           </ul>
         </li>

@@ -58,7 +58,66 @@ class QuizAnswerController extends Controller
         /* inserir em todos metodos - fim */
 
         $items = $this->model::whereQuizCampaignId($quizCampaign->id)->get();
+/*
+        $items = $this->model::whereQuizCampaignId($quizCampaign->id)->get()->groupBy('name');
+      //dd($items);
+        foreach($items as $name => $answers){
+          
+          if ( $name>0 ) {
 
+            $findCard = $this->card::find($name);
+
+            if(isset($findCard->id)){
+              $card_id = $findCard->id;
+            }else{
+           
+              $card = new $this->card;
+              $card->id = $name;
+              $card->quiz_campaign_id = $answers[0]->quiz_campaign_id;
+              $card->name = $answers[0]->name;
+              $card->district_id = $answers[0]->district_id;
+              $card->address = $answers[0]->address;
+              $card->zip_code = $answers[0]->zip_code;
+              $card->latitude = $answers[0]->latitude;
+              $card->longitude = $answers[0]->longitude;
+              $card->save();
+
+              $card_id = $card->id;
+            }
+
+            foreach($answers as $answer){
+              $answer = $this->model::findOrFail($answer->id);
+              $answer->card_id = $card_id;
+              $answer->save();
+            }
+          }
+        }
+        foreach($items as $name => $answers){
+          
+          if ( !$name>0 ) {
+           
+            $card = new $this->card;
+            $card->quiz_campaign_id = $answers[0]->quiz_campaign_id;
+            $card->name = $answers[0]->name;
+            $card->district_id = $answers[0]->district_id;
+            $card->address = $answers[0]->address;
+            $card->zip_code = $answers[0]->zip_code;
+            $card->latitude = $answers[0]->latitude;
+            $card->longitude = $answers[0]->longitude;
+            $card->save();
+
+            $card_id = $card->id;
+
+            foreach($answers as $answer){
+              $answer = $this->model::findOrFail($answer->id);
+              $answer->card_id = $card_id;
+              $answer->save();
+            }
+          }
+        }
+
+        dd(true);
+*/
         if($request->has('quiz_question_id')){
           $items = $this->model::whereQuizQuestionId($request->quiz_question_id)->whereQuizCampaignId($quizCampaign->id)->get();
         }
@@ -589,18 +648,17 @@ class QuizAnswerController extends Controller
         $states = $this->state::all();
         $districts = $this->district::whereQuizCampaignId($quizCampaign->id)->get();
 
-        if($request->has('answer')){
-          $answer = $this->model::findOrFail($request->answer);
+        if($request->has('card_id')){
+          $card = $this->card::findOrFail($request->card_id);
 
-          $question = $this->question::whereDoesntHave('answers',function($query) use ($answer){
-            $query->where('quiz_campaign_id',$answer->quiz_campaign_id);
-            $query->where('name',$answer->name);
+          $question = $this->question::whereQuizCampaignId($quizCampaign->id)->whereDoesntHave('answers',function($query) use ($card){
+            $query->where('card_id',$card->id);
           })->first();
 
 
           if(isset($question->id)){
 
-            return view('app.quiz.answer.answerAll.formQuestion',compact('quizCampaign','states','question','districts','answer'));
+            return view('app.quiz.answer.answerAll.formQuestion',compact('quizCampaign','states','question','districts','card'));
 
           }else{
             
@@ -614,7 +672,7 @@ class QuizAnswerController extends Controller
 
         }else{
 
-          $question = $this->question::first();
+          $question = $this->question::whereQuizCampaignId($quizCampaign->id)->first();
 
           return view('app.quiz.answer.answerAll.formQuestion',compact('quizCampaign','states','question','districts'));
 
@@ -686,6 +744,25 @@ class QuizAnswerController extends Controller
 
               $answer = null;
 
+              if($request->has('card_id')){
+                $card_id = $request->card_id;
+
+              }else{
+
+                $card = new $this->card;
+                $card->quiz_campaign_id = $request->quiz_campaign_id;
+                $card->name = $request->name;
+                $card->district_id = $request->district_id;
+                $card->address = $request->address;
+                $card->zip_code = $request->zip_code;
+                $card->latitude = $request->latitude;
+                $card->longitude = $request->longitude;
+                $card->save();
+    
+                $card_id = $card->id;
+    
+              }
+
               if($type=='0' or $type=='1'){
 
                 foreach ($request->options as $option) {
@@ -706,6 +783,8 @@ class QuizAnswerController extends Controller
                   $model->zip_code = $request->zip_code;
                   $model->latitude = $request->latitude;
                   $model->longitude = $request->longitude;
+
+                  $model->card_id = $card_id;
 
                   $model->save();
 
@@ -728,6 +807,8 @@ class QuizAnswerController extends Controller
                 $model->latitude = $request->latitude;
                 $model->longitude = $request->longitude;
 
+                $model->card_id = $card_id;
+
                 $model->save();
 
                 $answer = $model->id;
@@ -735,7 +816,7 @@ class QuizAnswerController extends Controller
 
             $response = 'Pergunta Respondida com Sucesso!';
 
-            return redirect('app/campanha/'.$quizCampaign->slug.'/responder-perguntas?answer='.$answer)->with('success', $response);
+            return redirect('app/campanha/'.$quizCampaign->slug.'/responder-perguntas?card_id='.$card_id)->with('success', $response);
 
 
 

@@ -24,4 +24,7 @@ class QuizAnswer extends Model
     public function district(){
       return $this->belongsTo("App\Domain\City\Model\District","district_id");
     }
+    public function card(){
+      return $this->belongsTo("App\Domain\Quiz\Model\Card","card_id");
+    }
 }

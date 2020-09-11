@@ -48,7 +48,7 @@ $max_answers = 0;
 $districts = \App\Domain\City\Model\District::whereHas('answers',function($query) use ($quizCampaign){
   $query->where('quiz_campaign_id',$quizCampaign->id);
 })->get();
-$answersDistricts = \App\Domain\Quiz\Model\QuizAnswer::whereQuizCampaignId($quizCampaign->id)->select('district_id')->get()->groupBy('district_id');
+$answersDistricts = \App\Domain\Quiz\Model\QuizAnswer::whereQuizCampaignId($quizCampaign->id)->select('district_id')->get();
 
 //dd($districts);
 ?>
@@ -109,11 +109,17 @@ $answersDistricts = \App\Domain\Quiz\Model\QuizAnswer::whereQuizCampaignId($quiz
 
   @endforeach
 
-     <td>
-          @if(isset($districts[$c]))
-            {{$districts[$c]->name}}
-          @endif
-     </td>
+    @if(isset($answersDistricts[$c]) && $answersDistricts[$c]->district_id>0)
+
+    <td>{{$answersDistricts[$c]->district->name}}</td> 
+
+    <?php
+        $answers_printed++;
+    ?>
+
+    @else 
+    <td></td>
+    @endif
                    
     </tr>
   

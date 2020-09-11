@@ -53,54 +53,54 @@ padding: 0;
 
 
 
-                @if(isset($answer))
-                  <input type="hidden" name="name" value="{{$answer->name}}" />
+                @if(isset($card))
+                  <input type="hidden" name="name" value="{{$card->name}}" />
                   <div class="row">
                     <div class="col-12">
                       <div class="form-group">
                         <label class="control-label">Municipe *</label>
-                        <input type="text" disabled="disabled" value="{{$answer->name}}" class="form-control">
+                        <input type="text" disabled="disabled" value="{{$card->name}}" class="form-control">
                       </div>
                     </div>
                   </div>
 
-                  <input type="hidden" name="district_id" value="{{$answer->district_id}}" />
-                  <input type="hidden" name="zip_code" value="{{$answer->zip_code}}" />
+                  <input type="hidden" name="district_id" value="{{$card->district_id}}" />
+                  <input type="hidden" name="zip_code" value="{{$card->zip_code}}" />
 
                   <div class="row">
-                    @if($answer->district_id>0)
+                    @if($card->district_id>0)
                     <div class="col-7">
                       <div class="form-group">
                       <label class="control-label">Bairro </label>
-                      <input type="text" disabled="disabled" value="{{$answer->district->name}}" class="form-control">
+                      <input type="text" disabled="disabled" value="{{$card->district->name}}" class="form-control">
                       </div>
                     </div>
                     @endif
                     <div class="col-5">
                       <div class="form-group">
                       <label class="control-label">CEP </label>
-                      <input type="text" disabled="disabled" value="{{$answer->zip_code}}" class="form-control">
+                      <input type="text" disabled="disabled" value="{{$card->zip_code}}" class="form-control">
                       </div>
                     </div>
                   </div>
 
                   <div class="form-group">
                   <label class="control-label">Endereço </label>
-                  <input type="text" disabled="disabled" value="{{$answer->address}}" class="form-control">
+                  <input type="text" disabled="disabled" value="{{$card->address}}" class="form-control">
                   </div>
 
                   <div class="row">
                     <div class="col-6">
                       <div class="form-group">
                         <label class="control-label">Latitude </label>
-                        <input type="text" disabled='disabled' value="{{$answer->latitude}}" class="form-control">
+                        <input type="text" disabled='disabled' value="{{$card->latitude}}" class="form-control">
 
                       </div>
                     </div>
                     <div class="col-6">
                       <div class="form-group">
                         <label class="control-label">Longitude </label>
-                        <input type="text" disabled='disabled' value="{{$answer->longitude}}" class="form-control">
+                        <input type="text" disabled='disabled' value="{{$card->longitude}}" class="form-control">
 
                       </div>
                     </div>
